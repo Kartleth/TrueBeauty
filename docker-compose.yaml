@@ -7,12 +7,12 @@ services:
     container_name: mysql_estetica
     environment:
       MYSQL_ROOT_PASSWORD: 123
-     # MYSQL_USER: ${USER}
-      #MYSQL_PASSWORD: ${USER_PASS}
-      #MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: truebeauty
     volumes:
       - dbdata:/var/lib/mysql
-      #- ./mysql-dump/petvet_script.sql:/docker-entrypoint-initdb.d/petvet_script.sql
+      - ./mysql-dump/bdEstetica.sql:/docker-entrypoint-initdb.d/bdEstetica.sql
     networks:
       mysql_network:
         aliases:
