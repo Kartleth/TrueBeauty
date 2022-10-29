@@ -2,7 +2,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 
 
 app = Flask(__name__)
-
+app.secret_key = 'lwiu74dhn2SuF3j'
 
 @app.route('/')
 def hello_world():  # put application's code here
