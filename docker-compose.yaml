@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:8.0.31
+    ports:
+      - "${PORT_LOCAL}:${PORT_MYSQL}"
+    container_name: mysql_estetica
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASS}
+     # MYSQL_USER: ${USER}
+      #MYSQL_PASSWORD: ${USER_PASS}
+      #MYSQL_DATABASE: ${DATABASE}
+    volumes:
+      - dbdata:/var/lib/mysql
+      #- ./mysql-dump/petvet_script.sql:/docker-entrypoint-initdb.d/petvet_script.sql
+    networks:
+      mysql_network:
+        aliases:
+          - mysql_host
+networks:
+  mysql_network:
+    name: mysql_net
+volumes:
+  dbdata:
+    driver: local
