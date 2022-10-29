@@ -3,11 +3,10 @@ services:
   db:
     image: mysql:8.0.31
     ports:
-      - "${PORT_LOCAL}:${PORT_MYSQL}"
+      - "5600:3306"
     container_name: mysql_estetica
-    env_file: ./.env
     environment:
-      MYSQL_ROOT_PASSWORD: ${PASS}
+      MYSQL_ROOT_PASSWORD: 123
      # MYSQL_USER: ${USER}
       #MYSQL_PASSWORD: ${USER_PASS}
       #MYSQL_DATABASE: ${DATABASE}
@@ -18,6 +17,18 @@ services:
       mysql_network:
         aliases:
           - mysql_host
+  flask:
+    build: .  
+    ports:
+      - "5000:5000"
+    networks:
+      mysql_network:
+        aliases:
+          - mysql_host
+    depends_on:
+      - db
+    volumes:
+      - .:/app
 networks:
   mysql_network:
     name: mysql_net
