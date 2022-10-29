@@ -7,9 +7,9 @@ services:
     container_name: mysql_estetica
     environment:
       MYSQL_ROOT_PASSWORD: 123
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: 123
-      MYSQL_DATABASE: truebeauty
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin_123"
+      MYSQL_DATABASE: "truebeauty"
     volumes:
       - dbdata:/var/lib/mysql
       - ./mysql-dump/bdEstetica.sql:/docker-entrypoint-initdb.d/bdEstetica.sql
