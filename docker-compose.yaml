@@ -3,7 +3,7 @@ services:
   db:
     image: mysql:8.0.31
     ports:
-      - "5500:3306"
+      - "5600:3306"
     container_name: mysql_estetica
     environment:
       MYSQL_ROOT_PASSWORD: 123
