@@ -1,3 +1,8 @@
 .container {
     max-width: 960px;
 }
+
+.center {
+    display: flex;
+    justify-content: center;
+}

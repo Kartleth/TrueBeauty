@@ -1,10 +1,276 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.104.2">
+    <title>SIGN UP TRUE BEAUTY</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sign-in/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+
+
+    <link href="/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#712cf9">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/signup.css" rel="stylesheet">
 </head>
+
 <body>
 
+    <div class="card mb-3"  style="max-width: 686px; width: 800%;">
+        <div class="row g-0">
+
+            <div class="col-md-4 ">
+                <img src="/static/images/cleopatra.png" class="img-fluid rounded-start position-png" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    
+                    <!--<img class="mb-4" src="/static/images/cleopatra.png" alt="" width="50" height="50">-->
+                    <h5 class="card-title">Crea una cuenta en True Beauty</h5>
+                    
+                    <div>
+                        <form class="needs-validation" novalidate>
+                            <div>
+
+                                <label for="firstName" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="firstName" placeholder="" value=""
+                                    required>
+                                <div class="invalid-feedback">
+                                    Valid first name is required.
+                                </div>
+
+
+
+                                <label for="lastName" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="lastName" placeholder="" value=""
+                                    required>
+                                <div class="invalid-feedback">
+                                    Valid last name is required.
+                                </div>
+
+
+
+                                <label for="email" class="form-label">Email</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text">@</span>
+                                    <input type="email" class="form-control" id="email" placeholder="email"
+                                        required>
+                                    <div class="invalid-feedback">
+                                        Your email is required.
+                                    </div>
+                                </div>
+
+
+
+                                <label for="inputPassword" class="form-label">Contraseña</label>
+                                <div>
+                                    <input type="password" class="form-control" id="inputPassword">
+                                </div>
+
+
+
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" id="telefono" placeholder="xxx-xxx-xxx" required>
+                                <div class="invalid-feedback">
+                                    Ingrese una número de teléfono
+                                </div>
+                                <a> </a>
+
+                                <a href="/inicio" class="btn btn-primary position-btn">Registrarse</a>
+
+                            </div>
+                            
+                    </div>
+                    
+                    
+                </div>
+
+                
+
+                
+                
+            </div>
+
+            
+        </div>
+
+        <p class="mt-5 mb-3 text-muted text-center">&copy; 2017–2022</p>
+    </div>
+
+    
+
+
+    <!--<div >
+        <form>
+            <div class="card" style="align-self: unset;">
+                <div style="display: flex;">
+                    <div class="card-body">
+                        <div class="card-body text-center">
+                            <img class="mb-4" src="/static/images/cleopatra.png" alt="" width="89" height="89">
+                        </div>
+
+                        <h5 class="card-title">Crea una cuenta en True Beauty</h5>
+
+                        <div>
+                            <form class="needs-validation" novalidate>
+                                <div>
+
+                                    <label for="firstName" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="" value=""
+                                        required>
+                                    <div class="invalid-feedback">
+                                        Valid first name is required.
+                                    </div>
+
+
+
+                                    <label for="lastName" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="" value=""
+                                        required>
+                                    <div class="invalid-feedback">
+                                        Valid last name is required.
+                                    </div>
+
+
+
+                                    <label for="email" class="form-label">Email</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text">@</span>
+                                        <input type="email" class="form-control" id="email" placeholder="email"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Your email is required.
+                                        </div>
+                                    </div>
+
+
+
+                                    <label for="inputPassword" class="form-label">Contraseña</label>
+                                    <div>
+                                        <input type="password" class="form-control" id="inputPassword">
+                                    </div>
+
+
+
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" id="telefono" placeholder="" required>
+                                    <div class="invalid-feedback">
+                                        Ingrese una número de teléfono
+                                    </div>
+
+                                </div>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+
+                       
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; padding: 10px 60px;">
+                        <img src="/static/images/proteccion-de-la-piel.png" style="width: 100px; height: fit-content" class="img-fluid rounded-start" alt="">
+                    </div>
+                    
+
+                </div>
+
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Registrarse</button>
+                <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+        </form>
+    
+    </div>
+
+    -->
+    <!-- <main class="form-signin">
+        <form>
+            <div class="card" style="align-self: unset;">
+                <div style="display: flex;">
+                    <div class="card-body">
+                        <div class="card-body text-center">
+                            <img class="mb-4" src="/static/images/cleopatra.png" alt="" width="89" height="89">
+                        </div>
+
+                        <h5 class="card-title">Crea una cuenta en True Beauty</h5>
+
+                        <div>
+                            <form class="needs-validation" novalidate>
+                                <div>
+
+                                    <label for="firstName" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="" value=""
+                                        required>
+                                    <div class="invalid-feedback">
+                                        Valid first name is required.
+                                    </div>
+
+
+
+                                    <label for="lastName" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="" value=""
+                                        required>
+                                    <div class="invalid-feedback">
+                                        Valid last name is required.
+                                    </div>
+
+
+
+                                    <label for="email" class="form-label">Email</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text">@</span>
+                                        <input type="email" class="form-control" id="email" placeholder="email"
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Your email is required.
+                                        </div>
+                                    </div>
+
+
+
+                                    <label for="inputPassword" class="form-label">Contraseña</label>
+                                    <div>
+                                        <input type="password" class="form-control" id="inputPassword">
+                                    </div>
+
+
+
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" id="telefono" placeholder="" required>
+                                    <div class="invalid-feedback">
+                                        Ingrese una número de teléfono
+                                    </div>
+
+                                </div>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+
+                       
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; padding: 10px 60px;">
+                        <img src="/static/images/proteccion-de-la-piel.png" style="width: 100px; height: fit-content" class="img-fluid rounded-start" alt="">
+                    </div>
+                    
+
+                </div>
+
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Registrarse</button>
+                <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+        </form>
+    </main> -->
 </body>
+
+
 </html>
