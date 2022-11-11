@@ -1,6 +1,7 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for, abort
 from passlib.hash import sha256_crypt
 from bd import *
+from herramientas import *
 
 app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
@@ -21,9 +22,42 @@ def inicio():
     return render_template("inicio.html")
 
 
-@app.route('/agendar_cita')
+@app.route('/agendar_cita', methods=['GET', 'POST'])
 def agendar_cita():
+    # if 'logeado' in session.keys():
+    #     if session['logeado']:
+    #         if session['tipo']!='estilista':
+    #             if request.method == 'GET':
+    #
+    #
+    # else:
+    #     return redirect('/')
+
     return render_template("agendar_cita.html")
+
+# METODO DE PRUEBA
+@app.route('/escoger_cita', methods=['GET', 'POST'])
+def escoger_cita():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] != 'estilista':
+                if request.method == 'GET':
+                    sucursales = get_lista_sucursales()
+                    servicios = get_lista_servicios()
+
+                    fecha = get_cur_datetime()
+                    return render_template('escoger_cita.html',
+                                           lista_sucursales=get_lista_sucursales(),
+                                           lista_servicios=get_lista_servicios(),
+                                           date_min=fecha['fecha_actual'],
+                                           date_max=fecha['fecha_fin'])
+
+
+
+    else:
+        return redirect('/')
+
+    return render_template("escoger_cita.html")
 
 
 @app.route('/fecha_cita')
@@ -70,7 +104,8 @@ def informacion_cita(id_cita):
                 citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
                 info_cita = get_info_cita(id_cita)
                 servicios = get_lista_servicios()
-                return render_template("informacion_cita.html",lista_citas=citas,dicc_cita=info_cita, lista_servicios=servicios)
+                return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
+                                       lista_servicios=servicios)
             else:
                 return redirect('/')
         else:
