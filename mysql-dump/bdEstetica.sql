@@ -1,5 +1,8 @@
+DROP DATABASE truebeauty;
 CREATE DATABASE IF NOT EXISTS truebeauty DEFAULT CHARACTER SET latin1;
+USE truebeauty;
 
+/*CREACION DE TABLAS*/
 CREATE TABLE cita(
     id_cita int unsigned AUTO_INCREMENT NOT NULL,
     fecha_creacion DATE NOT NULL,
@@ -27,7 +30,7 @@ CREATE TABLE usuario (
     apellido_materno varchar(50) NOT NULL,
     correo varchar(50) NOT NULL,
     contrasenia varchar(25) NOT NULL,
-    telefono int(10), 
+    telefono int(15),
     tipo_usuario ENUM('gerente','recepcionista','estilista','cliente') NOT NULL,
     PRIMARY KEY (id_usuario)
 
@@ -51,6 +54,7 @@ CREATE TABLE sucursal(
 
 )ENGINE=MyISAM default char set=latin1;
 
+/* CREACION DE LLAVES FORANEAS*/
 ALTER TABLE cita ADD FOREIGN KEY(id_cliente) REFERENCES usuario(id_usuario);
 ALTER TABLE cita ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
 ALTER TABLE cita ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
@@ -61,4 +65,12 @@ ALTER TABLE empleado ADD FOREIGN KEY(id_usuario) REFERENCES usuario(id_usuario);
 ALTER TABLE empleado ADD FOREIGN KEY(id_sucursal) REFERENCES sucursal(id_sucursal);
 
 ALTER TABLE sucursal ADD FOREIGN KEY(id_gerente) REFERENCES usuario(id_usuario);
+
+/*INSERTS */
+
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
+VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx','holaxd','6621935761','gerente');
+
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
+VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','gerente');
 
