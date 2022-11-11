@@ -33,7 +33,17 @@ def hora_cita():
 
 @app.route('/consultar_citas')
 def consultar_citas():
-    return render_template("consultar_citas.html")
+    session['logeado'] = True
+    session['tipo'] = 'cliente'
+    session['id_usuario']=4
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo']=='cliente':
+                citas = bd.get_citas_de_usuario(session['id_usuario'])
+                return render_template("consultar_citas.html",lista_citas=citas)
+    else:
+        return redirect('/')
+    # return render_template("consultar_citas.html")
 
 @app.route('/informacion_cita')
 def informacion_cita():

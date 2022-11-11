@@ -23,5 +23,16 @@ def get_usuarios():
     conexion.close()
     return lista
 
+def get_citas_de_usuario(id_usuario:int):
+    conexion = obtener_conexion()
+    query = "SELECT DATE_FORMAT(C.fecha_creacion, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, S.nombre as nombre_servicio FROM cita C, servicio S WHERE C.id_servicio=S.id_servicio AND C.id_cliente="+str(id_usuario)
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
 if __name__ == '__main__':
-    print(get_usuarios())
+    print(get_citas_de_usuario(4))
