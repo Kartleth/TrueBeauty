@@ -5,7 +5,7 @@ USE truebeauty;
 /*CREACION DE TABLAS*/
 CREATE TABLE cita(
     id_cita int unsigned AUTO_INCREMENT NOT NULL,
-    fecha_creacion DATE NOT NULL,
+    fecha DATE NOT NULL,
     hora time NOT NULL,
     id_servicio int unsigned NOT NULL,
     id_estilista int unsigned NOT NULL,
@@ -88,6 +88,7 @@ INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Peinado','Pein
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Maquillaje','Pintada de caritas',3499.99,45);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Facial','Se te lava la mugrosa cara',1499.99,45);
 
-INSERT INTO cita(fecha_creacion, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2023-10-08','8:30',1,3,4,1);
-INSERT INTO cita(fecha_creacion, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','10:00',2,3,4,1);
-INSERT INTO cita(fecha_creacion, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','10:00',3,3,4,1);
+INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2023-10-08','8:30',1,3,4,1);
+INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','10:00',2,3,4,1);
+INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','14:00',3,3,4,1);
+

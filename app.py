@@ -1,6 +1,6 @@
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for, abort
 from passlib.hash import sha256_crypt
-import bd
+from bd import *
 
 app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
@@ -44,15 +44,40 @@ def consultar_citas():
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
-                citas = bd.get_citas_de_usuario('id_' + session['tipo'], session['id_usuario'])
+                citas = get_citas_de_usuario('id_' + session['tipo'], session['id_usuario'])
                 return render_template("consultar_citas.html", lista_citas=citas)
+            elif session['tipo'] == 'recepcionista':
+                return redirect('/')
+            elif session['tipo'] == 'gerente':
+                return redirect('/')
+            else:
+                return redirect('/')
+
     else:
+
         return redirect('/')
     # return render_template("consultar_citas.html")
 
 
-@app.route('/informacion_cita')
-def informacion_cita():
+@app.route('/informacion_cita/<id_cita>', methods=['GET', 'POST'])
+def informacion_cita(id_cita):
+    session['logeado'] = True
+    session['tipo'] = 'estilista'
+    session['id_usuario'] = 3
+    if session['logeado']:
+        if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
+            if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
+                citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
+                info_cita = get_info_cita(id_cita)
+                servicios = get_lista_servicios()
+                return render_template("informacion_cita.html",lista_citas=citas,dicc_cita=info_cita, lista_servicios=servicios)
+            else:
+                return redirect('/')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
     return render_template("informacion_cita.html")
 
 
