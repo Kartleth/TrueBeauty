@@ -60,22 +60,19 @@
     </div>
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <form class="needs-validation" action="" method="POST">
       <main>
+
                           <div class="col-md-5">
                   <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
-                          {% if lista_servicios %}
-                              <label for="tipo_servicio" class="form-label">SI HAY DATOS EN lista_servicios</label>
-                              {% else %}
-                              <label for="tipo_servicio" class="form-label">NO HAY DATOS EN lista_servicios</label>
-                          {% endif %}
 
                   <select class="form-select" id="tipo_servicio" required>
                       {% for servicio in lista_servicios %}
 
                     <option value="{{ servicio['id_servicio'] }}">{{ servicio['nombre'] }}</option>
-                          <option value="">hola...</option>
+
                       {% endfor %}
-<option value="">Seleccion...</option>
+
                   </select>
                   <div class="invalid-feedback">
                     Please select a valid service.
@@ -84,39 +81,39 @@
 
   <div class="col-md-5">
                   <label for="tipo_servicio" class="form-label">Sucursal</label>
-                          {% if lista_servicios %}
-                              <label for="tipo_servicio" class="form-label">SI HAY DATOS EN lista_sucursales</label>
-                              {% else %}
-                              <label for="tipo_servicio" class="form-label">NO HAY DATOS EN lista_sucursales</label>
-                          {% endif %}
 
-                  <select class="form-select" id="tipo_servicio" required>
+
+                  <select class="form-select" id="tipo_sucursal" required>
                       {% for sucursal in lista_sucursales %}
 
                     <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
 
                       {% endfor %}
-<option value="">Seleccion...</option>
+
                   </select>
                   <div class="invalid-feedback">
                     Please select a valid service.
                   </div>
                 </div>
 
-                <div class="col-md-5">
-                  <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
-                  <select class="form-select" id="tipo_servicio" required>
-                    <option value="">Seleccion...</option>
-                    <option>Corte de cabello</option>
-                    <option>Pedicura</option>
-                    <option>Manicura</option>
-                    <option>Maquillaje</option>
-                    <option>Faciales</option>
-                  </select>
-                  <div class="invalid-feedback">
-                    Please select a valid service.
-                  </div>
+          <div class="col-lg-8 container my-5">
+
+
+                <div class="row justify-content-center mx-5">
+                    <form class="needs-validation" action="" method="POST">
+
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="validationServer04" required name="fecha"
+                                min="{{date_min}}" max="{{date_max}}">
+                            <label for="validationServer04">Fecha</label>
+                        </div>
+                        <div class="contenedor_btns">
+                            <!--<input class="btn boton_pie" type="submit" name="enviar" value="Mostrar horarios"> -->
+                            <h6 style="color: #0d6efc;font-size: 1.2rem;">{{mensaje}}</h6>
+                        </div>
+                    </form>
                 </div>
+            </div>
 
 
 {#        <div class="row g-5 center">#}
@@ -200,14 +197,14 @@
     <main>
       <div class="row g-5 center">
         <div class="col-md-7 col-lg-8">
-          <!--<button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>-->
-          <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>
+{#          <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
           
         </div>
       </div>
 
     </main>
-
+</form>
     <footer class="my-5 pt-5 text-muted text-center text-small">
       <p class="mb-1">&copy; 2017–2022 Company Name</p>
       <ul class="list-inline">

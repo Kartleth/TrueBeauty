@@ -35,9 +35,13 @@ def agendar_cita():
 
     return render_template("agendar_cita.html")
 
+
 # METODO DE PRUEBA
 @app.route('/escoger_cita', methods=['GET', 'POST'])
 def escoger_cita():
+    session['logeado'] = True
+    session['tipo'] = 'cliente'
+    session['id_usuario'] = 3
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
@@ -51,13 +55,18 @@ def escoger_cita():
                                            lista_servicios=get_lista_servicios(),
                                            date_min=fecha['fecha_actual'],
                                            date_max=fecha['fecha_fin'])
-
-
-
+                elif request.method == 'POST':
+                    print(request.form['fecha'])
+                    print(request.form['tipo_servicio'])
+                    print(request.form['tipo_sucursal'])
+                else:
+                    return redirect('/')
+            else:
+                return redirect('/')
+        else:
+            return redirect('/')
     else:
         return redirect('/')
-
-    return render_template("escoger_cita.html")
 
 
 @app.route('/fecha_cita')
