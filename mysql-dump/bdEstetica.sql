@@ -73,11 +73,11 @@ use truebeauty;
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
 VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','gerente');
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx','holaxd','6621935761','recepcionista');
+VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx',' $5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','recepcionista');
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('David','Nuñez','Gurrola','david@gmail.com','david_123','21354684565','estilista');
+VALUES('David','Nuñez','Gurrola','david@gmail.com',' $5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','21354684565','estilista');
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Karla','Lerma','Molina','karla@gmail.com','karla_123','12145789632','cliente');
+VALUES('Karla','Lerma','Molina','karla@gmail.com',' $5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','12145789632','cliente');
 
 INSERT INTO sucursal(nombre,direccion, telefono, id_gerente) values ('Villa de seris','Colonia villa de seris, calle isabel #18','6212254887',2);
 
@@ -93,3 +93,4 @@ INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal
 INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','10:00',2,3,4,1);
 INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','14:00',3,3,4,1);
 
+SELECT * FROM usuario;

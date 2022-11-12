@@ -13,6 +13,7 @@ app.secret_key = 'lwiu74dhn2SuF3j'
 diccionario_menu = get_dicc_menu()
 lista_servicios_sel = []
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def inicio_sesion():
     """
@@ -22,16 +23,17 @@ def inicio_sesion():
     if request.method == 'GET':
         return render_template("login.html")
     elif request.method == 'POST':
-        correo= request.form['email']
+        correo = request.form['email']
         password = request.form['password']
         if usuario_existe('correo', correo):
             usr = get_usuario('correo', correo)
+            # password = sha256_crypt.encrypt(str(password))
             if sha256_crypt.verify(password, usr['contrasenia']):
                 session['id_usuario'] = usr['id_usuario']
                 session['nombre'] = usr['nombre']
                 session['correo'] = usr['correo']
-                session['logged_in'] = True
-                session['tipo_usuario'] = usr['tipo_usuario']
+                session['logeado'] = True
+                session['tipo'] = usr['tipo_usuario']
                 return redirect("/")
             else:
                 mensaje = 'Contraseña incorrecta'
@@ -41,22 +43,25 @@ def inicio_sesion():
             mensaje = 'Ese correo o usuario no esta registrado'
             flash(mensaje)
             return render_template("login.html")
-        
+
+
 @app.route("/logout", methods=['GET'])
 def logout():
     """Cierra la sesión del usuario borrando el dicc session y lo redirige a index"""
     session.clear()
     return redirect("/")
-        
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if 'logged_in' not in session.keys():
+    if 'logeado' not in session.keys():
         if request.method == 'GET':
             return render_template("signup.html")
         elif request.method == 'POST':
             correo = request.form['correo']
             nombre = request.form['nombre']
-            apellidos = request.form['apellidos']
+            apellido_paterno = request.form['apellido1']
+            apellido_materno = request.form['apellido2']
             password = request.form['password1']
             password2 = request.form['password2']
             telefono = request.form['telefono']
@@ -68,25 +73,21 @@ def signup():
                 flash('Contraseñas no concuerdan, intente de nuevo')
                 return render_template("signup.html")
             else:
-                lista=apellidos.split()
-                apellido_paterno=lista[0]
-                if len(lista)>1:
-                    apellido_materno=lista[1]
-                else:
-                    apellido_materno=''
-                insertar_usuario(nombre, apellido_paterno, apellido_materno, correo, sha256_crypt.hash(password), telefono, tipo_usuario)
+
+                insertar_usuario(nombre, apellido_paterno, apellido_materno, correo, sha256_crypt.hash(password),
+                                 telefono, tipo_usuario)
                 return redirect('/login')
     else:
         return redirect("/")
-    
-    
+
+
 @app.route("/forgot_password", methods=['GET', 'POST'])
 def forgot_password():
     """Controla restablecer contraseña.
     Se asegura que no haya una sesion iniciada.
     Se confirma que el usuario exista y se envia un codigo de recuperación.
     Se redirige a reset_code"""
-    if 'logged_in' not in session.keys():
+    if 'logeado' not in session.keys():
         if request.method == 'GET':
             return render_template("forgot_password.html")
         elif request.method == 'POST':
@@ -104,7 +105,7 @@ def forgot_password():
                 # MANDAR CODIGO POR CORREO DE LA PERSONA
                 mandar_correo_codigo('petvetreal@gmail.com', usr['correo'], 'aozykokpzeaqcnzv', codigo)
                 flash(mensaje)
-                return redirect('/reset_code')        
+                return redirect('/reset_code')
             else:
                 mensaje = 'El correo o usuario no está registrado'
                 flash(mensaje)
@@ -112,12 +113,13 @@ def forgot_password():
     else:
         return redirect("/")
 
+
 @app.route("/reset_code", methods=['GET', 'POST'])
 def reset_code():
     """ Se asegura que el codigo sea correcto.
     Se redirige para cambiar contraseña a '/new_password'"""
-    if 'logged_in' not in session.keys():
-        if request.method == 'GET': 
+    if 'logeado' not in session.keys():
+        if request.method == 'GET':
             return render_template('reset_code.html')
         elif request.method == 'POST':
             codigo_usuario = request.form['codigo']
@@ -131,6 +133,7 @@ def reset_code():
                 return render_template('reset_code.html')
     else:
         return redirect("/")
+
 
 @app.route("/new_password", methods=['GET', 'POST'])
 def new_password():
@@ -155,6 +158,8 @@ def new_password():
                 return render_template("new_password.html")
     else:
         return redirect("/")
+
+
 @app.route('/')
 def inicio():
     return render_template("inicio.html")

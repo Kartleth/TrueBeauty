@@ -33,7 +33,7 @@
 
 <body>
 
-    <div class="card mb-3" style="max-width: 686px; width: 800%;">
+    <div class="card mb-3" style="max-width: 686px; width: 800%; height: auto">
         <div class="row g-0">
 
             <div class="col-md-4 ">
@@ -57,17 +57,22 @@
                                 <label for="firstName" class="form-label">Nombre</label>
                                 <input type="text" class="form-control" id="firstName" placeholder="" name="nombre" value="" required>
                                 <div class="invalid-feedback">
-                                    Valid first name is required.
+                                    Ingrese un nombre valido
                                 </div>
 
 
 
-                                <label for="lastName" class="form-label">Apellido</label>
-                                <input type="text" class="form-control" id="lastName" name="apellidos" placeholder="" value="" required>
+                                <label for="lastName" class="form-label">Apellido Paterno</label>
+                                <input type="text" class="form-control" id="lastName" name="apellido1" placeholder="" value="" required>
                                 <div class="invalid-feedback">
-                                    Valid last name is required.
+                                    Ingrese un apellido valido
                                 </div>
 
+                                <label for="lastName" class="form-label">Apellido Materno</label>
+                                <input type="text" class="form-control" id="lastName" name="apellido2" placeholder="" value="" required>
+                                <div class="invalid-feedback">
+                                    Ingrese un apellido valido
+                                </div>
 
 
                                 <label for="email" class="form-label">Email</label>
@@ -85,7 +90,7 @@
                                     <input type="password" class="form-control" id="password" name="password1" required>
                                 </div>
 
-                                <label for="inputPassword" class="form-label">Repetir Contraseña</label>
+                                <label for="inputPassword" class="form-label">Confirmar Contraseña</label>
                                 <div>
                                     <input type="password" class="form-control" id="password2" name="password2" oninput="check(this)" required >
                                 </div>
@@ -103,14 +108,14 @@
                                 <input type="text" class="form-control" id="telefono" name="telefono" placeholder="xxx-xxx-xxx"
                                     required>
                                 <div class="invalid-feedback">
-                                    Ingrese una número de teléfono
+                                    Ingrese un número de teléfono
                                 </div>
                                 <a> </a>
                                 <br>                
                                 <button class="w-100 btn btn-lg btn-primary" type="submit" name="enviar" value="Enviar">Registrarse</button>
 
                             </div>
-
+                            </form>
                     </div>
 
 

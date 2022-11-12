@@ -77,7 +77,7 @@
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
       <img class="me-3" src="/static/images/cleopatra.png" alt="" width="30" height="30">
-      <a class="navbar-brand" href="/inicio">True Beauty</a>
+      <a class="navbar-brand" href="/">True Beauty</a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
         aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
           <li class="nav-item">
-            <a class="nav-link" href="/fecha_cita">Agendar cita</a>
+            <a class="nav-link" href="/escoger_cita">Agendar cita</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/consultar_citas">Consultar cita</a>
@@ -97,8 +97,8 @@
         </ul>
 
         <div class="text-end">
-          {% if session['logged_in'] == True %}
-          <a class="btn btn-outline-light me-2" href="/login">Logout</a>
+          {% if session['logeado'] %}
+          <a class="btn btn-outline-light me-2" href="/logout">Logout</a>
           {% else %}
           <a class="btn btn-outline-light me-2" href="/login">Login</a>
           <a class="btn btn-outline-light me-2" href="/signup">Sign-up</a>    
