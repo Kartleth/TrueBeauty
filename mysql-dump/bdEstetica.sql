@@ -85,6 +85,9 @@ INSERT INTO sucursal(nombre,direccion, telefono, id_gerente) values ('Villa de s
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Peinado','Peinado de cabello',299.99,45);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Maquillaje','Pintada de caritas',3499.99,45);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Facial','Se te lava la mugrosa cara',1499.99,45);
+INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Corte de cabello','Se le corta la greña para que no parezca loquito',299.99,25);
+INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Manicura','Se le arregla las uñas',999.99,30);
+INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Pedicura','Se le arregla las uñas de las patas',999.99,30);
 
 INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2023-10-08','8:30',1,3,4,1);
 INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','10:00',2,3,4,1);

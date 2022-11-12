@@ -77,5 +77,18 @@ def get_lista_servicios():
     return lista
 
 
+def get_lista_sucursales():
+    conexion = obtener_conexion()
+    query = "SELECT * FROM sucursal"
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
 if __name__ == '__main__':
-    print(get_info_cita(1))
+    print(get_lista_servicios())
+    print(get_lista_sucursales())
