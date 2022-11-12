@@ -67,7 +67,7 @@ def get_info_cita(id_cita: int):
 
 def get_lista_servicios():
     conexion = obtener_conexion()
-    query = "SELECT * FROM servicio"
+    query = "SELECT CONCAT(id_servicio,'') as id_servicio, nombre, descripcion, CONCAT(precio,'') as precio, tiempo FROM servicio"
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)

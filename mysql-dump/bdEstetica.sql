@@ -56,6 +56,18 @@ CREATE TABLE sucursal(
 
 )ENGINE=MyISAM default char set=latin1;
 
+CREATE TABLE estilista_servicio(
+    id_estilista int unsigned not null,
+    id_servicio int unsigned not null
+
+)ENGINE=MyISAM default char set=latin1;
+
+CREATE TABLE cita_servicio(
+    id_cita int unsigned not null,
+    id_servicio int unsigned not null
+)ENGINE=MyISAM default char set=latin1;
+
+
 /* CREACION DE LLAVES FORANEAS*/
 ALTER TABLE cita ADD FOREIGN KEY(id_cliente) REFERENCES usuario(id_usuario);
 ALTER TABLE cita ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
@@ -67,6 +79,13 @@ ALTER TABLE empleado ADD FOREIGN KEY(id_usuario) REFERENCES usuario(id_usuario);
 ALTER TABLE empleado ADD FOREIGN KEY(id_sucursal) REFERENCES sucursal(id_sucursal);
 
 ALTER TABLE sucursal ADD FOREIGN KEY(id_gerente) REFERENCES usuario(id_usuario);
+
+
+ALTER TABLE estilista_servicio ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
+ALTER TABLE estilista_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
+
+ALTER TABLE cita_servicio ADD FOREIGN KEY(id_cita) REFERENCES cita(id_cita);
+ALTER TABLE cita_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
 
 /*INSERTS */
 use truebeauty;

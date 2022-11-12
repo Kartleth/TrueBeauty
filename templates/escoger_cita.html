@@ -49,7 +49,7 @@
 </head>
 
 <body class="bg-light">
-
+<form class="needs-validation" action="" method="POST">
   <main class="container">
     <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
       <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
@@ -60,16 +60,18 @@
     </div>
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <form class="needs-validation" action="" method="POST">
+
       <main>
 
                           <div class="col-md-5">
                   <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
 
-                  <select class="form-select" id="tipo_servicio" required>
+                  <select onchange="mostrarPrecio()" class="form-select" name="tipo_servicio" id="servicio" required>
+                      <option value="">Seleccionar...</option>
+
                       {% for servicio in lista_servicios %}
 
-                    <option value="{{ servicio['id_servicio'] }}">{{ servicio['nombre'] }}</option>
+                    <option value="{{ servicio['id_servicio']+"-"+servicio['precio'] }}">{{ servicio['nombre'] }}</option>
 
                       {% endfor %}
 
@@ -78,12 +80,22 @@
                     Please select a valid service.
                   </div>
                 </div>
+                <button onclick="agregarServicio()" type="button" class="btn" >+</button>
+                <label for="" class="form-label" id="precio">Precio: $0</label>
 
-  <div class="col-md-5">
+
+          <div class="col-md-5">
+              <ul id="lista-servicios">
+
+              </ul>
+
+        <label id="precio-total" class="form-label">Total: $0</label>
+          </div>
+                <div class="col-md-5">
                   <label for="tipo_servicio" class="form-label">Sucursal</label>
 
 
-                  <select class="form-select" id="tipo_sucursal" required>
+                  <select class="form-select" name="tipo_sucursal" required>
                       {% for sucursal in lista_sucursales %}
 
                     <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
@@ -96,11 +108,12 @@
                   </div>
                 </div>
 
+
           <div class="col-lg-8 container my-5">
 
 
                 <div class="row justify-content-center mx-5">
-                    <form class="needs-validation" action="" method="POST">
+
 
                         <div class="form-floating mb-3">
                             <input type="date" class="form-control" id="validationServer04" required name="fecha"
@@ -111,82 +124,16 @@
                             <!--<input class="btn boton_pie" type="submit" name="enviar" value="Mostrar horarios"> -->
                             <h6 style="color: #0d6efc;font-size: 1.2rem;">{{mensaje}}</h6>
                         </div>
-                    </form>
+
                 </div>
             </div>
 
 
-{#        <div class="row g-5 center">#}
-{#          <div class="col-md-7 col-lg-8">#}
-{##}
-{#            <form class="needs-validation" novalidate>#}
-{#              <div class="row g-3">#}
-{#                <div class="col-sm-6">#}
-{#                  <label for="firstName" class="form-label">Nombre</label>#}
-{#                  <input type="text" class="form-control" id="firstName" placeholder="" value="" required>#}
-{#                  <div class="invalid-feedback">#}
-{#                    Valid first name is required.#}
-{#                  </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-sm-6">#}
-{#                  <label for="lastName" class="form-label">Apellido</label>#}
-{#                  <input type="text" class="form-control" id="lastName" placeholder="" value="" required>#}
-{#                  <div class="invalid-feedback">#}
-{#                    Valid last name is required.#}
-{#                  </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-12">#}
-{#                  <label for="email" class="form-label">Email</label>#}
-{#                  <div class="input-group has-validation">#}
-{#                    <span class="input-group-text">@</span>#}
-{#                    <input type="email" class="form-control" id="email" placeholder="email" required>#}
-{#                    <div class="invalid-feedback">#}
-{#                      Your email is required.#}
-{#                    </div>#}
-{#                  </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-md-5">#}
-{#                  <label for="tipo_servicio" class="form-label">Tipo de servicio</label>#}
-{#                  <select class="form-select" id="tipo_servicio" required>#}
-{#                    <option value="">Seleccion...</option>#}
-{#                    <option>Corte de cabello</option>#}
-{#                    <option>Pedicura</option>#}
-{#                    <option>Manicura</option>#}
-{#                    <option>Maquillaje</option>#}
-{#                    <option>Faciales</option>#}
-{#                  </select>#}
-{#                  <div class="invalid-feedback">#}
-{#                    Please select a valid service.#}
-{#                  </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-md-4">#}
-{#                  <label for="fecha" class="form-label">Fecha</label>#}
-{#                  <input type="text" class="form-control" id="fecha" placeholder="" required>#}
-{#                  <div class="invalid-feedback">#}
-{#                    Ingrese una fecha#}
-{#                  </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-md-3">#}
-{#                  <label for="hora" class="form-label">Hora</label>#}
-{#                  <input type="text" class="form-control" id="hora" placeholder="" required>#}
-{#                  <div class="invalid-feedback">#}
-{#                    hora requerida.#}
-{#                  </div>#}
-{#                </div>#}
-{#              </div>#}
-{#            </form>#}
-{#          </div>#}
-{#        </div>#}
+
 
       </main>
 
-
-
+</div>
     </div>
     <hr class="my-4">
   </main>
@@ -204,7 +151,6 @@
       </div>
 
     </main>
-</form>
     <footer class="my-5 pt-5 text-muted text-center text-small">
       <p class="mb-1">&copy; 2017–2022 Company Name</p>
       <ul class="list-inline">
@@ -214,6 +160,7 @@
       </ul>
     </footer>
   </div>
+</form>
 
 
   <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
@@ -228,6 +175,55 @@
     crossorigin="anonymous"></script>
 
   <script src="offcanvas.js"></script>
+
+    <script>
+
+        let agregarServicio = () => {
+            let valor = document.getElementById('servicio').value;
+            if (valor!=='') {
+                let precio = valor.split('-')[1];
+
+                let elementos = document.getElementById('servicio');
+                let nombre = elementos.options[elementos.selectedIndex].innerText;
+
+                let lista = document.getElementById('lista-servicios').innerHTML;
+                let numServicios = document.getElementById('lista-servicios').childElementCount;
+                numServicios += 1;
+                lista += "<li id=\"serv" + numServicios + "\" >" + nombre + "\t $" + precio + "<button onclick=\"quitarServicio(" + numServicios + ")\" type=\"button\" class=\"btn\" >X</button></li>";
+                document.getElementById('lista-servicios').innerHTML = lista;
+                actualizarTotal();
+            }
+        }
+
+        let quitarServicio = (numServicios) =>{
+            let padreLista = document.getElementById('serv'+numServicios).parentNode;
+            let elemento = document.getElementById('serv'+numServicios);
+            padreLista.removeChild(elemento);
+
+            actualizarTotal();
+        }
+
+        let actualizarTotal = () => {
+            let listaServicios = document.getElementById('lista-servicios').children;
+            let precio;
+            let total=0;
+
+            for (let servicio of listaServicios){
+             precio = servicio.innerHTML;
+             precio = parseFloat( precio.split('$')[1]);
+             total += precio;
+            }
+            total=total.toFixed(2);
+            document.getElementById('precio-total').innerText='Total: $'+total;
+        }
+        let mostrarPrecio = () => {
+            let valor = document.getElementById('servicio').value;
+            let precio = valor.split('-')[1];
+
+            document.getElementById('precio').textContent = 'Precio: $'+precio;
+        }
+
+    </script>
 </body>
 
 

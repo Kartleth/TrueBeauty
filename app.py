@@ -202,6 +202,7 @@ def escoger_cita():
                     print(request.form['fecha'])
                     print(request.form['tipo_servicio'])
                     print(request.form['tipo_sucursal'])
+                    return redirect('/hora_cita')
                 else:
                     return redirect('/')
             else:
@@ -265,7 +266,7 @@ def informacion_cita(id_cita):
     else:
         return redirect('/')
 
-    return render_template("informacion_cita.html")
+
 
 
 @app.route('/reparacion')
@@ -273,9 +274,7 @@ def reparacion():
     return render_template("reparacion.html")
 
 
-@app.route('/pruebabd')
-def pruebabd():
-    return str(bd.get_usuarios())
+
 
 
 if __name__ == '__main__':
