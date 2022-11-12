@@ -2,7 +2,8 @@ import pymysql
 
 
 def obtener_conexion():
-    return pymysql.connect(host='localhost',
+    return pymysql.connect(#host='localhost',
+                           host='mysql_host',
                            user='root',
                            password='luis2002',
                            database='truebeauty',
@@ -13,7 +14,7 @@ def obtener_conexion():
                            port=3306,
                            cursorclass=pymysql.cursors.DictCursor)
 
-
+""" 
 def get_usuarios():
     conexion = obtener_conexion()
     query = "SELECT * FROM usuario"
@@ -24,7 +25,7 @@ def get_usuarios():
     conexion.commit()
     conexion.close()
     return lista
-
+"""
 
 def get_citas_de_usuario(columna: str, id_usuario: int):
     conexion = obtener_conexion()

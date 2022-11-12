@@ -44,13 +44,18 @@
 
                     <!--<img class="mb-4" src="/static/images/cleopatra.png" alt="" width="50" height="50">-->
                     <h5 class="card-title">Crea una cuenta en True Beauty</h5>
-
+                    {% for message in get_flashed_messages() %}
+                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
                     <div>
-                        <form class="needs-validation" novalidate>
+                        <form class="needs-validation" method="POST" novalidate>
                             <div>
 
                                 <label for="firstName" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                                <input type="text" class="form-control" id="firstName" placeholder="" name="nombre" value="" required>
                                 <div class="invalid-feedback">
                                     Valid first name is required.
                                 </div>
@@ -58,7 +63,7 @@
 
 
                                 <label for="lastName" class="form-label">Apellido</label>
-                                <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                                <input type="text" class="form-control" id="lastName" name="apellidos" placeholder="" value="" required>
                                 <div class="invalid-feedback">
                                     Valid last name is required.
                                 </div>
@@ -68,30 +73,41 @@
                                 <label for="email" class="form-label">Email</label>
                                 <div class="input-group has-validation">
                                     <span class="input-group-text">@</span>
-                                    <input type="email" class="form-control" id="email" placeholder="email" required>
+                                    <input type="email" class="form-control" id="email" name="correo" placeholder="email" required>
                                     <div class="invalid-feedback">
                                         Your email is required.
                                     </div>
                                 </div>
 
 
-
                                 <label for="inputPassword" class="form-label">Contraseña</label>
                                 <div>
-                                    <input type="password" class="form-control" id="inputPassword">
+                                    <input type="password" class="form-control" id="password" name="password1" required>
                                 </div>
 
-
-
+                                <label for="inputPassword" class="form-label">Repetir Contraseña</label>
+                                <div>
+                                    <input type="password" class="form-control" id="password2" name="password2" oninput="check(this)" required >
+                                </div>
+                                <script language='javascript' type='text/javascript'>
+                                    function check(input) {
+                                        if (input.value != document.getElementById('password').value) {
+                                            input.setCustomValidity('Password Must be Matching.');
+                                        } else {
+                                            // input is valid -- reset the error message
+                                            input.setCustomValidity('');
+                                        }
+                                    }
+                                </script>
                                 <label for="telefono" class="form-label">Teléfono</label>
-                                <input type="text" class="form-control" id="telefono" placeholder="xxx-xxx-xxx"
+                                <input type="text" class="form-control" id="telefono" name="telefono" placeholder="xxx-xxx-xxx"
                                     required>
                                 <div class="invalid-feedback">
                                     Ingrese una número de teléfono
                                 </div>
                                 <a> </a>
-
-                                <a href="/inicio" class="btn btn-primary position-btn">Registrarse</a>
+                                <br>                
+                                <button class="w-100 btn btn-lg btn-primary" type="submit" name="enviar" value="Enviar">Registrarse</button>
 
                             </div>
 

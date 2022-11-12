@@ -30,8 +30,8 @@ CREATE TABLE usuario (
     apellido_paterno varchar(50) NOT NULL,
     apellido_materno varchar(50) NOT NULL,
     correo varchar(50) NOT NULL,
-    contrasenia varchar(25) NOT NULL,
-    telefono int(15),
+    contrasenia varchar(200) NOT NULL,
+    telefono varchar(15),
     tipo_usuario ENUM('gerente','recepcionista','estilista','cliente') NOT NULL,
     PRIMARY KEY (id_usuario)
 
@@ -69,9 +69,7 @@ ALTER TABLE empleado ADD FOREIGN KEY(id_sucursal) REFERENCES sucursal(id_sucursa
 ALTER TABLE sucursal ADD FOREIGN KEY(id_gerente) REFERENCES usuario(id_usuario);
 
 /*INSERTS */
-
-
-
+use truebeauty;
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
 VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','gerente');
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)

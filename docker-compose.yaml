@@ -6,7 +6,7 @@ services:
       - "5600:3306"
     container_name: mysql_estetica
     environment:
-      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: "luis2002"
       MYSQL_USER: "admin"
       MYSQL_PASSWORD: "admin_123"
       MYSQL_DATABASE: "truebeauty"
@@ -21,6 +21,7 @@ services:
     build: .  
     ports:
       - "5000:5000"
+      - "470:465"
     networks:
       mysql_network:
         aliases:
