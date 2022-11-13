@@ -164,6 +164,10 @@ def new_password():
 def inicio():
     return render_template("inicio.html")
 
+@app.route('/inicio_cliente')
+def inicio_cliente():
+    return render_template("inicio_cliente.html")
+
 
 @app.route('/agendar_cita', methods=['GET', 'POST'])
 def agendar_cita():

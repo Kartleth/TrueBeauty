@@ -1,6 +1,5 @@
-
 <!--ARCHIVO HECHO DE PRUEBA -->
-{% extends 'base.html' %} {% include 'nav-scroller.html' %}
+{% extends 'base.html' %} 
 {% block title %}Hora_cita{% endblock %}
 
 {% block body %}
@@ -49,118 +48,106 @@
 </head>
 
 <body class="bg-light">
-<form class="needs-validation" action="" method="POST">
-  <main class="container">
-    <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
-      <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
-      <div class="lh-1">
-        <h1 class="h6 mb-0 text-white lh-1">Complete los siguientes campos:</h1>
-        <small>(Escoga para ver las horas disponibles)</small>
-      </div>
-    </div>
-
-    <div class="my-3 p-3 bg-body rounded shadow-sm">
-
-      <main>
-
-                          <div class="col-md-5">
-                  <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
-
-                  <select onchange="mostrarPrecio()" class="form-select" name="tipo_servicio" id="servicio" required>
-                      <option value="">Seleccionar...</option>
-
-                      {% for servicio in lista_servicios %}
-
-                    <option value="{{ servicio['id_servicio']+"-"+servicio['precio'] }}">{{ servicio['nombre'] }}</option>
-
-                      {% endfor %}
-
-                  </select>
-                  <div class="invalid-feedback">
-                    Please select a valid service.
-                  </div>
-                </div>
-                <button onclick="agregarServicio()" type="button" class="btn" >+</button>
-                <label for="" class="form-label" id="precio">Precio: $0</label>
-
-
-          <div class="col-md-5">
-              <ul id="lista-servicios">
-
-              </ul>
-
-        <label id="precio-total" class="form-label">Total: $0</label>
-          </div>
-                <div class="col-md-5">
-                  <label for="tipo_servicio" class="form-label">Sucursal</label>
-
-
-                  <select class="form-select" name="tipo_sucursal" required>
-                      {% for sucursal in lista_sucursales %}
-
-                    <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
-
-                      {% endfor %}
-
-                  </select>
-                  <div class="invalid-feedback">
-                    Please select a valid service.
-                  </div>
-                </div>
-
-
-          <div class="col-lg-8 container my-5">
-
-
-                <div class="row justify-content-center mx-5">
-
-
-                        <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="validationServer04" required name="fecha"
-                                min="{{date_min}}" max="{{date_max}}">
-                            <label for="validationServer04">Fecha</label>
-                        </div>
-                        <div class="contenedor_btns">
-                            <!--<input class="btn boton_pie" type="submit" name="enviar" value="Mostrar horarios"> -->
-                            <h6 style="color: #0d6efc;font-size: 1.2rem;">{{mensaje}}</h6>
-                        </div>
-
-                </div>
-            </div>
-
-
-
-
-      </main>
-
-</div>
-    </div>
-    <hr class="my-4">
-  </main>
-
-
-
-  <div class="container">
-    <main>
-      <div class="row g-5 center">
-        <div class="col-md-7 col-lg-8">
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>
-{#          <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
-          
+  <form class="needs-validation" action="" method="POST">
+    <main class="container">
+      <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+        <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
+        <div class="lh-1">
+          <h1 class="h6 mb-0 text-white lh-1">Complete los siguientes campos:</h1>
+          <small>(Escoga para ver las horas disponibles)</small>
         </div>
       </div>
 
+      <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+        <main>
+          <div class="row g-3">
+
+            <div class="col-12">
+                <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
+  
+                <select onchange="mostrarPrecio()" class="form-select" name="tipo_servicio" id="servicio" required>
+                  <option value="">Seleccionar...</option>
+  
+                  {% for servicio in lista_servicios %}
+                  <option value="{{ servicio['id_servicio']+" -"+servicio['precio'] }}">{{ servicio['nombre'] }}</option>
+                  {% endfor %}
+  
+                </select>
+                <div class="invalid-feedback">
+                  Please select a valid service.
+                </div>
+  
+                <button onclick="agregarServicio()" type="button" class="btn">+</button>
+                <label for="" class="form-label" id="precio">Precio: $0</label>
+  
+                <div class="col-md-5">
+                  <ul id="lista-servicios">
+                  </ul>
+                  <label id="precio-total" class="form-label">Total: $0</label>
+                </div>
+            </div>
+  
+            <div class="col-12">
+                <label for="tipo_servicio" class="form-label">Sucursal</label>
+                <select class="form-select" name="tipo_sucursal" required>
+                  {% for sucursal in lista_sucursales %}
+                  <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
+                  {% endfor %}
+                </select>
+                <div class="invalid-feedback">
+                  Please select a valid service.
+                </div>
+            </div>
+  
+  
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                  <input type="date" class="form-control" id="validationServer04" required name="fecha" min="{{date_min}}"
+                    max="{{date_max}}">
+                  <label for="validationServer04">Fecha</label>
+                </div>
+            </div>
+  
+
+
+          </div>
+      </div>
+      </div>
     </main>
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-      <p class="mb-1">&copy; 2017–2022 Company Name</p>
-      <ul class="list-inline">
-        <li class="list-inline-item"><a href="#">Privacy</a></li>
-        <li class="list-inline-item"><a href="#">Terms</a></li>
-        <li class="list-inline-item"><a href="#">Support</a></li>
-      </ul>
-    </footer>
-  </div>
-</form>
+    </div>
+    </div>
+    <hr class="my-4">
+    </main>
+    <div class="container">
+      <main>
+        <!--<div class="row g-5 center">
+          <div class="col-md-7 col-lg-8">
+            <button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>
+            {# <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
+
+          </div>
+        </div>-->
+
+        
+          <!--<button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>-->
+          <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>
+
+        
+
+      </div>
+
+      </main>
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017–2022 Company Name</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+      </footer>
+    </div>
+  </form>
 
 
   <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
@@ -176,54 +163,54 @@
 
   <script src="offcanvas.js"></script>
 
-    <script>
+  <script>
 
-        let agregarServicio = () => {
-            let valor = document.getElementById('servicio').value;
-            if (valor!=='') {
-                let precio = valor.split('-')[1];
+    let agregarServicio = () => {
+      let valor = document.getElementById('servicio').value;
+      if (valor !== '') {
+        let precio = valor.split('-')[1];
 
-                let elementos = document.getElementById('servicio');
-                let nombre = elementos.options[elementos.selectedIndex].innerText;
+        let elementos = document.getElementById('servicio');
+        let nombre = elementos.options[elementos.selectedIndex].innerText;
 
-                let lista = document.getElementById('lista-servicios').innerHTML;
-                let numServicios = document.getElementById('lista-servicios').childElementCount;
-                numServicios += 1;
-                lista += "<li id=\"serv" + numServicios + "\" >" + nombre + "\t $" + precio + "<button onclick=\"quitarServicio(" + numServicios + ")\" type=\"button\" class=\"btn\" >X</button></li>";
-                document.getElementById('lista-servicios').innerHTML = lista;
-                actualizarTotal();
-            }
-        }
+        let lista = document.getElementById('lista-servicios').innerHTML;
+        let numServicios = document.getElementById('lista-servicios').childElementCount;
+        numServicios += 1;
+        lista += "<li id=\"serv" + numServicios + "\" >" + nombre + "\t $" + precio + "<button onclick=\"quitarServicio(" + numServicios + ")\" type=\"button\" class=\"btn\" >X</button></li>";
+        document.getElementById('lista-servicios').innerHTML = lista;
+        actualizarTotal();
+      }
+    }
 
-        let quitarServicio = (numServicios) =>{
-            let padreLista = document.getElementById('serv'+numServicios).parentNode;
-            let elemento = document.getElementById('serv'+numServicios);
-            padreLista.removeChild(elemento);
+    let quitarServicio = (numServicios) => {
+      let padreLista = document.getElementById('serv' + numServicios).parentNode;
+      let elemento = document.getElementById('serv' + numServicios);
+      padreLista.removeChild(elemento);
 
-            actualizarTotal();
-        }
+      actualizarTotal();
+    }
 
-        let actualizarTotal = () => {
-            let listaServicios = document.getElementById('lista-servicios').children;
-            let precio;
-            let total=0;
+    let actualizarTotal = () => {
+      let listaServicios = document.getElementById('lista-servicios').children;
+      let precio;
+      let total = 0;
 
-            for (let servicio of listaServicios){
-             precio = servicio.innerHTML;
-             precio = parseFloat( precio.split('$')[1]);
-             total += precio;
-            }
-            total=total.toFixed(2);
-            document.getElementById('precio-total').innerText='Total: $'+total;
-        }
-        let mostrarPrecio = () => {
-            let valor = document.getElementById('servicio').value;
-            let precio = valor.split('-')[1];
+      for (let servicio of listaServicios) {
+        precio = servicio.innerHTML;
+        precio = parseFloat(precio.split('$')[1]);
+        total += precio;
+      }
+      total = total.toFixed(2);
+      document.getElementById('precio-total').innerText = 'Total: $' + total;
+    }
+    let mostrarPrecio = () => {
+      let valor = document.getElementById('servicio').value;
+      let precio = valor.split('-')[1];
 
-            document.getElementById('precio').textContent = 'Precio: $'+precio;
-        }
+      document.getElementById('precio').textContent = 'Precio: $' + precio;
+    }
 
-    </script>
+  </script>
 </body>
 
 
