@@ -94,16 +94,7 @@
                                 <div>
                                     <input type="password" class="form-control" id="password2" name="password2" oninput="check(this)" required >
                                 </div>
-                                <script language='javascript' type='text/javascript'>
-                                    function check(input) {
-                                        if (input.value != document.getElementById('password').value) {
-                                            input.setCustomValidity('Password Must be Matching.');
-                                        } else {
-                                            // input is valid -- reset the error message
-                                            input.setCustomValidity('');
-                                        }
-                                    }
-                                </script>
+
                                 <label for="telefono" class="form-label">Teléfono</label>
                                 <input type="text" class="form-control" id="telefono" name="telefono" placeholder="xxx-xxx-xxx"
                                     required>

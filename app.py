@@ -116,7 +116,7 @@ def forgot_password():
 
 @app.route("/reset_code", methods=['GET', 'POST'])
 def reset_code():
-    """ Se asegura que el codigo sea correcto.
+    """ Se asegura que el codigo sea correcto.1|
     Se redirige para cambiar contraseña a '/new_password'"""
     if 'logeado' not in session.keys():
         if request.method == 'GET':
@@ -206,6 +206,7 @@ def escoger_cita():
                     print(request.form['fecha'])
                     print(request.form['tipo_servicio'])
                     print(request.form['tipo_sucursal'])
+                    print(str(request.form.keys()))
                     return redirect('/hora_cita')
                 else:
                     return redirect('/')
