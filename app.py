@@ -205,7 +205,7 @@ def escoger_cita():
                     global lista_servicios_sel
                     lista_servicios_sel = obtener_servicios(request.form.to_dict())
                     global lista_horas_disponibles
-                    lista_horas_disponibles = obtener_horas_disponibles(id_sucursal, fecha, lista_servicios_sel)
+                    lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, lista_servicios_sel)
 
                     return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
