@@ -25,15 +25,19 @@
 
             <div class="list-group">
                 {% for hora in horas_disponibles %}
-                    <a href="#" class="list-group-item list-group-item-action">{{ hora }}</a>
-                {% endfor %}
 
+                    <label class="list-group-item list-group-item-action" for="hora_{{ hora.index }}">
+                      <input id="hora_{{ hora.index }}" type="radio" name="hora" value="{{ hora }}">  {{ hora }} Horas</label>
+{#                    <a href="/confirmar_cita/{{ hora }}" class="list-group-item list-group-item-action">{{ hora }}</a>#}
+                {% endfor %}
+<!--
                 <a href="#" class="list-group-item list-group-item-action">9:00 AM</a>
                 <a href="#" class="list-group-item list-group-item-action">9:30 AM</a>
                 <a href="#" class="list-group-item list-group-item-action">1:00 PM</a>
                 <a href="#" class="list-group-item list-group-item-action">4:00 PM</a>
                 <a href="#" class="list-group-item list-group-item-action">4:30 PM</a>
                 <a class="list-group-item list-group-item-action disabled">5:00 PM</a>
+                -->
               </div>
 
 

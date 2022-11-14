@@ -186,7 +186,7 @@ def agendar_cita():
     return render_template("agendar_cita.html")
 
 
-# METODO DE PRUEBA
+
 @app.route('/escoger_cita', methods=['GET', 'POST'])
 def escoger_cita():
     if 'logeado' in session.keys():
@@ -204,8 +204,7 @@ def escoger_cita():
                     fecha = request.form['fecha']
                     global lista_servicios_sel
                     lista_servicios_sel = obtener_servicios(request.form.to_dict())
-                    global lista_horas_disponibles
-                    lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, lista_servicios_sel)
+
 
                     return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
@@ -218,6 +217,8 @@ def escoger_cita():
         return redirect('/')
 
 
+
+
 @app.route('/fecha_cita')
 def fecha_cita():
     return render_template("fecha_cita.html")
@@ -228,15 +229,24 @@ def hora_cita():
     if 'logeado' in session.keys():
         if session['logeado']:
             if request.method == 'GET':
-
-                return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
+                id_sucursal = request.args['id_sucursal']
+                fecha = request.args['fecha']
+                global lista_horas_disponibles
+                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, lista_servicios_sel)
+                if lista_horas_disponibles is None:
+                    return redirect('/escoger_cita')
+                else:
+                    return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
             elif request.method == 'POST':
+                return
                 print()
         else:
             return redirect('/')
     else:
         return redirect('/')
     return render_template("hora_cita.html")
+
+
 
 
 @app.route('/consultar_citas')
