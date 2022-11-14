@@ -91,6 +91,17 @@ def get_lista_sucursales():
     conexion.close()
     return lista
 
+def get_lista_estilistas_de_sucursal(id_sucursal):
+    conexion = obtener_conexion()
+    query = "SELECT id_usuario,turno FROM empleado WHERE id_sucursal="+id_sucursal
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
 
 if __name__ == '__main__':
     print(get_lista_servicios())

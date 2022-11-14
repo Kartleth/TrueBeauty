@@ -11,7 +11,9 @@ app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
 
 diccionario_menu = get_dicc_menu()
+
 lista_servicios_sel = []
+lista_horas_disponibles = []
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -164,6 +166,7 @@ def new_password():
 def inicio():
     return render_template("inicio.html")
 
+
 @app.route('/inicio_cliente')
 def inicio_cliente():
     return render_template("inicio_cliente.html")
@@ -186,16 +189,10 @@ def agendar_cita():
 # METODO DE PRUEBA
 @app.route('/escoger_cita', methods=['GET', 'POST'])
 def escoger_cita():
-    session['logeado'] = True
-    session['tipo'] = 'cliente'
-    session['id_usuario'] = 3
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
                 if request.method == 'GET':
-                    sucursales = get_lista_sucursales()
-                    servicios = get_lista_servicios()
-
                     fecha = get_cur_datetime()
                     return render_template('escoger_cita.html',
                                            lista_sucursales=get_lista_sucursales(),
@@ -203,11 +200,14 @@ def escoger_cita():
                                            date_min=fecha['fecha_actual'],
                                            date_max=fecha['fecha_fin'])
                 elif request.method == 'POST':
-                    print(request.form['fecha'])
-                    print(request.form['tipo_servicio'])
-                    print(request.form['tipo_sucursal'])
-                    print(str(request.form.keys()))
-                    return redirect('/hora_cita')
+                    id_sucursal = request.form['tipo_sucursal']
+                    fecha = request.form['fecha']
+                    global lista_servicios_sel
+                    lista_servicios_sel = obtener_servicios(request.form.to_dict())
+                    global lista_horas_disponibles
+                    lista_horas_disponibles = obtener_horas_disponibles(id_sucursal, fecha, lista_servicios_sel)
+
+                    return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
                     return redirect('/')
             else:
@@ -223,16 +223,24 @@ def fecha_cita():
     return render_template("fecha_cita.html")
 
 
-@app.route('/hora_cita')
+@app.route('/hora_cita', methods=['GET', 'POST'])
 def hora_cita():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if request.method == 'GET':
+
+                return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
+            elif request.method == 'POST':
+                print()
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
     return render_template("hora_cita.html")
 
 
 @app.route('/consultar_citas')
 def consultar_citas():
-    session['logeado'] = True
-    session['tipo'] = 'estilista'
-    session['id_usuario'] = 3
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
@@ -253,9 +261,6 @@ def consultar_citas():
 
 @app.route('/informacion_cita/<id_cita>', methods=['GET', 'POST'])
 def informacion_cita(id_cita):
-    session['logeado'] = True
-    session['tipo'] = 'estilista'
-    session['id_usuario'] = 3
     if session['logeado']:
         if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
             if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
@@ -272,14 +277,9 @@ def informacion_cita(id_cita):
         return redirect('/')
 
 
-
-
 @app.route('/reparacion')
 def reparacion():
     return render_template("reparacion.html")
-
-
-
 
 
 if __name__ == '__main__':

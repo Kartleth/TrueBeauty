@@ -24,6 +24,10 @@
         <div class="my-3 p-3 bg-body rounded shadow-sm">
 
             <div class="list-group">
+                {% for hora in horas_disponibles %}
+                    <a href="#" class="list-group-item list-group-item-action">{{ hora }}</a>
+                {% endfor %}
+
                 <a href="#" class="list-group-item list-group-item-action">9:00 AM</a>
                 <a href="#" class="list-group-item list-group-item-action">9:30 AM</a>
                 <a href="#" class="list-group-item list-group-item-action">1:00 PM</a>

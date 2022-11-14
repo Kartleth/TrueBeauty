@@ -183,19 +183,14 @@
         console.log(id_servicio);
         quitarOpcionDeComboList(id_servicio);
 
-        lista += "<li id=\"" + id_servicio + "\" ><input type='text' style='all:unset;' value='" + nombre + "\t $" + precio + "' name='serv" + id_servicio + "'><button onclick=\"quitarServicioDeMonto(" + id_servicio + ")\" type=\"button\" class=\"btn\" >X</button></li>";
+        lista += "<li id=\"" + id_servicio + "\" ><input type='text' style='all:unset;' value='" + nombre + "  $" + precio + "' name='serv_" + id_servicio + "'><button onclick=\"quitarServicioDeMonto(" + id_servicio + ")\" type=\"button\" class=\"btn\" >X</button></li>";
         document.getElementById('lista-servicios').innerHTML = lista;
         actualizarTotal();
         document.getElementById('precio').textContent = 'Precio: $0.00' ;
       }
     }
 
-    let moverServicioAMonto=(id_servicio)=>{
 
-    }
-    let moverServicioAComboList = (id_servicio) =>{
-
-    }
 
     let quitarOpcionDeComboList = (id_opcion) =>{
         let comboList = document.getElementById(id_opcion).parentNode;
@@ -213,7 +208,7 @@
     let quitarServicioDeMonto = (id_servicio) => {
         console.log('ID DE SERVICIO A QUITAR:'+id_servicio);
         let elemento = document.getElementById(id_servicio);
-        let servicio = document.getElementsByName('serv'+id_servicio)[0];
+        let servicio = document.getElementsByName('serv_'+id_servicio)[0];
         console.log(servicio);
         let comboList = document.getElementById('comboListServicios');
         let nodo = document.createElement("option")

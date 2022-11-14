@@ -112,4 +112,6 @@ INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal
 INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','10:00',2,3,4,1);
 INSERT INTO cita(fecha, hora, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','14:00',3,3,4,1);
 
+INSERT INTO empleado(id_usuario,id_sucursal,turno) values(3,1,'tiempo completo');
+
 SELECT * FROM usuario;
