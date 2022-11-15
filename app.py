@@ -226,6 +226,14 @@ def fecha_cita():
 def hora_cita():
     return render_template("hora_cita.html")
 
+@app.route('/ver_cita_gerente_recepcionista')
+def ver_cita_gerente_recepcionista():
+    return render_template("ver_cita_gerente_recepcionista.html")
+
+@app.route('/registrarse')
+def registrarse():
+    return render_template("registrarse.html")
+
 
 @app.route('/consultar_citas')
 def consultar_citas():

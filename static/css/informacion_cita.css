@@ -57,3 +57,8 @@ body {
   .scrollarea {
     overflow-y: auto;
   }
+
+  .bg-purple {
+    background-color: #7CB8EB;
+  }
+  
