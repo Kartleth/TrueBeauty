@@ -95,11 +95,11 @@ use truebeauty;
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
 VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','gerente');
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx',' $5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','recepcionista');
+VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','recepcionista');
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('David','Nuñez','Gurrola','david@gmail.com',' $5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','21354684565','estilista');
+VALUES('David','Nuñez','Gurrola','david@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','21354684565','estilista');
 INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Karla','Lerma','Molina','karla@gmail.com',' $5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','12145789632','cliente');
+VALUES('Karla','Lerma','Molina','karla@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','12145789632','cliente');
 
 INSERT INTO sucursal(nombre,direccion, telefono, id_gerente) values ('Villa de seris','Colonia villa de seris, calle isabel #18','6212254887',2);
 
@@ -111,9 +111,9 @@ INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Corte de cabel
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Manicura','Se le arregla las uñas',999.99,30);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Pedicura','Se le arregla las uñas de las patas',999.99,30);
 
-INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto) VALUES ('2023-10-08','8:30','9:00',1,3,1000);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','10:00','12:00',2,3,12021);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','14:00','16:00',3,3,3000);
+INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto) VALUES ('2023-10-08','8:30','9:00',1,1,1000);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','10:00','12:00',2,1,12021);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','14:00','16:00',3,1,3000);
 
 INSERT INTO empleado(id_usuario,id_sucursal,turno) values(3,1,'tiempo completo');
 

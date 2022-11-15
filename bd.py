@@ -34,8 +34,7 @@ def get_usuarios():
 
 def get_citas_de_usuario(columna: str, id_usuario: int):
     conexion = obtener_conexion()
-    query = "SELECT C.id_cita, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, S.nombre as nombre_servicio FROM cita C, servicio S WHERE C.id_servicio=S.id_servicio AND C." + columna + "=" + str(
-        id_usuario)
+    query = "SELECT C.id_cita, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora FROM cita C WHERE  C." + columna + "=" + str(id_usuario)
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
