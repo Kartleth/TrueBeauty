@@ -104,54 +104,13 @@
                     </div>
 
 
-                    <div class="col-sm-6">
-                        <label for="firstName" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="Lucia" value="" required>
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label for="lastName" class="form-label">Apellido</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Lopez" value="" required>
-                        <div class="invalid-feedback">
-                            Valid last name is required.
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="email" class="form-label">Email</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text">@</span>
-                            <input type="email" class="form-control" id="email" placeholder="Lucia@gmail.com" required>
-                            <div class="invalid-feedback">
-                                Your email is required.
-                            </div>
-                        </div>
-                    </div>
 
 
-                    <div class="col-md-5">
-                        <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
-                        <select class="form-select" id="tipo_servicio" required>
-                            <!--<option value="">Seleccion...</option>-->
-                            {% for servicio in lista_servicios %}
-                            <option value="{{ servicio['id_servicio'] }}" {% if
-                                servicio['nombre']==dicc_cita['nombre_servicio'] %}selected{% endif %}>
-                                {{ servicio['nombre'] }}</option>
-
-                            {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">
-                            Selecciona un servicio valido
-                        </div>
-                    </div>
 
                     <div class="col-md-4">
                         <label for="fecha" class="form-label">Fecha</label>
-                        <input type="text" class="form-control" id="fecha" placeholder="{{ dicc_cita['fecha'] }}"
-                            required>
+                        <input style="all:unset;" type="text" class="form-control" id="fecha" value="{{ dicc_cita['fecha'] }}"
+                            disabled>
                         <div class="invalid-feedback">
                             Ingrese una fecha
                         </div>
