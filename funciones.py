@@ -103,8 +103,19 @@ def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> b
     return False
 
 
-def get_horas_libres_de_estilista():
-    return 0
+def crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados)-> dict:
+    dicc = {}
+    lista_de_diccs_servicios = get_servs_por_lista_id(servicios_seleccionados)
+    info_sucursal = get_info_sucursal(id_sucursal)
+
+    dicc['lista_servicios'] = lista_de_diccs_servicios
+    dicc['info_sucursal'] = info_sucursal
+    dicc['fecha'] = fecha
+    dicc['hora'] = hora
+    return dicc
+
+
+
 
 
 if __name__ == '__main__':

@@ -13,7 +13,6 @@ app.secret_key = 'lwiu74dhn2SuF3j'
 diccionario_menu = get_dicc_menu()
 
 lista_servicios_sel = []
-lista_horas_disponibles = []
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -186,7 +185,6 @@ def agendar_cita():
     return render_template("agendar_cita.html")
 
 
-
 @app.route('/escoger_cita', methods=['GET', 'POST'])
 def escoger_cita():
     if 'logeado' in session.keys():
@@ -205,7 +203,6 @@ def escoger_cita():
                     global lista_servicios_sel
                     lista_servicios_sel = obtener_servicios(request.form.to_dict())
 
-
                     return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
                     return redirect('/')
@@ -217,8 +214,6 @@ def escoger_cita():
         return redirect('/')
 
 
-
-
 @app.route('/fecha_cita')
 def fecha_cita():
     return render_template("fecha_cita.html")
@@ -228,18 +223,26 @@ def fecha_cita():
 def hora_cita():
     if 'logeado' in session.keys():
         if session['logeado']:
+
+            id_sucursal = request.args['id_sucursal']
+            fecha = request.args['fecha']
+            global lista_servicios_sel
+            servicios_seleccionados = lista_servicios_sel.copy()
+            lista_servicios_sel.clear()
+
+            lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, servicios_seleccionados)
+
             if request.method == 'GET':
-                id_sucursal = request.args['id_sucursal']
-                fecha = request.args['fecha']
-                global lista_horas_disponibles
-                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, lista_servicios_sel)
                 if lista_horas_disponibles is None:
                     return redirect('/escoger_cita')
                 else:
                     return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
             elif request.method == 'POST':
-                return
-                print()
+                hora = request.form['hora']
+                lista_servicios_sel = servicios_seleccionados.copy()
+
+                return redirect(url_for('confirmar_cita', fecha=fecha, id_sucursal=id_sucursal, hora=hora))
+
         else:
             return redirect('/')
     else:
@@ -247,6 +250,22 @@ def hora_cita():
     return render_template("hora_cita.html")
 
 
+@app.route('/confirmar_cita', methods=['GET', 'POST'])
+def confirmar_cita():
+    if 'logeado' in session.keys():
+        global lista_servicios_sel
+        servicios_seleccionados = lista_servicios_sel.copy()
+        lista_servicios_sel.clear()
+        id_sucursal = request.args['id_sucursal']
+        fecha = request.args['fecha']
+        hora = request.args['hora']
+        if session['logeado']:
+            dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados)
+            return render_template('confirmar_cita.html',info_cita=dicc_info_cita)
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
 
 
 @app.route('/consultar_citas')

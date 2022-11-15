@@ -106,9 +106,11 @@ def get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio):
     conexion.close()
     return lista
 
-def estilista_tiene_cita(hora,id_estilista,fecha):
+
+def estilista_tiene_cita(hora, id_estilista, fecha):
     conexion = obtener_conexion()
-    query = "SELECT id_cita FROM cita WHERE hora='"+str(hora)+"' AND id_estilista="+str(id_estilista)+" AND fecha='"+fecha+"'"
+    query = "SELECT id_cita FROM cita WHERE hora='" + str(hora) + "' AND id_estilista=" + str(
+        id_estilista) + " AND fecha='" + fecha + "'"
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
@@ -116,6 +118,7 @@ def estilista_tiene_cita(hora,id_estilista,fecha):
     conexion.commit()
     conexion.close()
     return True
+
 
 # def hora_esta_disponible(hora,id_estilista,id_servicio):
 #     conexion = obtener_conexion()
@@ -128,6 +131,33 @@ def estilista_tiene_cita(hora,id_estilista,fecha):
 #     conexion.close()
 #     return False
 
+def get_servs_por_lista_id(lista_id_servicio):
+    conexion = obtener_conexion()
+    query = "SELECT * FROM servicio WHERE"
+    for id_servicio in lista_id_servicio:
+        query += ' id_servicio=' + str(id_servicio) + " OR"
+    query = query[:-2]
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+def get_info_sucursal(id_sucursal):
+    conexion = obtener_conexion()
+    query = "SELECT * FROM sucursal WHERE id_sucursal="+id_sucursal
+
+
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
 if __name__ == '__main__':
-    print(get_lista_servicios())
-    print(get_lista_sucursales())
+    print(str(get_servs_por_lista_id(['1', '2', '3'])))

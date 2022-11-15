@@ -21,32 +21,65 @@
             </div>
         </div>
 
+<form class="needs-validation" action="" method="POST">
         <div class="my-3 p-3 bg-body rounded shadow-sm">
-
-            <div class="list-group">
-                {% for hora in horas_disponibles %}
-
-                    <label class="list-group-item list-group-item-action" for="hora_{{ hora.index }}">
-                      <input id="hora_{{ hora.index }}" type="radio" name="hora" value="{{ hora }}">  {{ hora }} Horas</label>
-{#                    <a href="/confirmar_cita/{{ hora }}" class="list-group-item list-group-item-action">{{ hora }}</a>#}
-                {% endfor %}
-<!--
-                <a href="#" class="list-group-item list-group-item-action">9:00 AM</a>
-                <a href="#" class="list-group-item list-group-item-action">9:30 AM</a>
-                <a href="#" class="list-group-item list-group-item-action">1:00 PM</a>
-                <a href="#" class="list-group-item list-group-item-action">4:00 PM</a>
-                <a href="#" class="list-group-item list-group-item-action">4:30 PM</a>
-                <a class="list-group-item list-group-item-action disabled">5:00 PM</a>
-                -->
-              </div>
+            <div class="col-lg-8 container my-5">
 
 
+                <div class="row justify-content-center mx-5">
+
+
+
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="hora">
+                                {% for hora in horas_disponibles %}
+
+                                <option value="{{ hora }}">{{ hora }} Horas</option>
+
+                                {% endfor %}
+
+                            </select>
+
+
+
+
+
+                </div>
+            </div>
         </div>
 
-
-
         <hr class="my-4">
-        <p align="right"><a class="btn btn-lg btn-primary" href="/agendar_cita">Información de cita</a></p>
+            <p align="right"><button class="btn btn-lg btn-primary" type="submit" >Continuar</button></p>
+
+</form>
+{#        <form action="" method="POST">#}
+{#        <div class="my-3 p-3 bg-body rounded shadow-sm">#}
+{##}
+{#            <div class="list-group">#}
+{#                {% for hora in horas_disponibles %}#}
+{##}
+{#                    <label class="list-group-item list-group-item-action" for="hora_{{ hora.index }}">#}
+{#                      <input id="hora_{{ hora.index }}" type="radio" name="hora" value="{{ hora }}">  {{ hora }} Horas</label>#}
+{#                    <a href="/confirmar_cita/{{ hora }}" class="list-group-item list-group-item-action">{{ hora }}</a>#}
+{#                {% endfor %}#}
+{#<!--#}
+{#                <a href="#" class="list-group-item list-group-item-action">9:00 AM</a>#}
+{#                <a href="#" class="list-group-item list-group-item-action">9:30 AM</a>#}
+{#                <a href="#" class="list-group-item list-group-item-action">1:00 PM</a>#}
+{#                <a href="#" class="list-group-item list-group-item-action">4:00 PM</a>#}
+{#                <a href="#" class="list-group-item list-group-item-action">4:30 PM</a>#}
+{#                <a class="list-group-item list-group-item-action disabled">5:00 PM</a>#}
+{#                -->#}
+{#              </div>#}
+{##}
+{##}
+{#        </div>#}
+{##}
+{##}
+{##}
+{#        <hr class="my-4">#}
+{#            <p align="right"><button class="btn btn-lg btn-primary" type="submit" >Continuar</button></p>#}
+{#    </form>#}
+{#        <p align="right"><a class="btn btn-lg btn-primary" href="/agendar_cita">Información de cita</a></p>#}
 
 
 
