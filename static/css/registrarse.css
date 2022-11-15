@@ -1,10 +1,10 @@
 body{
-    margin:0;
-    padding: 0;
+    /*margin:0;*/
+    /*padding: 0;*/
     font-family: 'Montserrat';
     background: linear-gradient(120deg, #cbe5f7,  #5b9ad1 ) ;
-    height: 100vh;
-    overflow: hidden;
+    /*height: 100vh;*/
+    /*overflow: hidden;*/
 }
 
 .center{
