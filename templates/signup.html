@@ -4,42 +4,52 @@
 <head>
     <meta charser="utf-8">
     <title>SignUp</title>
-    <link rel="stylesheet" href="/static/css/registrarse.css"></link>
-    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Montserrat'></link>
+    <link rel="stylesheet" href="/static/css/registrarse.css">
+    </link>
+    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Montserrat'>
+    </link>
 </head>
 
 <body>
-    
+
     <div class="center">
         <img src="/static/images/cleopatra.png" alt="" width="48" height="48">
         <h1>Registrarse</h1>
         <form method="post">
             <div class="txt_field">
-                <input type="text" required ></input>
-                <span ></span>
+                <input type="text" required></input>
+                <span></span>
                 <label>Nombre</label>
             </div>
 
             <div class="txt_field">
-                <input type="email" required ></input>
-                <span ></span>
+                <input type="email" required></input>
+                <span></span>
                 <label>Email</label>
             </div>
 
             <div class="txt_field">
-                <input type="password" required ></input>
-                <span ></span>
+                <input input type="tel" name="telephone" pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}"
+                    title="A valid telephone number consist of a 3 digits code area between brackets, a space, the three first digits of the number, a space or hypen (-), and four more digits"
+                    required></input>
+                <span></span>
+                <label>Télefono</label>
+            </div>
+
+            <div class="txt_field">
+                <input type="password" required></input>
+                <span></span>
                 <label>Contraseña</label>
             </div>
 
             <div class="txt_field">
-                <input type="password" required ></input>
-                <span ></span>
+                <input type="password" required></input>
+                <span></span>
                 <label>Repetir contraseña</label>
             </div>
 
-            
-            <input type="submit" value="Registrarse" required ></input>
+
+            <input type="submit" value="Registrarse" required></input>
 
             <div class="login_link">
                 ¿Ya estás registrado?
