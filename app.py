@@ -170,6 +170,10 @@ def inicio():
 def inicio_cliente():
     return render_template("inicio_cliente.html")
 
+@app.route('/registrar_servicio')
+def registrar_servicio():
+    return render_template("registrar_servicio.html")
+
 
 @app.route('/agendar_cita', methods=['GET', 'POST'])
 def agendar_cita():

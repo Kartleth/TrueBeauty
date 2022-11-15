@@ -65,49 +65,51 @@
           <div class="row g-3">
 
             <div class="col-12">
-                <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
+              <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
 
-                <select id="comboListServicios" onchange="mostrarPrecio()" class="form-select" name="tipo_servicio"  required>
+              <select id="comboListServicios" onchange="mostrarPrecio()" class="form-select" name="tipo_servicio"
+                required>
 
 
-                  {% for servicio in lista_servicios %}
-                  <option id="{{ servicio['id_servicio'] }}" value="{{ servicio['id_servicio']+"-"+servicio['precio'] }}">{{ servicio['nombre'] }}</option>
-                  {% endfor %}
+                {% for servicio in lista_servicios %}
+                <option id="{{ servicio['id_servicio'] }}" value="{{ servicio['id_servicio']+" -"+servicio['precio']
+                  }}">{{ servicio['nombre'] }}</option>
+                {% endfor %}
 
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid service.
-                </div>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid service.
+              </div>
 
-                <button onclick="agregarServicio()" type="button" class="btn">+</button>
-                <label for="" class="form-label" id="precio">Precio: $0.00</label>
+              <button onclick="agregarServicio()" type="button" class="btn">+</button>
+              <label for="" class="form-label" id="precio">Precio: $0.00</label>
 
-                <div class="col-md-5">
-                  <ul id="lista-servicios">
-                  </ul>
-                  <label id="precio-total" class="form-label">Total: $0.00</label>
-                </div>
+              <div class="col-md-5">
+                <ul id="lista-servicios">
+                </ul>
+                <label id="precio-total" class="form-label">Total: $0.00</label>
+              </div>
             </div>
 
             <div class="col-12">
-                <label for="tipo_servicio" class="form-label">Sucursal</label>
-                <select class="form-select" name="tipo_sucursal" required>
-                  {% for sucursal in lista_sucursales %}
-                  <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
-                  {% endfor %}
-                </select>
-                <div class="invalid-feedback">
-                  Please select a valid service.
-                </div>
+              <label for="tipo_servicio" class="form-label">Sucursal</label>
+              <select class="form-select" name="tipo_sucursal" required>
+                {% for sucursal in lista_sucursales %}
+                <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid service.
+              </div>
             </div>
 
 
             <div class="col-12">
-                <div class="form-floating mb-3">
-                  <input type="date" class="form-control" id="validationServer04" required name="fecha" min="{{date_min}}"
-                    max="{{date_max}}">
-                  <label for="validationServer04">Fecha</label>
-                </div>
+              <div class="form-floating mb-3">
+                <input type="date" class="form-control" id="validationServer04" required name="fecha" min="{{date_min}}"
+                  max="{{date_max}}">
+                <label for="validationServer04">Fecha</label>
+              </div>
             </div>
 
 
@@ -116,21 +118,22 @@
 
 
           </div>
-    </main>
-    <div class="container">
-      <main>
-        <div class="row g-5 center">
-          <div class="col-md-7 col-lg-8">
-{#              SE PUEDE MODIFICAR PERO SOLO A TRAVES DE CLASES (class="..."), NO CAMBIAR TIPO DE ETIQUETA (<button></button>) O EL ATRIBUTO "type" PORFAVOR #}
-            <button class="w-100 btn btn-primary btn-lg" type="submit" >Continuar</button>
-            {# <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
+        </main>
+        <div class="container">
+          <main>
+            <div class="row g-5 center">
+              <div class="col-md-7 col-lg-8">
+                {# SE PUEDE MODIFICAR PERO SOLO A TRAVES DE CLASES (class="..."), NO CAMBIAR TIPO DE ETIQUETA
+                (<button></button>) O EL ATRIBUTO "type" PORFAVOR #}
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Continuar</button>
+                {# <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
 
-          </div>
+              </div>
+            </div>
+          </main>
         </div>
-</main>
-</div>
-       <!--   <button class="btn btn-lg btn-primary" type="submit" >Agendar cita</button>-->
-         <!-- <p align="right"><a class="btn btn-lg btn-primary" href="/">Agendar cita</a></p>-->
+        <!--   <button class="btn btn-lg btn-primary" type="submit" >Agendar cita</button>-->
+        <!-- <p align="right"><a class="btn btn-lg btn-primary" href="/">Agendar cita</a></p>-->
 
 
 
@@ -139,18 +142,18 @@
       </div>
     </main>
 
-          </form>
+  </form>
 
-      <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; 2017–2022 Company Name</p>
-        <ul class="list-inline">
-          <li class="list-inline-item"><a href="#">Privacy</a></li>
-          <li class="list-inline-item"><a href="#">Terms</a></li>
-          <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-      </footer>
-    </div>
-      </div>
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2017–2022 Company Name</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
+  </div>
+  </div>
 
 
 
@@ -186,40 +189,40 @@
         lista += "<li id=\"" + id_servicio + "\" ><input type='text' style='all:unset;' value='" + nombre + "  $" + precio + "' name='serv_" + id_servicio + "'><button onclick=\"quitarServicioDeMonto(" + id_servicio + ")\" type=\"button\" class=\"btn\" >X</button></li>";
         document.getElementById('lista-servicios').innerHTML = lista;
         actualizarTotal();
-        document.getElementById('precio').textContent = 'Precio: $0.00' ;
+        document.getElementById('precio').textContent = 'Precio: $0.00';
       }
     }
 
 
 
-    let quitarOpcionDeComboList = (id_opcion) =>{
-        let comboList = document.getElementById(id_opcion).parentNode;
-        let elemento = document.getElementById(id_opcion);
-        comboList.removeChild(elemento);
+    let quitarOpcionDeComboList = (id_opcion) => {
+      let comboList = document.getElementById(id_opcion).parentNode;
+      let elemento = document.getElementById(id_opcion);
+      comboList.removeChild(elemento);
     }
 
-    let agregarOpcionComboList = (id_opcion, idComboList) =>{
-        let comboList = document.getElementById(idComboList);
-        let valueOpcion = document.getElementById(id_opcion);
+    let agregarOpcionComboList = (id_opcion, idComboList) => {
+      let comboList = document.getElementById(idComboList);
+      let valueOpcion = document.getElementById(id_opcion);
 
     }
 
 
     let quitarServicioDeMonto = (id_servicio) => {
-        console.log('ID DE SERVICIO A QUITAR:'+id_servicio);
-        let elemento = document.getElementById(id_servicio);
-        let servicio = document.getElementsByName('serv_'+id_servicio)[0];
-        console.log(servicio);
-        let comboList = document.getElementById('comboListServicios');
-        let nodo = document.createElement("option")
-        nodo.value=id_servicio+"-"+servicio.value.split('$')[1];
-        nodo.innerText=servicio.value.split('$')[0].trim();
-        nodo.id=id_servicio;
-        console.log(servicio.value);
-        let padreLista = document.getElementById(id_servicio).parentNode;
+      console.log('ID DE SERVICIO A QUITAR:' + id_servicio);
+      let elemento = document.getElementById(id_servicio);
+      let servicio = document.getElementsByName('serv_' + id_servicio)[0];
+      console.log(servicio);
+      let comboList = document.getElementById('comboListServicios');
+      let nodo = document.createElement("option")
+      nodo.value = id_servicio + "-" + servicio.value.split('$')[1];
+      nodo.innerText = servicio.value.split('$')[0].trim();
+      nodo.id = id_servicio;
+      console.log(servicio.value);
+      let padreLista = document.getElementById(id_servicio).parentNode;
 
       padreLista.removeChild(elemento);
-        comboList.appendChild(nodo)
+      comboList.appendChild(nodo)
 
 
 
