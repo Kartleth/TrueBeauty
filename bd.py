@@ -34,8 +34,7 @@ def get_usuarios():
 
 def get_citas_de_usuario(columna: str, id_usuario: int):
     conexion = obtener_conexion()
-    query = "SELECT C.id_cita, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, S.nombre as nombre_servicio FROM cita C, servicio S WHERE C.id_servicio=S.id_servicio AND C." + columna + "=" + str(
-        id_usuario)
+    query = "SELECT C.id_cita, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora FROM cita C WHERE  C." + columna + "=" + str(id_usuario)
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -109,8 +108,7 @@ def get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio):
 
 def estilista_tiene_cita(hora, id_estilista, fecha):
     conexion = obtener_conexion()
-    query = "SELECT id_cita FROM cita WHERE hora='" + str(hora) + "' AND id_estilista=" + str(
-        id_estilista) + " AND fecha='" + fecha + "'"
+    query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='"+fecha+"' AND CS.hora_inicio<'"+hora+"' AND CS.hora_fin>'"+hora+"' AND CS.id_estilista="+str(id_estilista)
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
@@ -159,5 +157,18 @@ def get_info_sucursal(id_sucursal):
     return lista
 
 
+def get_lista_citas():
+    conexion = obtener_conexion()
+    query = "SELECT C.id_cita,U.nombre,U.apellido_paterno,U.apellido_materno, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, C.monto,S.nombre as nombre_sucursal FROM cita C, usuario U, sucursal S WHERE C.id_cliente=U.id_usuario AND C.id_sucursal=S.id_sucursal"
+
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
 if __name__ == '__main__':
-    print(str(get_servs_por_lista_id(['1', '2', '3'])))
+    print(str(get_lista_citas()))
