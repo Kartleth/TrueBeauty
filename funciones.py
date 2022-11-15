@@ -69,7 +69,8 @@ def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
 
     for id_servicio in lista_servicios:
         if not hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal):
-            print(f"No hay estilista para la hora:{hora} para el servicio {id_servicio} para la fecha: {fecha} para la sucursal {id_sucursal}")
+            print(
+                f"No hay estilista para la hora:{hora} para el servicio {id_servicio} para la fecha: {fecha} para la sucursal {id_sucursal}")
             return False
         else:
             if lista_servicios[-1] == id_servicio:
@@ -81,9 +82,7 @@ def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
     return True
 
 
-def agregar_tiempo_de_servicio(hora,id_servicio):
-
-
+def agregar_tiempo_de_servicio(hora, id_servicio):
     hora_separada = hora.split(':')
     horas = int(hora_separada[0])
     minutos = hora_separada[1]
@@ -103,7 +102,7 @@ def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> b
     return False
 
 
-def crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados)-> dict:
+def crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados) -> dict:
     dicc = {}
     lista_de_diccs_servicios = get_servs_por_lista_id(servicios_seleccionados)
     info_sucursal = get_info_sucursal(id_sucursal)
@@ -115,11 +114,25 @@ def crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados)-> di
     return dicc
 
 
+def get_lista_info_citas():
+    lista_citas = get_lista_citas()
+    lista_de_diccs_citas = []
+    dicc_cita = {}
+    for cita in lista_citas:
+        dicc_cita['id_cita'] = cita['id_cita']
+        dicc_cita['nombre_completo'] = cita['nombre'] + " " + cita['apellido_paterno'] + " " + cita['apellido_materno']
+        dicc_cita['fecha'] = cita['fecha']
+        dicc_cita['hora'] = cita['hora']
+        dicc_cita['monto'] = cita['monto']
+        dicc_cita['nombre_sucursal'] = cita['nombre_sucursal']
+        lista_de_diccs_citas.append(dicc_cita.copy())
 
+    return lista_de_diccs_citas
 
 
 if __name__ == '__main__':
-    print(get_horas_disponibles('1', '2023-10-08', ['1', '2', '3']))
+    print(str(get_lista_info_citas()))
+    # print(get_horas_disponibles('1', '2023-10-08', ['1', '2', '3']))
     # print(hay_estilista_para_horayservicio('10:30','3','2023-10-08','1'))
     # print(estilista_tiene_cita('10:30','3','2023-10-08'))
     # print(estilista_tiene_cita('8:30', 3, '2023-10-18'))

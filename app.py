@@ -249,9 +249,11 @@ def hora_cita():
         return redirect('/')
     return render_template("hora_cita.html")
 
+
 @app.route('/ver_cita_gerente_recepcionista')
 def ver_cita_gerente_recepcionista():
     return render_template("ver_cita_gerente_recepcionista.html")
+
 
 @app.route('/registrarse')
 def registrarse():
@@ -269,7 +271,7 @@ def confirmar_cita():
         hora = request.args['hora']
         if session['logeado']:
             dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados)
-            return render_template('confirmar_cita.html',info_cita=dicc_info_cita)
+            return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
         else:
             return redirect('/')
     else:
@@ -283,10 +285,9 @@ def consultar_citas():
             if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
                 citas = get_citas_de_usuario('id_' + session['tipo'], session['id_usuario'])
                 return render_template("consultar_citas.html", lista_citas=citas)
-            elif session['tipo'] == 'recepcionista':
-                return redirect('/')
-            elif session['tipo'] == 'gerente':
-                return redirect('/')
+            elif session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
+                lista_citas = get_lista_info_citas()
+                return render_template('ver_cita_gerente_recepcionista.html', citas=lista_citas)
             else:
                 return redirect('/')
 

@@ -7,11 +7,10 @@ CREATE TABLE cita(
     id_cita int unsigned AUTO_INCREMENT NOT NULL,
     fecha DATE NOT NULL,
     hora time NOT NULL,
-    hora_fin time NOT NULL,
-
-    id_estilista int unsigned NOT NULL,
+    hora_fin time,
     id_cliente int unsigned NOT NULL,
     id_sucursal int unsigned NOT NULL,
+    monto decimal NOT NULL,
     PRIMARY KEY (id_cita)
 ) ENGINE=MyISAM default char set=latin1;
 
@@ -66,15 +65,15 @@ CREATE TABLE estilista_servicio(
 CREATE TABLE cita_servicio(
     id_cita int unsigned not null,
     id_servicio int unsigned not null,
-    id_estilista int unsigned not null
+    id_estilista int unsigned not null,
+    hora_inicio time not null,
+    hora_fin time not null
 
 )ENGINE=MyISAM default char set=latin1;
 
 
 /* CREACION DE LLAVES FORANEAS*/
 ALTER TABLE cita ADD FOREIGN KEY(id_cliente) REFERENCES usuario(id_usuario);
-ALTER TABLE cita ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
-ALTER TABLE cita ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
 ALTER TABLE cita ADD FOREIGN KEY(id_sucursal) REFERENCES sucursal(id_sucursal);
 
 
@@ -89,6 +88,7 @@ ALTER TABLE estilista_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(
 
 ALTER TABLE cita_servicio ADD FOREIGN KEY(id_cita) REFERENCES cita(id_cita);
 ALTER TABLE cita_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
+ALTER TABLE cita_servicio ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
 
 /*INSERTS */
 use truebeauty;
@@ -111,9 +111,9 @@ INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Corte de cabel
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Manicura','Se le arregla las uñas',999.99,30);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Pedicura','Se le arregla las uñas de las patas',999.99,30);
 
-INSERT INTO cita(fecha, hora, hora_fin,id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2023-10-08','8:30','9:00',1,3,4,1);
-INSERT INTO cita(fecha, hora,hora_fin, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','10:00','12:00',2,3,4,1);
-INSERT INTO cita(fecha, hora,hora_fin, id_servicio, id_estilista, id_cliente, id_sucursal) VALUES ('2022-12-10','14:00','16:00',3,3,4,1);
+INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto) VALUES ('2023-10-08','8:30','9:00',1,3,1000);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','10:00','12:00',2,3,12021);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','14:00','16:00',3,3,3000);
 
 INSERT INTO empleado(id_usuario,id_sucursal,turno) values(3,1,'tiempo completo');
 
@@ -124,9 +124,15 @@ INSERT INTO estilista_servicio VALUES (3,4);
 INSERT INTO estilista_servicio VALUES (3,5);
 INSERT INTO estilista_servicio VALUES (3,6);
 
+INSERT INTO cita_servicio VALUES (1,1,3,'10:00','10:45');
+INSERT INTO cita_servicio VALUES (1,2,3,'10:45','11:30');
+INSERT INTO cita_servicio VALUES (1,5,3,'12:00','12:30');
+INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
+
 SELECT * FROM usuario;
 /*Estilistas que trabajan en esa sucursal y ofrecen ese servicio */
 SELECT E.id_usuario FROM empleado E, estilista_servicio ES WHERE E.id_usuario=ES.id_estilista AND ES.id_servicio=1 AND E.id_usuario=(SELECT estilista_minimo.id_estilista FROM (SELECT servicios_por_estilista.id_estilista, min(servicios_por_estilista.num_servicios) AS num_servicios FROM (SELECT id_estilista, count(id_estilista) as num_servicios FROM estilista_servicio) as servicios_por_estilista LIMIT 1 ) as estilista_minimo);
 /*SELECCIONAR ID_ESTILISTA QUE OFREZCA MENOR NUMERO DE SERVICIOS*/
 SELECT estilista_minimo.id_estilista FROM (SELECT servicios_por_estilista.id_estilista, min(servicios_por_estilista.num_servicios) AS num_servicios FROM (SELECT id_estilista, count(id_estilista) as num_servicios FROM estilista_servicio) as servicios_por_estilista LIMIT 1 ) as estilista_minimo;
-/*SELECCIONAR CITAS DE UNA SUCURSAL   */
+/*SELECCIONAR citas en a esa hora que hagan ese servicio  */
+SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='2023-08-12' AND CS.hora_inicio>'8:30' AND CS.hora_fin<'8:30' AND CS.id_estilista=3;
