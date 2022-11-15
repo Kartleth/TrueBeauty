@@ -1,5 +1,5 @@
 <!--ARCHIVO HECHO DE PRUEBA -->
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block title %}Hora_cita{% endblock %}
 
 {% block body %}
@@ -49,6 +49,7 @@
 
 <body class="bg-light">
   <form class="needs-validation" action="" method="POST">
+
     <main class="container">
       <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
         <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
@@ -65,29 +66,29 @@
 
             <div class="col-12">
                 <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
-  
-                <select onchange="mostrarPrecio()" class="form-select" name="tipo_servicio" id="servicio" required>
-                  <option value="">Seleccionar...</option>
-  
+
+                <select id="comboListServicios" onchange="mostrarPrecio()" class="form-select" name="tipo_servicio"  required>
+
+
                   {% for servicio in lista_servicios %}
-                  <option value="{{ servicio['id_servicio']+" -"+servicio['precio'] }}">{{ servicio['nombre'] }}</option>
+                  <option id="{{ servicio['id_servicio'] }}" value="{{ servicio['id_servicio']+"-"+servicio['precio'] }}">{{ servicio['nombre'] }}</option>
                   {% endfor %}
-  
+
                 </select>
                 <div class="invalid-feedback">
                   Please select a valid service.
                 </div>
-  
+
                 <button onclick="agregarServicio()" type="button" class="btn">+</button>
-                <label for="" class="form-label" id="precio">Precio: $0</label>
-  
+                <label for="" class="form-label" id="precio">Precio: $0.00</label>
+
                 <div class="col-md-5">
                   <ul id="lista-servicios">
                   </ul>
-                  <label id="precio-total" class="form-label">Total: $0</label>
+                  <label id="precio-total" class="form-label">Total: $0.00</label>
                 </div>
             </div>
-  
+
             <div class="col-12">
                 <label for="tipo_servicio" class="form-label">Sucursal</label>
                 <select class="form-select" name="tipo_sucursal" required>
@@ -99,8 +100,8 @@
                   Please select a valid service.
                 </div>
             </div>
-  
-  
+
+
             <div class="col-12">
                 <div class="form-floating mb-3">
                   <input type="date" class="form-control" id="validationServer04" required name="fecha" min="{{date_min}}"
@@ -108,36 +109,38 @@
                   <label for="validationServer04">Fecha</label>
                 </div>
             </div>
-  
+
+
+
+
 
 
           </div>
-      </div>
-      </div>
-    </main>
-    </div>
-    </div>
-    <hr class="my-4">
     </main>
     <div class="container">
       <main>
-        <!--<div class="row g-5 center">
+        <div class="row g-5 center">
           <div class="col-md-7 col-lg-8">
-            <button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>
+{#              SE PUEDE MODIFICAR PERO SOLO A TRAVES DE CLASES (class="..."), NO CAMBIAR TIPO DE ETIQUETA (<button></button>) O EL ATRIBUTO "type" PORFAVOR #}
+            <button class="w-100 btn btn-primary btn-lg" type="submit" >Continuar</button>
             {# <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
 
           </div>
-        </div>-->
+        </div>
+</main>
+</div>
+       <!--   <button class="btn btn-lg btn-primary" type="submit" >Agendar cita</button>-->
+         <!-- <p align="right"><a class="btn btn-lg btn-primary" href="/">Agendar cita</a></p>-->
 
-        
-          <!--<button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>-->
-          <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>
 
-        
+
+
 
       </div>
+    </main>
 
-      </main>
+          </form>
+
       <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">&copy; 2017–2022 Company Name</p>
         <ul class="list-inline">
@@ -147,7 +150,8 @@
         </ul>
       </footer>
     </div>
-  </form>
+      </div>
+
 
 
   <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
@@ -166,26 +170,61 @@
   <script>
 
     let agregarServicio = () => {
-      let valor = document.getElementById('servicio').value;
+      let valor = document.getElementById('comboListServicios').value;
       if (valor !== '') {
         let precio = valor.split('-')[1];
-
-        let elementos = document.getElementById('servicio');
+        let id_servicio = valor.split('-')[0];
+        let elementos = document.getElementById('comboListServicios');
         let nombre = elementos.options[elementos.selectedIndex].innerText;
 
         let lista = document.getElementById('lista-servicios').innerHTML;
         let numServicios = document.getElementById('lista-servicios').childElementCount;
         numServicios += 1;
-        lista += "<li id=\"serv" + numServicios + "\" >" + nombre + "\t $" + precio + "<button onclick=\"quitarServicio(" + numServicios + ")\" type=\"button\" class=\"btn\" >X</button></li>";
+        console.log(id_servicio);
+        quitarOpcionDeComboList(id_servicio);
+
+        lista += "<li id=\"" + id_servicio + "\" ><input type='text' style='all:unset;' value='" + nombre + "  $" + precio + "' name='serv_" + id_servicio + "'><button onclick=\"quitarServicioDeMonto(" + id_servicio + ")\" type=\"button\" class=\"btn\" >X</button></li>";
         document.getElementById('lista-servicios').innerHTML = lista;
         actualizarTotal();
+        document.getElementById('precio').textContent = 'Precio: $0.00' ;
       }
     }
 
-    let quitarServicio = (numServicios) => {
-      let padreLista = document.getElementById('serv' + numServicios).parentNode;
-      let elemento = document.getElementById('serv' + numServicios);
+
+
+    let quitarOpcionDeComboList = (id_opcion) =>{
+        let comboList = document.getElementById(id_opcion).parentNode;
+        let elemento = document.getElementById(id_opcion);
+        comboList.removeChild(elemento);
+    }
+
+    let agregarOpcionComboList = (id_opcion, idComboList) =>{
+        let comboList = document.getElementById(idComboList);
+        let valueOpcion = document.getElementById(id_opcion);
+
+    }
+
+
+    let quitarServicioDeMonto = (id_servicio) => {
+        console.log('ID DE SERVICIO A QUITAR:'+id_servicio);
+        let elemento = document.getElementById(id_servicio);
+        let servicio = document.getElementsByName('serv_'+id_servicio)[0];
+        console.log(servicio);
+        let comboList = document.getElementById('comboListServicios');
+        let nodo = document.createElement("option")
+        nodo.value=id_servicio+"-"+servicio.value.split('$')[1];
+        nodo.innerText=servicio.value.split('$')[0].trim();
+        nodo.id=id_servicio;
+        console.log(servicio.value);
+        let padreLista = document.getElementById(id_servicio).parentNode;
+
       padreLista.removeChild(elemento);
+        comboList.appendChild(nodo)
+
+
+
+
+
 
       actualizarTotal();
     }

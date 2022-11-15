@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
 
 diccionario_menu = get_dicc_menu()
+
 lista_servicios_sel = []
 
 
@@ -116,7 +117,7 @@ def forgot_password():
 
 @app.route("/reset_code", methods=['GET', 'POST'])
 def reset_code():
-    """ Se asegura que el codigo sea correcto.
+    """ Se asegura que el codigo sea correcto.1|
     Se redirige para cambiar contraseña a '/new_password'"""
     if 'logeado' not in session.keys():
         if request.method == 'GET':
@@ -164,6 +165,7 @@ def new_password():
 def inicio():
     return render_template("inicio.html")
 
+
 @app.route('/inicio_cliente')
 def inicio_cliente():
     return render_template("inicio_cliente.html")
@@ -183,19 +185,12 @@ def agendar_cita():
     return render_template("agendar_cita.html")
 
 
-# METODO DE PRUEBA
 @app.route('/escoger_cita', methods=['GET', 'POST'])
 def escoger_cita():
-    session['logeado'] = True
-    session['tipo'] = 'cliente'
-    session['id_usuario'] = 3
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
                 if request.method == 'GET':
-                    sucursales = get_lista_sucursales()
-                    servicios = get_lista_servicios()
-
                     fecha = get_cur_datetime()
                     return render_template('escoger_cita.html',
                                            lista_sucursales=get_lista_sucursales(),
@@ -203,10 +198,12 @@ def escoger_cita():
                                            date_min=fecha['fecha_actual'],
                                            date_max=fecha['fecha_fin'])
                 elif request.method == 'POST':
-                    print(request.form['fecha'])
-                    print(request.form['tipo_servicio'])
-                    print(request.form['tipo_sucursal'])
-                    return redirect('/hora_cita')
+                    id_sucursal = request.form['tipo_sucursal']
+                    fecha = request.form['fecha']
+                    global lista_servicios_sel
+                    lista_servicios_sel = obtener_servicios(request.form.to_dict())
+
+                    return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
                     return redirect('/')
             else:
@@ -222,8 +219,34 @@ def fecha_cita():
     return render_template("fecha_cita.html")
 
 
-@app.route('/hora_cita')
+@app.route('/hora_cita', methods=['GET', 'POST'])
 def hora_cita():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+
+            id_sucursal = request.args['id_sucursal']
+            fecha = request.args['fecha']
+            global lista_servicios_sel
+            servicios_seleccionados = lista_servicios_sel.copy()
+            lista_servicios_sel.clear()
+
+            lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, servicios_seleccionados)
+
+            if request.method == 'GET':
+                if lista_horas_disponibles is None:
+                    return redirect('/escoger_cita')
+                else:
+                    return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
+            elif request.method == 'POST':
+                hora = request.form['hora']
+                lista_servicios_sel = servicios_seleccionados.copy()
+
+                return redirect(url_for('confirmar_cita', fecha=fecha, id_sucursal=id_sucursal, hora=hora))
+
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
     return render_template("hora_cita.html")
 
 @app.route('/ver_cita_gerente_recepcionista')
@@ -235,11 +258,26 @@ def registrarse():
     return render_template("registrarse.html")
 
 
+@app.route('/confirmar_cita', methods=['GET', 'POST'])
+def confirmar_cita():
+    if 'logeado' in session.keys():
+        global lista_servicios_sel
+        servicios_seleccionados = lista_servicios_sel.copy()
+        lista_servicios_sel.clear()
+        id_sucursal = request.args['id_sucursal']
+        fecha = request.args['fecha']
+        hora = request.args['hora']
+        if session['logeado']:
+            dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados)
+            return render_template('confirmar_cita.html',info_cita=dicc_info_cita)
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
 @app.route('/consultar_citas')
 def consultar_citas():
-    session['logeado'] = True
-    session['tipo'] = 'estilista'
-    session['id_usuario'] = 3
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
@@ -260,9 +298,6 @@ def consultar_citas():
 
 @app.route('/informacion_cita/<id_cita>', methods=['GET', 'POST'])
 def informacion_cita(id_cita):
-    session['logeado'] = True
-    session['tipo'] = 'estilista'
-    session['id_usuario'] = 3
     if session['logeado']:
         if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
             if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
@@ -279,14 +314,9 @@ def informacion_cita(id_cita):
         return redirect('/')
 
 
-
-
 @app.route('/reparacion')
 def reparacion():
     return render_template("reparacion.html")
-
-
-
 
 
 if __name__ == '__main__':

@@ -2,20 +2,21 @@ import pymysql
 
 
 def obtener_conexion():
-    return pymysql.connect(#host='localhost',
-                           host='mysql_host',
-                           #user='root',
-                           #password='luis2002',
-                           #database='truebeauty',
-                           user='admin',
-                           password='admin_123',
+    return pymysql.connect(host='localhost',
+                           # host='mysql_host',
+                           user='root',
+                           password='luis2002',
                            database='truebeauty',
+                           # user='admin',
+                           # password='admin_123',
+                           # database='truebeauty',
                            #    host='petvet.mysql.pythonanywhere-services.com',
                            #    user='petvet',
                            #    password='b15c419d98df06db4a88f8cee',
                            #    database='petvet$veterinaria',
                            port=3306,
                            cursorclass=pymysql.cursors.DictCursor)
+
 
 """ 
 def get_usuarios():
@@ -29,6 +30,7 @@ def get_usuarios():
     conexion.close()
     return lista
 """
+
 
 def get_citas_de_usuario(columna: str, id_usuario: int):
     conexion = obtener_conexion()
@@ -92,6 +94,70 @@ def get_lista_sucursales():
     return lista
 
 
+def get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio):
+    conexion = obtener_conexion()
+    # query = "SELECT E.id_usuario FROM empleado E, estilista_servicio ES WHERE E.id_usuario=ES.id_estilista AND ES.id_servicio=" + id_servicio + " AND E.id_sucursal=" + id_sucursal + " AND E.id_usuario=(SELECT estilista_minimo.id_estilista FROM (SELECT servicios_por_estilista.id_estilista, min(servicios_por_estilista.num_servicios) AS num_servicios FROM (SELECT id_estilista, count(id_estilista) as num_servicios FROM estilista_servicio) as servicios_por_estilista LIMIT 1 ) as estilista_minimo)"
+    query = "SELECT E.id_usuario FROM empleado E, estilista_servicio ES WHERE E.id_usuario=ES.id_estilista AND E.id_sucursal=" + id_sucursal + " AND ES.id_servicio=" + id_servicio
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
+def estilista_tiene_cita(hora, id_estilista, fecha):
+    conexion = obtener_conexion()
+    query = "SELECT id_cita FROM cita WHERE hora='" + str(hora) + "' AND id_estilista=" + str(
+        id_estilista) + " AND fecha='" + fecha + "'"
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        if cursor.fetchone() is None:
+            return False
+    conexion.commit()
+    conexion.close()
+    return True
+
+
+# def hora_esta_disponible(hora,id_estilista,id_servicio):
+#     conexion = obtener_conexion()
+#     query = ""
+#     with conexion.cursor() as cursor:
+#         cursor.execute(query)
+#         if cursor.fetchone() is None:
+#             return True
+#     conexion.commit()
+#     conexion.close()
+#     return False
+
+def get_servs_por_lista_id(lista_id_servicio):
+    conexion = obtener_conexion()
+    query = "SELECT * FROM servicio WHERE"
+    for id_servicio in lista_id_servicio:
+        query += ' id_servicio=' + str(id_servicio) + " OR"
+    query = query[:-2]
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+def get_info_sucursal(id_sucursal):
+    conexion = obtener_conexion()
+    query = "SELECT * FROM sucursal WHERE id_sucursal="+id_sucursal
+
+
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
 if __name__ == '__main__':
-    print(get_lista_servicios())
-    print(get_lista_sucursales())
+    print(str(get_servs_por_lista_id(['1', '2', '3'])))
