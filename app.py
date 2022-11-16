@@ -15,6 +15,23 @@ diccionario_menu = get_dicc_menu()
 
 # dicc_lista_servicios_sel = {}
 
+@app.context_processor
+def handle_context():
+    """Controla lo información mostrada dependiendo de si el usuario esta logeado y sus permisos"""
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            accesos = diccionario_menu[session['tipo']]
+
+
+            # return render_template("index.html", accesos=accesos, log=['Log Out', '/logout'], usuario=usuario)
+            return {'accesos': accesos, 'logeado': 'yes'}
+        else:
+            return {'logeado': 'no'}
+    else:
+        return {'logeado': 'no'}
+
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def inicio_sesion():

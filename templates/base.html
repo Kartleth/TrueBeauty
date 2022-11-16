@@ -112,7 +112,14 @@
 
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-
+          {% if accesos %}
+              {% for link,nombre in accesos.items() %}
+                 <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ link }}">{{ nombre }}</a>
+            </li>
+              {% endfor %}
+          {% endif %}
+<!--
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/#">Home</a>
             </li>
@@ -138,6 +145,7 @@
               </ul>
 
             </li>
+              -->
           </ul>
 
 
