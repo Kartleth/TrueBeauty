@@ -1,5 +1,6 @@
 import os
 import smtplib, ssl
+import datetime
 from email.message import EmailMessage
 from bd import *
 
@@ -111,6 +112,7 @@ def crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados) -> d
     dicc['info_sucursal'] = info_sucursal
     dicc['fecha'] = fecha
     dicc['hora'] = hora
+    dicc['monto'] = calcular_monto(servicios_seleccionados)['precio']
     return dicc
 
 
@@ -130,8 +132,53 @@ def get_lista_info_citas():
     return lista_de_diccs_citas
 
 
+def get_lista_info_citas_usuario(columna: str, id_usuario: int):
+    lista_citas = get_citas_de_usuario(columna, id_usuario)
+    lista_de_diccs_citas = []
+    dicc_cita = {}
+    for cita in lista_citas:
+        dicc_cita['id_cita'] = cita['id_cita']
+        dicc_cita['fecha'] = cita['fecha']
+        dicc_cita['hora'] = cita['hora']
+
+        dicc_cita['lista_servicios'] = get_nombre_servicios_de_cita(cita['id_cita'])
+        lista_de_diccs_citas.append(dicc_cita.copy())
+    return lista_de_diccs_citas
+
+
+def guardar_cita(fecha, hora, id_usuario, id_sucursal, monto, lista_servicios):
+    id_cita = insert_into_cita(fecha, hora, id_usuario, id_sucursal, monto)
+    guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal, id_cita)
+
+
+def guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal,id_cita):
+    for servicio in lista_servicios:
+        id_estilista = get_estilista_apropiado(servicio, hora, fecha,id_sucursal)[0]
+
+        tiempo_servicio = get_tiempo_servicio(servicio)
+        aumento = datetime.timedelta(minutes=int(tiempo_servicio))
+        hora = datetime.datetime.strptime(hora, "%H:%M")
+        hora_fin = aumento + hora
+        hora_fin = hora_fin.strftime("%H:%M")
+        hora = hora.strftime("%H:%M")
+        insert_into_cita_servicio(id_cita, servicio, id_estilista['id_usuario'], hora, hora_fin)
+        hora = hora_fin
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
-    print(str(get_lista_info_citas()))
+    horas_salida = datetime.timedelta( minutes=180)
+    h1 = datetime.datetime.strptime('10:30', "%H:%M")
+
+    hora_fin = h1+horas_salida
+    print(hora_fin)
+
+    # print(str(get_lista_info_citas_usuario('id_cliente', 1)))
     # print(get_horas_disponibles('1', '2023-10-08', ['1', '2', '3']))
     # print(hay_estilista_para_horayservicio('10:30','3','2023-10-08','1'))
     # print(estilista_tiene_cita('10:30','3','2023-10-08'))
