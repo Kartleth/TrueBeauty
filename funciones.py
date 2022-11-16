@@ -161,7 +161,7 @@ def guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal,id_cita)
         hora_fin = aumento + hora
         hora_fin = hora_fin.strftime("%H:%M")
         hora = hora.strftime("%H:%M")
-        insert_into_cita_servicio(id_cita, servicio, id_estilista, hora, hora_fin)
+        insert_into_cita_servicio(id_cita, servicio, id_estilista['id_usuario'], hora, hora_fin)
         hora = hora_fin
 
 

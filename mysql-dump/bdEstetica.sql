@@ -155,7 +155,7 @@ INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
 #                          AND ES.id_servicio=2
 #                          AND CS.id_estilista=U.id_usuario
 #                          AND C.id_cita=CS.id_cita
-#                          AND C.fecha='2023-10-08'
-#                          AND NOT( CS.hora_inicio<'13:30'
-#                          AND CS.hora_fin>'13:30') LIMIT 1;
+#                          AND NOT( C.fecha='2022-11-24'
+#                          AND CS.hora_inicio<'11:00'
+#                          AND CS.hora_fin>'11:00') LIMIT 1;
 

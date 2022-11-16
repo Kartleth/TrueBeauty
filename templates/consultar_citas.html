@@ -28,7 +28,13 @@
 {#        <img class="me-3" src="/static/images/{{ cita['nombre_servicio'] }}.png" alt="" width="48" height="48">#}
           <img class="me-3" src="/static/images/Peinado.png" alt="" width="48" height="48">
         <p class="pb-3 mb-0 small lh-sm border-bottom btn-style">
-          <strong class="d-block text-gray-dark">Cita de {{ cita['lista_servicios'] }}{% for servicio in cita['lista_servicios'] %} {{ servicio['nombre'] }} {% endfor %}
+          <strong class="d-block text-gray-dark">Cita de {% for servicio in cita['lista_servicios'] %}
+              {% if cita['lista_servicios'].index(servicio) == 0 %}
+              {{ servicio['nombre'] }}
+                  {% else %}-{{ servicio['nombre'] }}
+              {% endif %}
+
+          {% endfor %}
           </strong>
           Cita agendada para el {{ cita['fecha'] }} a las {{ cita['hora'] }} horas.
 
