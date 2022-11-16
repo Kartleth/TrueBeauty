@@ -12,7 +12,8 @@ app.secret_key = 'lwiu74dhn2SuF3j'
 
 diccionario_menu = get_dicc_menu()
 
-lista_servicios_sel = []
+
+# dicc_lista_servicios_sel = {}
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -170,6 +171,7 @@ def inicio():
 def inicio_cliente():
     return render_template("inicio_cliente.html")
 
+
 @app.route('/registrar_servicio')
 def registrar_servicio():
     return render_template("registrar_servicio.html")
@@ -204,8 +206,7 @@ def escoger_cita():
                 elif request.method == 'POST':
                     id_sucursal = request.form['tipo_sucursal']
                     fecha = request.form['fecha']
-                    global lista_servicios_sel
-                    lista_servicios_sel = obtener_servicios(request.form.to_dict())
+                    session['lista_servicios_sel'] = obtener_servicios(request.form.to_dict())
 
                     return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
@@ -230,11 +231,8 @@ def hora_cita():
 
             id_sucursal = request.args['id_sucursal']
             fecha = request.args['fecha']
-            global lista_servicios_sel
-            servicios_seleccionados = lista_servicios_sel.copy()
-            lista_servicios_sel.clear()
 
-            lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, servicios_seleccionados)
+            lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'])
 
             if request.method == 'GET':
                 if lista_horas_disponibles is None:
@@ -243,7 +241,6 @@ def hora_cita():
                     return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
             elif request.method == 'POST':
                 hora = request.form['hora']
-                lista_servicios_sel = servicios_seleccionados.copy()
 
                 return redirect(url_for('confirmar_cita', fecha=fecha, id_sucursal=id_sucursal, hora=hora))
 
@@ -252,6 +249,34 @@ def hora_cita():
     else:
         return redirect('/')
     return render_template("hora_cita.html")
+
+
+@app.route('/confirmar_cita', methods=['GET', 'POST'])
+def confirmar_cita():
+    if 'logeado' in session.keys():
+
+        id_sucursal = request.args['id_sucursal']
+        fecha = request.args['fecha']
+        hora = request.args['hora']
+        if session['logeado']:
+            if request.method == 'GET':
+                dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
+                return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
+            elif request.method == 'POST':
+                fecha = request.form['fecha']
+                id_sucursal = request.form['id_sucursal']
+                hora = request.form['hora']
+
+                monto = request.form['monto']
+                print(fecha, hora, id_sucursal, monto)
+                guardar_cita(fecha,hora,session['id_usuario'],id_sucursal,monto,session['lista_servicios_sel'])
+
+                session.pop('lista_servicios_sel')
+                return redirect('/consultar_citas')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
 
 
 @app.route('/ver_cita_gerente_recepcionista')
@@ -264,30 +289,12 @@ def registrarse():
     return render_template("registrarse.html")
 
 
-@app.route('/confirmar_cita', methods=['GET', 'POST'])
-def confirmar_cita():
-    if 'logeado' in session.keys():
-        global lista_servicios_sel
-        servicios_seleccionados = lista_servicios_sel.copy()
-        lista_servicios_sel.clear()
-        id_sucursal = request.args['id_sucursal']
-        fecha = request.args['fecha']
-        hora = request.args['hora']
-        if session['logeado']:
-            dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados)
-            return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
-        else:
-            return redirect('/')
-    else:
-        return redirect('/')
-
-
 @app.route('/consultar_citas')
 def consultar_citas():
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
-                citas = get_citas_de_usuario('id_' + session['tipo'], session['id_usuario'])
+                citas = get_lista_info_citas_usuario('id_' + session['tipo'], session['id_usuario'])
                 return render_template("consultar_citas.html", lista_citas=citas)
             elif session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
                 lista_citas = get_lista_info_citas()

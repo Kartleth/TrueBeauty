@@ -3,139 +3,183 @@
 {% block title %}Hora_cita{% endblock %}
 
 {% block body %}
-<!doctype html>
-<html lang="en">
+    <!doctype html>
+    <html lang="en">
 
-<head>
-  <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
+    <head>
+        <style>
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
 
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
 
-    .b-example-divider {
-      height: 3rem;
-      background-color: rgba(0, 0, 0, .1);
-      border: solid rgba(0, 0, 0, .15);
-      border-width: 1px 0;
-      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
+            .b-example-divider {
+                height: 3rem;
+                background-color: rgba(0, 0, 0, .1);
+                border: solid rgba(0, 0, 0, .15);
+                border-width: 1px 0;
+                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+            }
 
-    .b-example-vr {
-      flex-shrink: 0;
-      width: 1.5rem;
-      height: 100vh;
-    }
+            .b-example-vr {
+                flex-shrink: 0;
+                width: 1.5rem;
+                height: 100vh;
+            }
 
-    .bi {
-      vertical-align: -.125em;
-      fill: currentColor;
-    }
-  </style>
-
-
-  <!-- Custom styles for this template -->
-  <link href="/static/css/fecha_cita.css" rel="stylesheet">
-</head>
-
-<body class="bg-light">
-  <form class="needs-validation" action="" method="POST">
-
-    <main class="container">
-      <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
-        <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
-        <div class="lh-1">
-          <h1 class="h6 mb-0 text-white lh-1">Complete los siguientes campos:</h1>
-          <small>(Escoga para ver las horas disponibles)</small>
-        </div>
-      </div>
-
-      <div class="my-3 p-3 bg-body rounded shadow-sm">
-
-        <main>
-          <div class="row g-3">
-
-            <div class="col-12">
+            .bi {
+                vertical-align: -.125em;
+                fill: currentColor;
+            }
+        </style>
 
 
+        <!-- Custom styles for this template -->
+        <link href="/static/css/fecha_cita.css" rel="stylesheet">
+    </head>
+
+    <body class="bg-light">
+    <form class="needs-validation" action="" method="POST">
+
+        <main class="container">
+            <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+                <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
+                <div class="lh-1">
+                    <h1 class="h6 mb-0 text-white lh-1">Porfavor asegúrese que los campos sean correctos:</h1>
+                    <small>(Si hay algún dato erróneo agende de nuevo la cita)</small>
+                </div>
+            </div>
+
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
+
+                <main>
+                    <div class="row g-3">
+
+                        <div class="col-12">
 
 
-            {% for llave,valor in info_cita.items() %}
-                <ul>
-                <li>{{ llave }} ----> {{ valor }}</li>
-                </ul>
-            {% endfor %}
+                            <div class="row g-3">
 
 
+                                <div class="col-md-3">
+                                    <label for="fecha" class="form-label">Fecha:</label>
+                                    <input style="all:unset;" type="text" id="fecha" name="fecha"
+                                           value="{{ info_cita['fecha'] }}" >
+                                    <div class="invalid-feedback">
+                                        Ingrese una fecha
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="hora" class="form-label">Hora (24h):</label>
+                                    <input type="text" style="all:unset;" id="hora" name="hora"
+                                           value="{{ info_cita['hora'] }}">
+                                    <div class="invalid-feedback">
+                                        hora requerida.
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: flex-start">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Sucursal:</label>
+                                        <label class="form-label">{{ info_cita['info_sucursal']['nombre'] }}</label>
+
+                                        <div class="invalid-feedback">
+                                            hora requerida.
+                                        </div>
+                                        <input type="text" style="display: none" name="id_sucursal"
+                                               value="{{ info_cita['info_sucursal']['id_sucursal'] }}"
+                                               >
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="hora" class="form-label">Dirección:</label>
+                                        <label style="width: 20rem"
+                                               class="form-label">{{ info_cita['info_sucursal']['direccion'] }}</label>
+                                        <div class="invalid-feedback">
+                                            hora requerida.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; justify-content: flex-start; border-bottom-style: solid; border-bottom-width:1px ">
+                                    <label for="" class="form-label">Servicios:</label>
+                                    {% for servicio in info_cita['lista_servicios'] %}
+                                        <div style="display: flex; justify-content: space-between">
+                                            <label class="form-label">{{ servicio['nombre'] }}</label>
+                                            <label class="form-label">{{ servicio['descripcion'] }}</label>
+                                            <label class="form-label">${{ servicio['precio'] }}</label>
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding-bottom: 2rem">
+                                    <label for="total" class="form-label">Total:</label>
+                                    <label for="total" class="form-label">${{ info_cita['monto'] }}</label>
+                                    <input type="text" style="display: none" name="monto"
+                                           value="{{ info_cita['monto'] }}">
+                                </div>
 
 
+                            </div>
 
-          </div>
-          </div>
-    </main>
-    <div class="container">
-      <main>
-        <div class="row g-5 center">
-          <div class="col-md-7 col-lg-8">
-{#              SE PUEDE MODIFICAR PERO SOLO A TRAVES DE CLASES (class="..."), NO CAMBIAR TIPO DE ETIQUETA (<button></button>) O EL ATRIBUTO "type" PORFAVOR #}
-            <button class="w-100 btn btn-primary btn-lg" type="submit" >Agendar Cita</button>
-            {# <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
-
-          </div>
-        </div>
-</main>
-</div>
-       <!--   <button class="btn btn-lg btn-primary" type="submit" >Agendar cita</button>-->
-         <!-- <p align="right"><a class="btn btn-lg btn-primary" href="/">Agendar cita</a></p>-->
+                        </div>
 
 
+                    </div>
+                </main>
+                <div class="container">
+                    <main>
+                        <div class="row g-5 center">
+                            <div class="col-md-7 col-lg-8">
+                                {#              SE PUEDE MODIFICAR PERO SOLO A TRAVES DE CLASES (class="..."), NO CAMBIAR TIPO DE ETIQUETA (<button></button>) O EL ATRIBUTO "type" PORFAVOR #}
+                     <button class="w-100 btn btn-primary btn-lg" type="submit">Agendar Cita</button>
 
+{#                                 <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
 
+                            </div>
+                        </div>
+                    </main>
+                </div>
+                <!--   <button class="btn btn-lg btn-primary" type="submit" >Agendar cita</button>-->
+                <!-- <p align="right"><a class="btn btn-lg btn-primary" href="/">Agendar cita</a></p>-->
+            </div>
+        </main>
+    </form>
 
-      </div>
-    </main>
-
-          </form>
-
-      <footer class="my-5 pt-5 text-muted text-center text-small">
+    <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">&copy; 2017–2022 Company Name</p>
         <ul class="list-inline">
-          <li class="list-inline-item"><a href="#">Privacy</a></li>
-          <li class="list-inline-item"><a href="#">Terms</a></li>
-          <li class="list-inline-item"><a href="#">Support</a></li>
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
         </ul>
-      </footer>
-    </div>
-      </div>
+    </footer>
 
 
+    <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
 
-  <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-    crossorigin="anonymous"></script>
-
-  <script src="form-validation.js"></script>
-
-
-  <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-    crossorigin="anonymous"></script>
-
-  <script src="offcanvas.js"></script>
+    <script src="form-validation.js"></script>
 
 
-</body>
+    <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
+
+    <script src="offcanvas.js"></script>
 
 
+    </body>
 
-</html>
+
+    </html>
 {% endblock %}

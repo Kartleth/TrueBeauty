@@ -129,10 +129,33 @@ INSERT INTO cita_servicio VALUES (1,2,3,'10:45','11:30');
 INSERT INTO cita_servicio VALUES (1,5,3,'12:00','12:30');
 INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
 
-SELECT * FROM usuario;
-/*Estilistas que trabajan en esa sucursal y ofrecen ese servicio */
-SELECT E.id_usuario FROM empleado E, estilista_servicio ES WHERE E.id_usuario=ES.id_estilista AND ES.id_servicio=1 AND E.id_usuario=(SELECT estilista_minimo.id_estilista FROM (SELECT servicios_por_estilista.id_estilista, min(servicios_por_estilista.num_servicios) AS num_servicios FROM (SELECT id_estilista, count(id_estilista) as num_servicios FROM estilista_servicio) as servicios_por_estilista LIMIT 1 ) as estilista_minimo);
-/*SELECCIONAR ID_ESTILISTA QUE OFREZCA MENOR NUMERO DE SERVICIOS*/
-SELECT estilista_minimo.id_estilista FROM (SELECT servicios_por_estilista.id_estilista, min(servicios_por_estilista.num_servicios) AS num_servicios FROM (SELECT id_estilista, count(id_estilista) as num_servicios FROM estilista_servicio) as servicios_por_estilista LIMIT 1 ) as estilista_minimo;
-/*SELECCIONAR citas en a esa hora que hagan ese servicio  */
-SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='2023-08-12' AND CS.hora_inicio>'8:30' AND CS.hora_fin<'8:30' AND CS.id_estilista=3;
+# SELECT * FROM usuario;
+# /*Estilistas que trabajan en esa sucursal y ofrecen ese servicio */
+# SELECT E.id_usuario FROM empleado E, estilista_servicio ES WHERE E.id_usuario=ES.id_estilista AND ES.id_servicio=1 AND E.id_usuario=(SELECT estilista_minimo.id_estilista FROM (SELECT servicios_por_estilista.id_estilista, min(servicios_por_estilista.num_servicios) AS num_servicios FROM (SELECT id_estilista, count(id_estilista) as num_servicios FROM estilista_servicio) as servicios_por_estilista LIMIT 1 ) as estilista_minimo);
+# /*SELECCIONAR ID_ESTILISTA QUE OFREZCA MENOR NUMERO DE SERVICIOS*/
+# SELECT estilista_minimo.id_estilista FROM (SELECT servicios_por_estilista.id_estilista, min(servicios_por_estilista.num_servicios) AS num_servicios FROM (SELECT id_estilista, count(id_estilista) as num_servicios FROM estilista_servicio) as servicios_por_estilista LIMIT 1 ) as estilista_minimo;
+# /*SELECCIONAR citas en a esa hora que hagan ese servicio  */
+# SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='2023-08-12' AND CS.hora_inicio>'8:30' AND CS.hora_fin<'8:30' AND CS.id_estilista=3;
+# /*SELECCIONAR UN ESTILISTA QUE OFREZCA ESE SERVICIO, TRABAJE EN ESA SUCURSAL,TENGA ESA FECHA Y HORA DISPONIBLE*/
+# SELECT ES.id_estilista FROM cita C, cita_servicio CS, estilista_servicio ES, empleado E
+#                        WHERE C.id_cita=CS.id_cita
+#                          AND CS.id_estilista=ES.id_estilista
+#                          AND E.id_sucursal=1
+#                          AND ES.id_servicio=3
+#                          AND CS.hora_inicio>'13:30'
+#                          AND CS.hora_fin<'13:30'
+#                        LIMIT 1;
+#
+#
+# SELECT DISTINCT U.id_usuario FROM usuario U, empleado E, estilista_servicio ES, cita_servicio CS, cita C
+#                        WHERE U.tipo_usuario='estilista'
+#                          AND E.id_usuario=U.id_usuario
+#                          AND E.id_sucursal=1
+#                          AND ES.id_estilista=E.id_usuario
+#                          AND ES.id_servicio=2
+#                          AND CS.id_estilista=U.id_usuario
+#                          AND C.id_cita=CS.id_cita
+#                          AND C.fecha='2023-10-08'
+#                          AND NOT( CS.hora_inicio<'13:30'
+#                          AND CS.hora_fin>'13:30') LIMIT 1;
+
