@@ -65,14 +65,14 @@
           <div class="row g-3">
 
             <div class="col-12">
-              <label for="tipo_servicio" class="form-label">Tipo de servicio</label>
+              <label for="comboListServicios" class="form-label">Tipo de servicio</label>
 
               <select id="comboListServicios" onchange="mostrarPrecio()" class="form-select" name="tipo_servicio"
                 required>
 
 
                 {% for servicio in lista_servicios %}
-                <option id="{{ servicio['id_servicio'] }}" value="{{ servicio['id_servicio']+" -"+servicio['precio']
+                <option id="{{ servicio['id_servicio'] }}" value="{{ servicio['id_servicio']+"-"+servicio['precio']
                   }}">{{ servicio['nombre'] }}</option>
                 {% endfor %}
 
@@ -92,8 +92,8 @@
             </div>
 
             <div class="col-12">
-              <label for="tipo_servicio" class="form-label">Sucursal</label>
-              <select class="form-select" name="tipo_sucursal" required>
+              <label for="select_sucursal" class="form-label">Sucursal</label>
+              <select id="select_sucursal" class="form-select" name="tipo_sucursal" required>
                 {% for sucursal in lista_sucursales %}
                 <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
                 {% endfor %}
@@ -152,8 +152,7 @@
       <li class="list-inline-item"><a href="#">Support</a></li>
     </ul>
   </footer>
-  </div>
-  </div>
+
 
 
 
@@ -189,7 +188,7 @@
         lista += "<li id=\"" + id_servicio + "\" ><input type='text' style='all:unset;' value='" + nombre + "  $" + precio + "' name='serv_" + id_servicio + "'><button onclick=\"quitarServicioDeMonto(" + id_servicio + ")\" type=\"button\" class=\"btn\" >X</button></li>";
         document.getElementById('lista-servicios').innerHTML = lista;
         actualizarTotal();
-        document.getElementById('precio').textContent = 'Precio: $0.00';
+        mostrarPrecio()
       }
     }
 
@@ -246,7 +245,7 @@
       document.getElementById('precio-total').innerText = 'Total: $' + total;
     }
     let mostrarPrecio = () => {
-      let valor = document.getElementById('servicio').value;
+      let valor = document.getElementById('comboListServicios').value;
       let precio = valor.split('-')[1];
 
       document.getElementById('precio').textContent = 'Precio: $' + precio;
