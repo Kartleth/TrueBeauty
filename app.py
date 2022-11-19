@@ -22,15 +22,12 @@ def handle_context():
         if session['logeado']:
             accesos = diccionario_menu[session['tipo']]
 
-
             # return render_template("index.html", accesos=accesos, log=['Log Out', '/logout'], usuario=usuario)
             return {'accesos': accesos, 'logeado': 'yes'}
         else:
             return {'logeado': 'no'}
     else:
         return {'logeado': 'no'}
-
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -272,24 +269,28 @@ def hora_cita():
 def confirmar_cita():
     if 'logeado' in session.keys():
 
-        id_sucursal = request.args['id_sucursal']
-        fecha = request.args['fecha']
-        hora = request.args['hora']
         if session['logeado']:
-            if request.method == 'GET':
-                dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
-                return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
-            elif request.method == 'POST':
-                fecha = request.form['fecha']
-                id_sucursal = request.form['id_sucursal']
-                hora = request.form['hora']
+            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys():
+                id_sucursal = request.args['id_sucursal']
+                fecha = request.args['fecha']
+                hora = request.args['hora']
 
-                monto = request.form['monto']
-                print(fecha, hora, id_sucursal, monto)
-                guardar_cita(fecha,hora,session['id_usuario'],id_sucursal,monto,session['lista_servicios_sel'])
+                if request.method == 'GET':
+                    dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
+                    return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
+                elif request.method == 'POST':
+                    fecha = request.form['fecha']
+                    id_sucursal = request.form['id_sucursal']
+                    hora = request.form['hora']
 
-                session.pop('lista_servicios_sel')
-                return redirect('/consultar_citas')
+                    monto = request.form['monto']
+                    print(fecha, hora, id_sucursal, monto)
+                    guardar_cita(fecha, hora, session['id_usuario'], id_sucursal, monto, session['lista_servicios_sel'])
+
+                    session.pop('lista_servicios_sel')
+                    return redirect('/consultar_citas')
+            else:
+                return redirect('/escoger_cita')
         else:
             return redirect('/')
     else:
@@ -406,9 +407,6 @@ def informe_ventas_diario():
         
 
 """
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

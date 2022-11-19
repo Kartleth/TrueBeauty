@@ -178,17 +178,16 @@
         let id_servicio = valor.split('-')[0];
         let elementos = document.getElementById('comboListServicios');
         let nombre = elementos.options[elementos.selectedIndex].innerText;
-
         let lista = document.getElementById('lista-servicios').innerHTML;
-        let numServicios = document.getElementById('lista-servicios').childElementCount;
-        numServicios += 1;
-        console.log(id_servicio);
+
         quitarOpcionDeComboList(id_servicio);
 
         lista += "<li id=\"" + id_servicio + "\" ><input type='text' style='all:unset;' value='" + nombre + "  $" + precio + "' name='serv_" + id_servicio + "'><button onclick=\"quitarServicioDeMonto(" + id_servicio + ")\" type=\"button\" class=\"btn\" >X</button></li>";
         document.getElementById('lista-servicios').innerHTML = lista;
+
         actualizarTotal();
-        mostrarPrecio()
+        mostrarPrecio();
+        checarSiComboListEstaVacio();
       }
     }
 
@@ -200,34 +199,23 @@
       comboList.removeChild(elemento);
     }
 
-    let agregarOpcionComboList = (id_opcion, idComboList) => {
-      let comboList = document.getElementById(idComboList);
-      let valueOpcion = document.getElementById(id_opcion);
-
-    }
-
 
     let quitarServicioDeMonto = (id_servicio) => {
       console.log('ID DE SERVICIO A QUITAR:' + id_servicio);
       let elemento = document.getElementById(id_servicio);
       let servicio = document.getElementsByName('serv_' + id_servicio)[0];
-      console.log(servicio);
+
       let comboList = document.getElementById('comboListServicios');
       let nodo = document.createElement("option")
       nodo.value = id_servicio + "-" + servicio.value.split('$')[1];
       nodo.innerText = servicio.value.split('$')[0].trim();
       nodo.id = id_servicio;
-      console.log(servicio.value);
+
       let padreLista = document.getElementById(id_servicio).parentNode;
 
       padreLista.removeChild(elemento);
-      comboList.appendChild(nodo)
-
-
-
-
-
-
+      comboList.appendChild(nodo);
+      checarSiComboListEstaVacio();
       actualizarTotal();
     }
 
@@ -245,12 +233,28 @@
       document.getElementById('precio-total').innerText = 'Total: $' + total;
     }
     let mostrarPrecio = () => {
-      let valor = document.getElementById('comboListServicios').value;
-      let precio = valor.split('-')[1];
+        let serviciosEnComboList = document.getElementById('comboListServicios').childElementCount;
+        if (serviciosEnComboList===0){
+            document.getElementById('precio').textContent = 'Precio: $0.00';
+        }else{
+            let valor = document.getElementById('comboListServicios').value;
+            let precio = valor.split('-')[1];
+            document.getElementById('precio').textContent = 'Precio: $' + precio;
+        }
 
-      document.getElementById('precio').textContent = 'Precio: $' + precio;
     }
 
+    let checarSiComboListEstaVacio= ()=>{
+        let numServicios = document.getElementById('comboListServicios').childElementCount;
+        /*Desactivar si ya no tiene servicios o activar si tiene alguno*/
+        if(numServicios===0){
+            document.getElementById('comboListServicios').setAttribute('disabled','');
+        }else{
+            document.getElementById('comboListServicios').removeAttribute('disabled');
+        }
+
+
+    }
   </script>
 </body>
 
