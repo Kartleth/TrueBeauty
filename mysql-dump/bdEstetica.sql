@@ -11,6 +11,8 @@ CREATE TABLE cita(
     id_cliente int unsigned NOT NULL,
     id_sucursal int unsigned NOT NULL,
     monto decimal NOT NULL,
+    iva decimal(10,2) unsigned NOT null,
+    total decimal(10,2) unsigned NOT null,
     PRIMARY KEY (id_cita)
 ) ENGINE=MyISAM default char set=latin1;
 
@@ -68,7 +70,6 @@ CREATE TABLE cita_servicio(
     id_estilista int unsigned not null,
     hora_inicio time not null,
     hora_fin time not null
-
 )ENGINE=MyISAM default char set=latin1;
 
 
@@ -111,9 +112,9 @@ INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Corte de cabel
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Manicura','Se le arregla las uñas',999.99,30);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Pedicura','Se le arregla las uñas de las patas',999.99,30);
 
-INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto) VALUES ('2023-10-08','8:30','9:00',1,1,1000);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','10:00','12:00',2,1,12021);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto) VALUES ('2022-12-10','14:00','16:00',3,1,3000);
+INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto,iva,total) VALUES ('2023-10-08','8:30','9:00',1,1,1000,160,1160);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-12-10','10:00','12:00',2,1,12021,1923.36,13944.36);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-12-10','14:00','16:00',3,1,3000,480,3480);
 
 INSERT INTO empleado(id_usuario,id_sucursal,turno) values(3,1,'tiempo completo');
 
