@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Consultar servicios{% endblock %}
+{% block body %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Custom styles for this template -->
+    <link href="/static/css/consultar_cita.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <main class="container">
+        <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+            <img class="me-3" src="/static/images/consultar_cita.png" alt="" width="48" height="48">
+            <div class="lh-1">
+                <h1 class="h6 mb-0 text-white lh-1">Consultar los servicios disponibles:</h1>
+                <small>¡Bienvenido a la sección de servicios!</small>
+            </div>
+        </div>
+
+
+        <div class="my-3 p-3 bg-body rounded shadow-sm">
+            <h6 class="border-bottom pb-2 mb-0">Servicios disponibles</h6>
+
+
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Duración</th>
+                        {% if tipo_usuario =='gerente' %}
+                        <th scope="col">Hacer cambios</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for servicio in lista_servicios %}
+                     <tr>
+                        <th scope="row">{{ servicio['nombre'] }}</th>
+                        <td>{{ servicio['descripcion'] }}</td>
+                        <td>${{ servicio['precio'] }}</td>
+                        <td>{{ servicio['tiempo'] }} minutos</td>
+                        {% if tipo_usuario =='gerente' %}
+                        <td align="center"><a href="/informacion_servicio/{{ servicio['id_servicio'] }}"  class="btn btn-primary btn-sm">Editar</a></td>
+                        {% endif %}
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            <small class="d-block text-end mt-3">
+                <a href="/escoger_cita" class="btn btn-primary btn-sm">Agregar nuevo servicio</a>
+            </small>
+        </div>
+
+
+    </main>
+
+    <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+
+    <script src="offcanvas.js"></script>
+</body>
+
+</html>
+{% endblock %}

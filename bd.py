@@ -250,6 +250,18 @@ def get_lista_citas_fechas(fecha1, fecha2) -> list:
     return lista
 
 
+def get_servicio(id_servicio):
+    conexion = obtener_conexion()
+    query = "SELECT CONCAT(id_servicio,'') as id_servicio, nombre, descripcion, CONCAT(precio,'') as precio, tiempo FROM servicio WHERE id_servicio="+id_servicio
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
 
 
 if __name__ == '__main__':

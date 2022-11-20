@@ -299,12 +299,23 @@ def confirmar_cita():
 
 @app.route('/ver_cita_gerente_recepcionista')
 def ver_cita_gerente_recepcionista():
-    return render_template("ver_cita_gerente_recepcionista.html")
+    return render_template("consultar_citas_gerente_recepcionista.html")
 
 
 @app.route('/registrarse')
 def registrarse():
     return render_template("registrarse.html")
+
+
+@app.route('/consultar_servicios')
+def consultar_servicios():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            servicios = get_lista_servicios()
+            return render_template('consultar_servicios.html', lista_servicios=servicios, tipo_usuario=session['tipo'])
+    else:
+
+        return redirect('/')
 
 
 @app.route('/consultar_citas')
@@ -316,14 +327,42 @@ def consultar_citas():
                 return render_template("consultar_citas.html", lista_citas=citas)
             elif session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
                 lista_citas = get_lista_info_citas()
-                return render_template('ver_cita_gerente_recepcionista.html', citas=lista_citas)
+                return render_template('consultar_citas_gerente_recepcionista.html', citas=lista_citas)
             else:
                 return redirect('/')
 
     else:
 
         return redirect('/')
-    # return render_template("consultar_citas.html")
+
+
+@app.route('/informacion_servicio/<id_servicio>', methods=['GET', 'POST'])
+def informacion_servicio(id_servicio):
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente':
+                if request.method == 'GET':
+                    info_servicio = get_servicio(id_servicio)
+                    if info_servicio is None:
+                        return redirect('/consultar_servicios')
+                    else:
+                        info_servicio = info_servicio[0]
+
+                    lista_servicios = get_lista_servicios()
+
+                    return render_template('informacion_servicio.html', info_servicio=info_servicio,
+                                           lista_servicios=lista_servicios)
+                elif request.method == 'POST':
+                    nombre_servicio = request.form['nombre']
+                    precio = request.form['precio']
+                    tiempo_duracion = request.form['tiempo']
+                    descripcion = request.form['descripcion']
+                    print(nombre_servicio,precio,tiempo_duracion,descripcion)
+                    return redirect('/consultar_servicios')
+            else:
+                return redirect('consultar_servicios')
+    else:
+        return redirect('/')
 
 
 @app.route('/informacion_cita/<id_cita>', methods=['GET', 'POST'])
@@ -336,10 +375,16 @@ def informacion_cita(id_cita):
                 servicios = get_lista_servicios()
                 return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
                                        lista_servicios=servicios)
+
             else:
-                return redirect('/')
+                return redirect('/escoger_cita')
         else:
-            return redirect('/')
+            info_cita = get_info_cita(id_cita)
+            servicios = get_lista_servicios()
+            return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita,
+                                   lista_servicios=servicios)
+
+
     else:
         return redirect('/')
 
