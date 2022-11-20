@@ -1,0 +1,13 @@
+/* Show it's not fixed to the top */
+body {
+    min-height: 75rem;
+  }
+
+  .center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+ 
+}
