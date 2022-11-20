@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Informacion usuario{% endblock %}
+
+{% block body %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    
+    <title>Información de usuario</title>
+    <link href="/static/css/informacion_usuario.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="/static/css/informacion_usuario.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+    <div class="container" style="margin-top: 5%;">
+        <main>
+            <div class="py-5 text-center">
+                <img class="d-block mx-auto mb-4" src="/static/images/cleopatra.png" alt="" width="57" height="57">
+                <h2>True Beauty</h2>
+                <p class="lead">Información sobre ti y tus preferencias en los servicios de True Beauty. Información
+                    personal y opciones para gestionarla.</p>
+            </div>
+
+            <div class="card">
+                <h5 class="card-header">Información personal</h5>
+                <div class="card-body">
+
+                    <div class="mb-3">
+                        <label for="" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="" disabled="disabled" placeholder="Karla">
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="" class="form-label">Apellido paterno</label>
+                            <input type="text" class="form-control" disabled="disabled" placeholder="Lerma"
+                                aria-label="">
+                        </div>
+                        <div class="col">
+                            <label for="" class="form-label">Apellido materno</label>
+                            <input type="text" class="form-control" disabled="disabled" placeholder="Molina"
+                                aria-label="">
+                        </div>
+                    </div>
+
+                    <div class="mb-3" style="margin-top: 1%;">
+                        <label for="" class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="" disabled="disabled" placeholder="662 128 4028">
+                    </div>
+
+                    <hr class="my-4">
+                    <button class="w-15 btn btn-primary btn-lg" type="submit">Editar Información</button>
+                </div>
+            </div>
+
+
+            <div class="card" style="margin-top: 1.5%;">
+                <h5 class="card-header">Información de correo</h5>
+
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="" disabled="disabled"
+                            placeholder="Karla@gmail.com">
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button class="w-15 btn btn-primary btn-lg" type="submit">Editar contraseña</button>
+                </div>
+            </div>
+            <hr class="my-4">
+            </form>
+        </main>
+    </div>
+
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017–2022 True Beauty</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+    </footer>
+    </div>
+
+
+    <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+
+    <script src="form-validation.js"></script>
+</body>
+
+</html>
+{% endblock %}
