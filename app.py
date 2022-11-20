@@ -401,6 +401,9 @@ def informacion_cita(id_cita):
     else:
         return redirect('/')
 
+@app.route('/informacion_usuario')
+def informacion_usuario():
+    return render_template("informacion_usuario.html")
 
 @app.route('/reparacion')
 def reparacion():
