@@ -225,7 +225,11 @@ def escoger_cita():
                 elif request.method == 'POST':
                     id_sucursal = request.form['tipo_sucursal']
                     fecha = request.form['fecha']
+                    session.pop('lista_servicios_sel')
                     session['lista_servicios_sel'] = obtener_servicios(request.form.to_dict())
+                    if len(session['lista_servicios_sel']) == 0:
+                        flash('Por favor, seleccione algún servicio para continuar')
+                        return redirect('/escoger_cita')
 
                     return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
@@ -255,7 +259,7 @@ def hora_cita():
 
             if request.method == 'GET':
                 if len(lista_horas_disponibles) == 0:
-                    flash('No hay horas disponibles con esos requerimientos')
+                    flash('No hay horas disponibles con esos requerimientos. Por favor, escoge otra fecha, otra sucursal u otros servicios.')
                     return redirect('/escoger_cita')
                 else:
                     return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
@@ -282,6 +286,7 @@ def confirmar_cita():
                 hora = request.args['hora']
 
                 if request.method == 'GET':
+                    print('SERVICIOS QUE SE MANDAN AL RENDER TEMPLATE DE session[lista_servicios_sel]'+str(session['lista_servicios_sel']))
                     dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
                     return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
                 elif request.method == 'POST':

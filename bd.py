@@ -116,6 +116,7 @@ def estilista_tiene_cita(hora, id_estilista, fecha,hora_fin):
 #     return False
 
 def get_servs_por_lista_id(lista_id_servicio):
+
     conexion = obtener_conexion()
     query = "SELECT * FROM servicio WHERE"
     for id_servicio in lista_id_servicio:
