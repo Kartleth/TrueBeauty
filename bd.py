@@ -91,10 +91,10 @@ def get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio):
 
 def estilista_tiene_cita(hora, id_estilista, fecha,hora_fin):
     conexion = obtener_conexion()
-    #query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND CS.hora_inicio<'" + hora + "' AND CS.hora_fin>'" + hora + "' AND CS.id_estilista=" + str(
-    #    id_estilista)
-    query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND (C.hora BETWEEN '" + hora + "' AND '" + str(hora_fin) + "') AND CS.id_estilista=" + str(
-        id_estilista)
+    query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND CS.hora_inicio<'" + hora + "' AND CS.hora_fin>'" + hora + "' AND CS.id_estilista=" + str(
+       id_estilista)
+    # query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND (C.hora BETWEEN '" + hora + "' AND '" + str(hora_fin) + "') AND CS.id_estilista=" + str(
+    #     id_estilista)
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:

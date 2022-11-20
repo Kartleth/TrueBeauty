@@ -1,6 +1,7 @@
 import os
 import smtplib, ssl
 import datetime
+import time
 from email.message import EmailMessage
 from bd import *
 
@@ -67,9 +68,11 @@ def get_horas_disponibles(id_sucursal, fecha, lista_servicios):
 
 def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
     # buscar que exista estilista disponible a esa hora en esa sucursal
-
+    hora_de_termino = time.strptime(calcular_hora_fin_de_cita(hora, lista_servicios),"%H:%M")
+    hora_de_cierre = time.strptime('20:00', "%H:%M")
     for id_servicio in lista_servicios:
-        if not hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal):
+        if not hay_estilista_para_horayservicio(hora, id_servicio, fecha,
+                                                id_sucursal) or hora_de_termino > hora_de_cierre:
             print(
                 f"No hay estilista para la hora:{hora} para el servicio {id_servicio} para la fecha: {fecha} para la sucursal {id_sucursal}")
             return False
@@ -96,6 +99,7 @@ def agregar_tiempo_de_servicio(hora, id_servicio):
 
 def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> bool:
     estilistas = get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio)
+    print('LA FECHA QUE BUSCA ES :', fecha)
     for estilista in estilistas:
         if not estilista_tiene_cita(hora, estilista['id_usuario'], fecha,
                                     calcular_tiempo_hora_servicio(id_servicio, hora)):
@@ -197,15 +201,24 @@ def calcular_tiempo_hora_servicio(id_servicio, hora):
 def get_dicc_info_cita(id_cita):
     dicc_cita = get_info_cita(id_cita)
 
-    print('formato de cita que se guarda en metodo: ',type(dicc_cita['fecha']))
+    print('formato de cita que se guarda en metodo: ', type(dicc_cita['fecha']))
     dicc_cita['lista_servicios'] = get_lista_info_servicios(id_cita)
     return dicc_cita
+
 
 def agregar_fechas_en_formato_datetime(citas):
     for cita in citas:
         cita['fecha_datetime'] = datetime.datetime.strptime(cita['fecha'], '%d/%m/%Y')
         cita['fecha_escrita'] = cita['fecha_datetime'].strftime('%d de %B de %Y')
     return citas
+
+
+def calcular_hora_fin_de_cita(hora_de_inicio, lista_servicios):
+    hora_de_termino = hora_de_inicio
+    for servicio in lista_servicios:
+        hora_de_termino = calcular_tiempo_hora_servicio(servicio, hora_de_termino)
+    return hora_de_termino
+
 
 if __name__ == '__main__':
     horas_salida = datetime.timedelta(minutes=180)

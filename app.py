@@ -250,7 +250,8 @@ def hora_cita():
             lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'])
 
             if request.method == 'GET':
-                if lista_horas_disponibles is None:
+                if len(lista_horas_disponibles) == 0:
+                    flash('No hay horas disponibles con esos requerimientos')
                     return redirect('/escoger_cita')
                 else:
                     return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
