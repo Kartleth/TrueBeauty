@@ -15,6 +15,20 @@ diccionario_menu = get_dicc_menu()
 
 # dicc_lista_servicios_sel = {}
 
+@app.context_processor
+def handle_context():
+    """Controla lo información mostrada dependiendo de si el usuario esta logeado y sus permisos"""
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            accesos = diccionario_menu[session['tipo']]
+
+            # return render_template("index.html", accesos=accesos, log=['Log Out', '/logout'], usuario=usuario)
+            return {'accesos': accesos, 'logeado': 'yes'}
+        else:
+            return {'logeado': 'no'}
+    else:
+        return {'logeado': 'no'}
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def inicio_sesion():
@@ -255,24 +269,28 @@ def hora_cita():
 def confirmar_cita():
     if 'logeado' in session.keys():
 
-        id_sucursal = request.args['id_sucursal']
-        fecha = request.args['fecha']
-        hora = request.args['hora']
         if session['logeado']:
-            if request.method == 'GET':
-                dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
-                return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
-            elif request.method == 'POST':
-                fecha = request.form['fecha']
-                id_sucursal = request.form['id_sucursal']
-                hora = request.form['hora']
+            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys():
+                id_sucursal = request.args['id_sucursal']
+                fecha = request.args['fecha']
+                hora = request.args['hora']
 
-                monto = request.form['monto']
-                print(fecha, hora, id_sucursal, monto)
-                guardar_cita(fecha,hora,session['id_usuario'],id_sucursal,monto,session['lista_servicios_sel'])
+                if request.method == 'GET':
+                    dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
+                    return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
+                elif request.method == 'POST':
+                    fecha = request.form['fecha']
+                    id_sucursal = request.form['id_sucursal']
+                    hora = request.form['hora']
 
-                session.pop('lista_servicios_sel')
-                return redirect('/consultar_citas')
+                    monto = request.form['monto']
+                    print(fecha, hora, id_sucursal, monto)
+                    guardar_cita(fecha, hora, session['id_usuario'], id_sucursal, monto, session['lista_servicios_sel'])
+
+                    session.pop('lista_servicios_sel')
+                    return redirect('/consultar_citas')
+            else:
+                return redirect('/escoger_cita')
         else:
             return redirect('/')
     else:
@@ -281,12 +299,23 @@ def confirmar_cita():
 
 @app.route('/ver_cita_gerente_recepcionista')
 def ver_cita_gerente_recepcionista():
-    return render_template("ver_cita_gerente_recepcionista.html")
+    return render_template("consultar_citas_gerente_recepcionista.html")
 
 
 @app.route('/registrarse')
 def registrarse():
     return render_template("registrarse.html")
+
+
+@app.route('/consultar_servicios')
+def consultar_servicios():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            servicios = get_lista_servicios()
+            return render_template('consultar_servicios.html', lista_servicios=servicios, tipo_usuario=session['tipo'])
+    else:
+
+        return redirect('/')
 
 
 @app.route('/consultar_citas')
@@ -298,14 +327,42 @@ def consultar_citas():
                 return render_template("consultar_citas.html", lista_citas=citas)
             elif session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
                 lista_citas = get_lista_info_citas()
-                return render_template('ver_cita_gerente_recepcionista.html', citas=lista_citas)
+                return render_template('consultar_citas_gerente_recepcionista.html', citas=lista_citas)
             else:
                 return redirect('/')
 
     else:
 
         return redirect('/')
-    # return render_template("consultar_citas.html")
+
+
+@app.route('/informacion_servicio/<id_servicio>', methods=['GET', 'POST'])
+def informacion_servicio(id_servicio):
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente':
+                if request.method == 'GET':
+                    info_servicio = get_servicio(id_servicio)
+                    if info_servicio is None:
+                        return redirect('/consultar_servicios')
+                    else:
+                        info_servicio = info_servicio[0]
+
+                    lista_servicios = get_lista_servicios()
+
+                    return render_template('informacion_servicio.html', info_servicio=info_servicio,
+                                           lista_servicios=lista_servicios)
+                elif request.method == 'POST':
+                    nombre_servicio = request.form['nombre']
+                    precio = request.form['precio']
+                    tiempo_duracion = request.form['tiempo']
+                    descripcion = request.form['descripcion']
+                    print(nombre_servicio,precio,tiempo_duracion,descripcion)
+                    return redirect('/consultar_servicios')
+            else:
+                return redirect('consultar_servicios')
+    else:
+        return redirect('/')
 
 
 @app.route('/informacion_cita/<id_cita>', methods=['GET', 'POST'])
@@ -318,10 +375,16 @@ def informacion_cita(id_cita):
                 servicios = get_lista_servicios()
                 return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
                                        lista_servicios=servicios)
+
             else:
-                return redirect('/')
+                return redirect('/escoger_cita')
         else:
-            return redirect('/')
+            info_cita = get_info_cita(id_cita)
+            servicios = get_lista_servicios()
+            return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita,
+                                   lista_servicios=servicios)
+
+
     else:
         return redirect('/')
 
@@ -330,6 +393,65 @@ def informacion_cita(id_cita):
 def reparacion():
     return render_template("reparacion.html")
 
+
+# Informes se va a dividir en diaria, mensual y en rango.
+""" 
+@app.route("/informe_ventas/diaria", methods=['GET', 'POST'])
+def informe_ventas_diario():
+ Se asegura que la cuenta tenga permisos de administrador.
+    Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas.
+    Si se selecciona alguna fecha en especifico la información cambia dependiendo de la misma.
+    if 'logged_in' in session.keys():
+            if session['logeado']:
+                if session['type'] == 'gerente':
+                    if request.method == 'GET' :
+                        horas = []
+                        fecha = get_cur_datetime()
+                        desde = fecha['now']
+                        hasta = fecha['now']
+                        citas = get_lista_citas_fechas(desde, hasta) #atenciones/citas
+                        usuarios = get_lista_usuarios_fechas(desde, hasta) #crear usuarios
+                        servicios = get_lista_serv_de_atenciones()  #
+                        suma = get_suma_atenciones(desde, hasta)
+                        total_atenciones_subtotal = suma['SUM(subtotal)']
+                        total_atenciones_iva = suma['SUM(iva)']
+                        total_atenciones_total = suma['SUM(total)']
+                        
+                        data_dict = get_datos_grafica_diaria(desde)
+
+                        return render_template("reporte.html", lista_usuarios=usuarios,
+                                            total_atenciones_subtotal=total_atenciones_subtotal,
+                                            total_atenciones_iva=total_atenciones_iva,
+                                            total_atenciones_total=total_atenciones_total,
+                                            lista_atenciones=citas, lista_servicios=servicios,
+                                            tipo='Diario', date=fecha['now'], data=json.dumps(data_dict))
+    
+                    if request.method == 'POST':
+                        fecha = request.form['fecha']
+                        citas = get_lista_citas_fechas(fecha, fecha)
+                        usuarios = get_lista_usuarios_fechas(fecha, fecha)
+                        servicios = get_lista_serv_de_atenciones()       
+                        suma = get_suma_atenciones(fecha, fecha)
+                        total_atenciones_subtotal = suma['SUM(subtotal)']
+                        total_atenciones_iva = suma['SUM(iva)']
+                        total_atenciones_total = suma['SUM(total)']
+                        print(fecha, fecha, suma)
+
+                        data_dict = get_datos_grafica_diaria(fecha)
+                        return render_template("reporte.html", lista_usuarios=usuarios,
+                                            total_atenciones_subtotal=total_atenciones_subtotal,
+                                            total_atenciones_iva=total_atenciones_iva,
+                                            total_atenciones_total=total_atenciones_total,
+                                            lista_atenciones=citas, lista_servicios=servicios,
+                                            tipo='Diario',
+                                                date=fecha, data=json.dumps(data_dict))
+                else:
+                    abort(403)
+            else:
+                abort(403)
+        
+
+"""
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

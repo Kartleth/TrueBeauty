@@ -97,7 +97,7 @@ def agregar_tiempo_de_servicio(hora, id_servicio):
 def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> bool:
     estilistas = get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio)
     for estilista in estilistas:
-        if not estilista_tiene_cita(hora, estilista['id_usuario'], fecha):
+        if not estilista_tiene_cita(hora, estilista['id_usuario'], fecha, calcular_tiempo_hora_servicio(id_servicio,hora)):
             return True
 
     return False
@@ -147,8 +147,24 @@ def get_lista_info_citas_usuario(columna: str, id_usuario: int):
 
 
 def guardar_cita(fecha, hora, id_usuario, id_sucursal, monto, lista_servicios):
-    id_cita = insert_into_cita(fecha, hora, id_usuario, id_sucursal, monto)
-    guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal, id_cita)
+    subtotal=float(monto)
+    iva=subtotal*0.16
+    total=subtotal+iva
+    c=0
+    hora2=hora
+    for servicio in lista_servicios:
+        
+        # aumento = datetime.timedelta(minutes=int(tiempo_servicio))
+        # hora = datetime.datetime.strptime(hora, "%H:%M")
+        # hora_fin = aumento + hora
+        # hora_fin = hora_fin.strftime("%H:%M")
+        # hora = hora.strftime("%H:%M")
+        # hora = hora_fin
+        hora_fin=calcular_tiempo_hora_servicio(servicio,hora2)
+        c+=1
+        hora2=hora_fin
+    id_cita = insert_into_cita(fecha, hora, hora_fin, id_usuario, id_sucursal, monto, iva, total)
+    guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal, id_cita)    
 
 
 def guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal,id_cita):
@@ -157,6 +173,7 @@ def guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal,id_cita)
 
         tiempo_servicio = get_tiempo_servicio(servicio)
         aumento = datetime.timedelta(minutes=int(tiempo_servicio))
+        
         hora = datetime.datetime.strptime(hora, "%H:%M")
         hora_fin = aumento + hora
         hora_fin = hora_fin.strftime("%H:%M")
@@ -164,6 +181,15 @@ def guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal,id_cita)
         insert_into_cita_servicio(id_cita, servicio, id_estilista['id_usuario'], hora, hora_fin)
         hora = hora_fin
 
+def calcular_tiempo_hora_servicio(id_servicio,hora):    
+    tiempo_servicio = get_tiempo_servicio(id_servicio)
+    aumento = datetime.timedelta(minutes=int(tiempo_servicio))
+    
+    hora = datetime.datetime.strptime(hora, "%H:%M")
+    hora_fin = aumento + hora
+    hora_fin = hora_fin.strftime("%H:%M")
+    hora = hora.strftime("%H:%M")
+    return hora_fin
 
 
 
