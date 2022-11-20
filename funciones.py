@@ -196,9 +196,16 @@ def calcular_tiempo_hora_servicio(id_servicio, hora):
 
 def get_dicc_info_cita(id_cita):
     dicc_cita = get_info_cita(id_cita)
+
+    print('formato de cita que se guarda en metodo: ',type(dicc_cita['fecha']))
     dicc_cita['lista_servicios'] = get_lista_info_servicios(id_cita)
     return dicc_cita
 
+def agregar_fechas_en_formato_datetime(citas):
+    for cita in citas:
+        cita['fecha_datetime'] = datetime.datetime.strptime(cita['fecha'], '%d/%m/%Y')
+        cita['fecha_escrita'] = cita['fecha_datetime'].strftime('%d de %B de %Y')
+    return citas
 
 if __name__ == '__main__':
     horas_salida = datetime.timedelta(minutes=180)

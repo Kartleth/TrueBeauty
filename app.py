@@ -6,6 +6,7 @@ from dicc_menu import *
 from funciones import *
 from random import randint
 from herramientas import *
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
@@ -377,10 +378,11 @@ def informacion_cita(id_cita):
         if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
             if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
                 citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
-                info_cita = get_info_cita(id_cita)
-                servicios = get_lista_servicios()
-                return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
-                                       lista_servicios=servicios)
+                citas = agregar_fechas_en_formato_datetime(citas)
+                info_cita = get_dicc_info_cita(id_cita)
+                fecha_actual = datetime.now()
+
+                return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita, fecha_actual=fecha_actual)
 
             else:
                 return redirect('/escoger_cita')

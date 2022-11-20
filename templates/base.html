@@ -89,15 +89,15 @@
       </a>
 
       <form class="d-flex">
-
+{% if logeado=='no' %}
         <a class="btn btn-outline-light me-2" href="/login">Login</a>
         <a class="btn btn-outline-light me-2" href="/signup">Sign-up</a>
-
+ {% else %}
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
           aria-controls="offcanvasDarkNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
-
+{% endif %}
       </form>
 
       <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
@@ -136,6 +136,7 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="#"> Aqui deberia de aparecer: {{ logeado }}</a></li>
                 <li><a class="dropdown-item" href="#">Action</a></li>
                 <li><a class="dropdown-item" href="#">Another action</a></li>
                 <li>
