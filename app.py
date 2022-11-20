@@ -336,6 +336,11 @@ def consultar_citas():
         return redirect('/')
 
 
+@app.route('/agregar_servicio')
+def agregar_servicio():
+    return render_template("agregar_servicio.html")
+
+
 @app.route('/informacion_servicio/<id_servicio>', methods=['GET', 'POST'])
 def informacion_servicio(id_servicio):
     if 'logeado' in session.keys():
