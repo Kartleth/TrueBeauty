@@ -97,6 +97,10 @@ def signup():
         return redirect("/")
 
 
+@app.route('/error')
+def error():
+    return render_template("error.html")
+
 @app.route("/forgot_password", methods=['GET', 'POST'])
 def forgot_password():
     """Controla restablecer contraseña.
@@ -364,6 +368,7 @@ def informacion_servicio(id_servicio):
                 return redirect('consultar_servicios')
     else:
         return redirect('/')
+
 
 
 @app.route('/informacion_cita/<id_cita>', methods=['GET', 'POST'])
