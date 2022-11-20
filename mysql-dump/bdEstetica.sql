@@ -159,4 +159,9 @@ INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
 #                          AND NOT( C.fecha='2022-11-24'
 #                          AND CS.hora_inicio<'11:00'
 #                          AND CS.hora_fin>'11:00') LIMIT 1;
-
+/*SELECCIONAR NOMBRE ID, NOMBRE DE SERVICIO, DESCRIPCION, PRECIO, ESTILISTA QUE LO DARA */
+SELECT cs.id_servicio, S.nombre AS nombre_servicio, S.descripcion ,S.precio ,U.nombre AS nombre_estilista, U.apellido_paterno as apellido1_estilista
+FROM cita_servicio CS, usuario U, servicio S
+WHERE CS.id_estilista=U.id_usuario
+  AND CS.id_servicio=S.id_servicio
+  AND CS.id_cita=1;

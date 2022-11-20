@@ -27,48 +27,119 @@
                     <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm" style="background-color:  #7CB8EB">
                         <img class="me-3" src="/static/images/calendario_fecha_cita.png" alt="" width="48" height="48">
                         <div class="lh-1">
-                            <h1 class="h6 mb-0 text-white lh-1">SUCURSAL: LAS LOMAS</h1>
-                            <small>Avenida villa de seris</small>
-                            <small>/</small>
-                            <small>+552 6621284028</small>
+                            <h1 class="h6 mb-0 text-white lh-1">Cita de {{ dicc_cita['nombre_cliente'] }}</h1>
+                            <small>El {{ dicc_cita['fecha'] }} a las {{ dicc_cita['hora'] }} horas</small>
+
                         </div>
                     </div>
 
 
+                    <div class="col-md-6">
+                        <label for="nombre_cliente" class="form-label">Nombre de cliente</label>
+                        <input type="text" class="form-control" id="nombre_cliente" name="nombre_completo_cliente" value="{{ dicc_cita['nombre_cliente'] }} {{ dicc_cita['apellido1_cliente'] }} {{ dicc_cita['apellido2_cliente'] }}" readonly>
+                    </div>
 
+                    <div class="col-md-6">
+                        <label for="correo" class="form-label">Nombre de cliente</label>
+                        <input type="text" class="form-control" id="corre" name="correo" value="{{ dicc_cita['correo'] }}" readonly>
+                    </div>
 
 
                     <div class="col-md-4">
                         <label for="fecha" class="form-label">Fecha</label>
-                        <input style="all:unset;" type="text" class="form-control" id="fecha" value="{{ dicc_cita['fecha'] }}"
-                            disabled>
+                        <input  type="text" class="form-control" id="fecha" name="fecha" value="{{ dicc_cita['fecha'] }}"
+                            readonly>
                         <div class="invalid-feedback">
                             Ingrese una fecha
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label for="hora" class="form-label">Hora (24h)</label>
-                        <input type="text" class="form-control" id="hora" placeholder="{{ dicc_cita['hora'] }}"
-                            required>
+                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['hora'] }}"
+                            readonly>
+                        <div class="invalid-feedback">
+                            hora requerida.
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="hora" class="form-label">Hora de termino(24h)</label>
+                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['hora_fin'] }}"
+                            readonly>
+                        <div class="invalid-feedback">
+                            hora requerida.
+                        </div>
+                    </div>
+                <div class="col-md-6">
+                        <label for="hora" class="form-label">Nombre de sucursal</label>
+                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['nombre_sucursal'] }}"
+                            readonly>
+                        <div class="invalid-feedback">
+                            hora requerida.
+                        </div>
+                    </div>
+                <div class="col-md-6">
+                        <label for="hora" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['direccion_sucursal'] }}"
+                            readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
                     </div>
 
-                    <div class="col-12">
-                        <label for="total" class="form-label">Total (Pesos)</label>
-                        <input type="text" class="form-control" id="total" placeholder="" value="" required>
-                    </div>
+                    <h4 class="border-bottom pb-2 mb-0">Servicios a realizar</h4>
+                    <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Estilista</th>
+                        <th scope="col">Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for servicio in dicc_cita['lista_servicios'] %}
+                     <tr>
+                        <th scope="row">{{ servicio['nombre_servicio'] }}</th>
+                        <td>{{ servicio['descripcion'] }}</td>
 
-                    <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Descripción de servicio</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <td>{{ servicio['nombre_estilista'] }} {{ servicio['apellido1_estilista'] }}</td>
+                        <td>${{ servicio['precio'] }}</td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+                    <div class="col-md-4">
+                        <label for="subtotal" class="form-label">Subtotal</label>
+                        <input type="number" class="form-control" id="subtotal" name="monto" value="{{ dicc_cita['monto'] }}"
+                            readonly>
+                        <div class="invalid-feedback">
+
+                        </div>
+                    </div>
+                <div class="col-md-4">
+                        <label for="iva" class="form-label">IVA</label>
+                        <input type="number" class="form-control" id="iva" name="iva" value="{{ dicc_cita['iva'] }}"
+                            readonly>
+                        <div class="invalid-feedback">
+
+                        </div>
+                    </div>
+                <div class="col-md-4">
+                        <label for="total" class="form-label">Total a pagar</label>
+                        <input type="number" class="form-control" id="total" name="total" value="{{ dicc_cita['total'] }}"
+                            readonly>
+                        <div class="invalid-feedback">
+                            hora requerida.
+                        </div>
                     </div>
 
                     <hr>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 3rem" ><a class="btn btn-lg btn-primary" href="/consultar_citas">Todas las citas</a> <button class="btn btn-lg btn-primary" type="submit">Editar cita</button></div>
 
-                    <p align="right"><a class="btn btn-lg btn-primary" href="">Editar cita</a></p>
 
 
                 </div>
