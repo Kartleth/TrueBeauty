@@ -2,75 +2,73 @@
 {% block title %}Hora_cita{% endblock %}
 
 {% block body %}
-<!doctype html>
-<html lang="en">
+    <!doctype html>
+    <html lang="en">
 
-<head>
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
+    <head>
+        <style>
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
             }
-        }
 
-        .b-example-divider {
-            height: 3rem;
-            background-color: rgba(0, 0, 0, .1);
-            border: solid rgba(0, 0, 0, .15);
-            border-width: 1px 0;
-            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-        }
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
 
-        .b-example-vr {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 100vh;
-        }
+            .b-example-divider {
+                height: 3rem;
+                background-color: rgba(0, 0, 0, .1);
+                border: solid rgba(0, 0, 0, .15);
+                border-width: 1px 0;
+                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+            }
 
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
-        }
-    </style>
+            .b-example-vr {
+                flex-shrink: 0;
+                width: 1.5rem;
+                height: 100vh;
+            }
+
+            .bi {
+                vertical-align: -.125em;
+                fill: currentColor;
+            }
+        </style>
 
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/fecha_cita.css" rel="stylesheet">
-</head>
+        <!-- Custom styles for this template -->
+        <link href="/static/css/fecha_cita.css" rel="stylesheet">
+    </head>
 
-<body class="bg-light">
-
-    <main class="container">
-        <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
-            <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
-            <div class="lh-1">
-                <h1 class="h6 mb-0 text-white lh-1">Registrar servicio:</h1>
-                <small>(Ingresa los datos correspondientes para registrar servicio)</small>
+    <body class="bg-light">
+    <form class="needs-validation" method="POST" >
+        <main class="container">
+            <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+                <img class="me-3" src="/static/images/informacion_cita_agendar_cita.png" alt="" width="48" height="48">
+                <div class="lh-1">
+                    <h1 class="h6 mb-0 text-white lh-1">Registrar servicio:</h1>
+                    <small>(Ingresa los datos correspondientes para registrar servicio)</small>
+                </div>
             </div>
-        </div>
 
-        <div class="my-3 p-3 bg-body rounded shadow-sm">
-            <main>
-
-
-                <div class="row g-5 center">
-                    <div class="col-md-7 col-lg-8">
-
-                        <form class="needs-validation" novalidate>
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                <main>
 
 
+                    <div class="row g-5 center">
+                        <div class="col-md-7 col-lg-8">
+
+    <h4>{{ get_flashed_messages()[0] }}</h4>
                             <div class="col-12">
-                                <label for="name" class="form-label">Nombre</label>
+                                <label for="name" class="form-label">Nombre del servicio</label>
                                 <div class="input-group has-validation">
-                                    <input type="text" class="form-control" id="name" required>
+                                    <input type="text" class="form-control" id="name" name="nombre" required>
                                     <div class="invalid-feedback">
                                         Necesita ingresar el nombre
                                     </div>
@@ -80,8 +78,8 @@
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="precio" class="form-label">Precio</label>
-                                    <input type="number" class="form-control" id="precio" placeholder="" value=""
-                                        required>
+                                    <input type="number" min="1" class="form-control" id="precio" name="precio"
+                                           required>
                                     <div class="invalid-feedback">
                                         El precio es necesario
                                     </div>
@@ -90,7 +88,7 @@
 
                                 <div class="col-sm-6">
                                     <label for="time" class="form-label">Tiempo</label>
-                                    <input type="time" class="form-control" id="time" placeholder="" value="" required>
+                                    <input type="number" min="1" class="form-control" id="time" name="tiempo" required>
                                     <div class="invalid-feedback">
                                         El tiempo es necesario
                                     </div>
@@ -98,37 +96,38 @@
 
                                 <div class="form-group">
                                     <label for="descripcion_servicio">Descripcion</label>
-                                    <textarea class="form-control" id="descripcion_servicio" rows="3"></textarea>
+                                    <textarea class="form-control" id="descripcion_servicio" rows="3"
+                                              name="descripcion"></textarea>
                                 </div>
 
 
-
                             </div>
-                        </form>
+
+                        </div>
                     </div>
-                </div>
 
-            </main>
-
+                </main>
 
 
-        </div>
-        <hr class="my-4">
-    </main>
+            </div>
+            <hr class="my-4">
+        </main>
 
-
-
-    <div class="container">
         <main>
             <div class="row g-5 center">
                 <div class="col-md-7 col-lg-8">
                     <!--<button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>-->
-                    <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Registrar servicio</a></p>
+                    <p align="right">
+                        <button class="btn btn-lg btn-primary" type="submit">Registrar servicio</button>
+                    </p>
 
                 </div>
             </div>
 
         </main>
+    </form>
+    <div class="container">
+
 
         <footer class="my-5 pt-5 text-muted text-center text-small">
             <p class="mb-1">&copy; 2017–2022 Company Name</p>
@@ -142,20 +141,19 @@
 
 
     <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-        crossorigin="anonymous"></script>
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
 
     <script src="form-validation.js"></script>
 
 
     <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-        crossorigin="anonymous"></script>
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
 
     <script src="offcanvas.js"></script>
-</body>
+    </body>
 
 
-
-</html>
+    </html>
 {% endblock %}

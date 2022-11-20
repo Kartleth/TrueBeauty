@@ -102,6 +102,7 @@ def signup():
 def error():
     return render_template("error.html")
 
+
 @app.route("/forgot_password", methods=['GET', 'POST'])
 def forgot_password():
     """Controla restablecer contraseña.
@@ -191,11 +192,6 @@ def inicio_cliente():
     return render_template("inicio_cliente.html")
 
 
-@app.route('/registrar_servicio')
-def registrar_servicio():
-    return render_template("registrar_servicio.html")
-
-
 @app.route('/agendar_cita', methods=['GET', 'POST'])
 def agendar_cita():
     # if 'logeado' in session.keys():
@@ -259,7 +255,8 @@ def hora_cita():
 
             if request.method == 'GET':
                 if len(lista_horas_disponibles) == 0:
-                    flash('No hay horas disponibles con esos requerimientos. Por favor, escoge otra fecha, otra sucursal u otros servicios.')
+                    flash(
+                        'No hay horas disponibles con esos requerimientos. Por favor, escoge otra fecha, otra sucursal u otros servicios.')
                     return redirect('/escoger_cita')
                 else:
                     return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
@@ -286,7 +283,8 @@ def confirmar_cita():
                 hora = request.args['hora']
 
                 if request.method == 'GET':
-                    print('SERVICIOS QUE SE MANDAN AL RENDER TEMPLATE DE session[lista_servicios_sel]'+str(session['lista_servicios_sel']))
+                    print('SERVICIOS QUE SE MANDAN AL RENDER TEMPLATE DE session[lista_servicios_sel]' + str(
+                        session['lista_servicios_sel']))
                     dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
                     return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
                 elif request.method == 'POST':
@@ -347,7 +345,6 @@ def consultar_citas():
         return redirect('/')
 
 
-
 @app.route('/informacion_servicio/<id_servicio>', methods=['GET', 'POST'])
 def informacion_servicio(id_servicio):
     if 'logeado' in session.keys():
@@ -369,13 +366,39 @@ def informacion_servicio(id_servicio):
                     precio = request.form['precio']
                     tiempo_duracion = request.form['tiempo']
                     descripcion = request.form['descripcion']
-                    print(nombre_servicio,precio,tiempo_duracion,descripcion)
+                    print(nombre_servicio, precio, tiempo_duracion, descripcion)
+                    update_servicio(id_servicio, nombre_servicio, precio, descripcion, tiempo_duracion)
                     return redirect('/consultar_servicios')
             else:
                 return redirect('consultar_servicios')
     else:
         return redirect('/')
 
+
+@app.route('/agregar_servicio', methods=['GET', 'POST'])
+def agregar_servicio():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente':
+                if request.method == 'GET':
+                    return render_template('registrar_servicio.html')
+                elif request.method == 'POST':
+                    nombre = request.form['nombre']
+                    precio = request.form['precio']
+                    tiempo = request.form['tiempo']
+                    descripcion = request.form['descripcion']
+                    print(str(request.form.to_dict()))
+                    if hay_servicio_con_ese_nombre(nombre):
+                        flash('Ya existe un servicio con ese nombre.')
+                        return redirect('/agregar_servicio')
+                    insert_into_servicio(nombre, precio, descripcion, tiempo)
+                    return redirect('/consultar_servicios')
+
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+    return render_template('registrar_servicio.html')
 
 
 @app.route('/informacion_cita/<id_cita>', methods=['GET', 'POST'])
@@ -388,7 +411,8 @@ def informacion_cita(id_cita):
                 info_cita = get_dicc_info_cita(id_cita)
                 fecha_actual = datetime.now()
 
-                return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita, fecha_actual=fecha_actual)
+                return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
+                                       fecha_actual=fecha_actual)
 
             else:
                 return redirect('/escoger_cita')

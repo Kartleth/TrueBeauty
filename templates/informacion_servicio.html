@@ -35,7 +35,7 @@
 {#                        <svg class="bi pe-none me-2" width="16" height="16">#}
 {#                            <use xlink:href="#home"></use>#}
 {#                        </svg>#}
-                        Cita de {{ servicio['nombre'] }}
+                        {{ servicio['nombre'] }}
                     </a>
                 </li>
                 {% endfor %}
@@ -90,6 +90,8 @@
             <form class="needs-validation" method="POST">
                 <div class="row g-3" style="padding-left: 7%; padding-top: 0%; margin-top: -9%;">
 
+
+
                     <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm" style="background-color:  #7CB8EB">
                         <img class="me-3" src="/static/images/calendario_fecha_cita.png" alt="" width="48" height="48">
                         <div class="lh-1">
@@ -105,18 +107,18 @@
                         <input type="text" class="form-control" id="nombre" name="nombre" value="{{ info_servicio['nombre'] }}"  required>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label for="precio" class="form-label">Precio:</label>
-                        <input  type="number" class="form-control" id="precio" name="precio" value="{{ info_servicio['precio'] }}"
+                        <input  type="number" min="1" class="form-control" id="precio" name="precio" value="{{ info_servicio['precio'] }}"
                             required>
                         <div class="invalid-feedback">
                             Ingrese el precio
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label for="tiempo" class="form-label">Tiempo de duración (minutos):</label>
-                        <input type="number" class="form-control" id="tiempo" name="tiempo" value="{{ info_servicio['tiempo'] }}"
+                        <input type="number" min="1" class="form-control" id="tiempo" name="tiempo" value="{{ info_servicio['tiempo'] }}"
                             required>
                         <div class="invalid-feedback">
                             Ingrese el tiempo de duración
@@ -125,7 +127,7 @@
 
 
 
-                    <div class="mb-3">
+                    <div class="mb-6">
                         <label for="exampleFormControlTextarea1" class="form-label">Descripción de servicio</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="descripcion" >{{ info_servicio['descripcion'] }}</textarea>
                     </div>
