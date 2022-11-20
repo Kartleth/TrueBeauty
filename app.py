@@ -379,10 +379,9 @@ def informacion_cita(id_cita):
             else:
                 return redirect('/escoger_cita')
         else:
-            info_cita = get_info_cita(id_cita)
-            servicios = get_lista_servicios()
-            return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita,
-                                   lista_servicios=servicios)
+            info_cita = get_dicc_info_cita(id_cita)
+
+            return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita)
 
 
     else:

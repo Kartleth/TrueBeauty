@@ -41,7 +41,7 @@ def cita_pertenece_a_usuario(columna: str, id_usuario: int, id_cita: int):
 
 def get_info_cita(id_cita: int):
     conexion = obtener_conexion()
-    query = "SELECT C.id_cita,DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, SU.nombre as nombre_sucursal, SU.direccion as direccion_sucursal, SE.nombre as nombre_servicio, SE.precio as precio_servicio, SE.descripcion as descripcion_servicio FROM cita C, sucursal SU, servicio SE WHERE  C.id_sucursal=SU.id_sucursal AND C.id_cita=" + str(
+    query = "SELECT C.id_cita,DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora,DATE_FORMAT(C.hora_fin, '%H:%i') as hora_fin, SU.nombre as nombre_sucursal, SU.direccion as direccion_sucursal, C.monto,C.iva,C.total, U.nombre as nombre_cliente, U.apellido_paterno as apellido1_cliente, U.apellido_materno as apellido2_cliente, U.correo AS correo FROM cita C, sucursal SU, servicio SE, usuario U WHERE  C.id_sucursal=SU.id_sucursal AND C.id_cliente=U.id_usuario AND C.id_cita=" + str(
         id_cita)
     lista = []
     with conexion.cursor() as cursor:
@@ -253,6 +253,17 @@ def get_lista_citas_fechas(fecha1, fecha2) -> list:
 def get_servicio(id_servicio):
     conexion = obtener_conexion()
     query = "SELECT CONCAT(id_servicio,'') as id_servicio, nombre, descripcion, CONCAT(precio,'') as precio, tiempo FROM servicio WHERE id_servicio="+id_servicio
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+def get_lista_info_servicios(id_cita):
+    conexion = obtener_conexion()
+    query = "SELECT cs.id_servicio, S.nombre AS nombre_servicio, S.descripcion ,S.precio ,U.nombre AS nombre_estilista, U.apellido_paterno as apellido1_estilista  FROM cita_servicio CS, usuario U, servicio S WHERE CS.id_estilista=U.id_usuario AND CS.id_servicio=S.id_servicio AND CS.id_cita="+id_cita
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
