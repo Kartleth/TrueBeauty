@@ -54,6 +54,7 @@ diccionario_menu = {
                 '/consultar_citas': 'Ver citas',
                 '/consultar_servicios': 'Servicios disponibles',
                 '/agregar_servicio': 'Agregar nuevo servicio',
+                '/consultar_clientes': 'Ver clientes',
                 '/consultar_usuarios': 'Ver usuarios',
                 '/registrar_usuario': 'Registrar usuario',
                 '/info_cuenta': 'Mi cuenta',

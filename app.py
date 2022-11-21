@@ -205,27 +205,45 @@ def agendar_cita():
 
     return render_template("agendar_cita.html")
 
-
-@app.route('/escoger_cita', methods=['GET', 'POST'])
-def escoger_cita():
+@app.route('/escoger_cita/', methods=['GET', 'POST'])
+@app.route('/escoger_cita/<int:id_cliente>', methods=['GET', 'POST'])
+def escoger_cita(id_cliente=None):
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
                 if request.method == 'GET':
-                    fecha = get_cur_datetime()
-                    return render_template('escoger_cita.html',
-                                           lista_sucursales=get_lista_sucursales(),
-                                           lista_servicios=get_lista_servicios(),
-                                           date_min=fecha['fecha_actual'],
-                                           date_max=fecha['fecha_fin'])
+                    if id_cliente is None:
+                        if session['tipo'] != 'cliente' :
+                            flash('Primero escoga o cree un usuario para agendar una cita:')
+                            return redirect('/consultar_clientes')
+                        else:
+                            fecha = get_cur_datetime()
+                            return render_template('escoger_cita.html',
+                                                   lista_sucursales=get_lista_sucursales(),
+                                                   lista_servicios=get_lista_servicios(),
+                                                   date_min=fecha['fecha_actual'],
+                                                   date_max=fecha['fecha_fin'])
+                    elif session['tipo'] == 'cliente':
+                        return redirect('/escoger_cita')
+                    else:
+                        session['id_cliente'] = str(id_cliente)
+                        fecha = get_cur_datetime()
+                        return render_template('escoger_cita.html',
+                                               lista_sucursales=get_lista_sucursales(),
+                                               lista_servicios=get_lista_servicios(),
+                                               date_min=fecha['fecha_actual'],
+                                               date_max=fecha['fecha_fin'])
                 elif request.method == 'POST':
                     id_sucursal = request.form['tipo_sucursal']
                     fecha = request.form['fecha']
-                    session.pop('lista_servicios_sel')
+
                     session['lista_servicios_sel'] = obtener_servicios(request.form.to_dict())
                     if len(session['lista_servicios_sel']) == 0:
                         flash('Por favor, seleccione algún servicio para continuar')
-                        return redirect('/escoger_cita')
+                        if id_cliente is None:
+                            return redirect('/escoger_cita')
+                        else:
+                            return redirect('/escoger_cita/'+ str(id_cliente))
 
                     return redirect(url_for('hora_cita', id_sucursal=id_sucursal, fecha=fecha))
                 else:
@@ -247,23 +265,34 @@ def fecha_cita():
 def hora_cita():
     if 'logeado' in session.keys():
         if session['logeado']:
+            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys():
+                id_sucursal = request.args['id_sucursal']
+                fecha = request.args['fecha']
 
-            id_sucursal = request.args['id_sucursal']
-            fecha = request.args['fecha']
+                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'])
 
-            lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'])
+                if request.method == 'GET':
+                    if len(lista_horas_disponibles) == 0:
+                        flash(
+                            'No hay horas disponibles con esos requerimientos. Por favor, escoge otra fecha, otra sucursal u otros servicios.')
+                        if 'id_cliente' in session.keys():
+                            return redirect('/escoger_cita/'+session['id_cliente'])
+                        else:
+                            return redirect('/escoger_cita')
+                    else:
+                        return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
+                elif request.method == 'POST':
+                    hora = request.form['hora']
 
-            if request.method == 'GET':
-                if len(lista_horas_disponibles) == 0:
-                    flash(
-                        'No hay horas disponibles con esos requerimientos. Por favor, escoge otra fecha, otra sucursal u otros servicios.')
-                    return redirect('/escoger_cita')
-                else:
-                    return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
-            elif request.method == 'POST':
-                hora = request.form['hora']
+                    return redirect(url_for('confirmar_cita', fecha=fecha, id_sucursal=id_sucursal, hora=hora))
+            elif 'id_cliente' in session.keys():
+                flash('Por favor, primero llene estos campos para escoger la hora')
+                print('Lo que se guardo en session[id_cliente] --> '+session['id_cliente'])
+                return redirect('/escoger_cita/'+session['id_cliente'])
+            else:
+                flash('Por favor, primero llene estos campos para escoger la hora')
+                return redirect('/escoger_cita')
 
-                return redirect(url_for('confirmar_cita', fecha=fecha, id_sucursal=id_sucursal, hora=hora))
 
         else:
             return redirect('/')
@@ -283,10 +312,12 @@ def confirmar_cita():
                 hora = request.args['hora']
 
                 if request.method == 'GET':
-                    print('SERVICIOS QUE SE MANDAN AL RENDER TEMPLATE DE session[lista_servicios_sel]' + str(
-                        session['lista_servicios_sel']))
                     dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
-                    return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
+                    if 'id_cliente' in session.keys():
+                        dicc_info_cliente = get_info_cliente(session['id_cliente'])
+                        return render_template('confirmar_cita.html', info_cita=dicc_info_cita,info_cliente=dicc_info_cliente )
+                    else:
+                        return render_template('confirmar_cita.html', info_cita=dicc_info_cita)
                 elif request.method == 'POST':
                     fecha = request.form['fecha']
                     id_sucursal = request.form['id_sucursal']
@@ -425,9 +456,38 @@ def informacion_cita(id_cita):
     else:
         return redirect('/')
 
+
+@app.route('/modificar_cita/<id_cita>', methods=['GET', 'POST'])
+def modificar_cita(id_cita):
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
+                return render_template('escoger_cita.html')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+@app.route('/consultar_clientes')
+def consultar_clientes():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                clientes = get_lista_clientes()
+                return render_template('consultar_clientes.html', lista_clientes=clientes)
+            else:
+                return redirect('/')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
 @app.route('/informacion_usuario')
 def informacion_usuario():
     return render_template("informacion_usuario.html")
+
 
 @app.route('/reparacion')
 def reparacion():

@@ -73,8 +73,6 @@ def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
     for id_servicio in lista_servicios:
         if not hay_estilista_para_horayservicio(hora, id_servicio, fecha,
                                                 id_sucursal) or hora_de_termino > hora_de_cierre:
-            print(
-                f"No hay estilista para la hora:{hora} para el servicio {id_servicio} para la fecha: {fecha} para la sucursal {id_sucursal}")
             return False
         else:
             if lista_servicios[-1] == id_servicio:
@@ -117,7 +115,7 @@ def crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados) -> d
     dicc['info_sucursal'] = info_sucursal
     dicc['fecha'] = fecha
     dicc['hora'] = hora
-    dicc['monto'] = calcular_monto(servicios_seleccionados)['precio']
+    dicc['monto'] = float(calcular_monto(servicios_seleccionados)['precio'])
     return dicc
 
 

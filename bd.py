@@ -292,16 +292,17 @@ def update_servicio(id_servicio, nombre, precio, descripcion, tiempo):
 
 def insert_into_servicio(nombre, precio, descripcion, tiempo):
     conexion = obtener_conexion()
-    query = "INSERT INTO servicio (nombre, precio, descripcion, tiempo) VALUES ('"+nombre+"', "+precio+", '"+descripcion+"', "+tiempo+")"
+    query = "INSERT INTO servicio (nombre, precio, descripcion, tiempo) VALUES ('" + nombre + "', " + precio + ", '" + descripcion + "', " + tiempo + ")"
     print(query)
     with conexion.cursor() as cursor:
         cursor.execute(query)
     conexion.commit()
     conexion.close()
 
+
 def hay_servicio_con_ese_nombre(nombre):
     conexion = obtener_conexion()
-    query = "SELECT id_servicio FROM servicio WHERE nombre='"+nombre+"'"
+    query = "SELECT id_servicio FROM servicio WHERE nombre='" + nombre + "'"
     print(query)
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -310,6 +311,45 @@ def hay_servicio_con_ese_nombre(nombre):
     conexion.commit()
     conexion.close()
     return True
+
+
+def get_lista_clientes():
+    conexion = obtener_conexion()
+    query = "SELECT * FROM usuario WHERE tipo_usuario='cliente'"
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
+def id_es_de_cliente(id_usuario):
+    conexion = obtener_conexion()
+    query = "SELECT id_usuario FROM usuario WHERE id_usuario="+id_usuario+" AND tipo_usuario='cliente'"
+    print(query)
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        if cursor.fetchone() is None:
+            return False
+    conexion.commit()
+    conexion.close()
+    return True
+
+
+def get_info_cliente(id_cliente):
+    conexion = obtener_conexion()
+    query = "SELECT * FROM usuario WHERE id_usuario="+id_cliente
+    print(query)
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista[0]
+
 
 
 if __name__ == '__main__':
