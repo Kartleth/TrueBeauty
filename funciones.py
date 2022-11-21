@@ -70,34 +70,29 @@ def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
     # buscar que exista estilista disponible a esa hora en esa sucursal
     hora_de_termino = time.strptime(calcular_hora_fin_de_cita(hora, lista_servicios),"%H:%M")
     hora_de_cierre = time.strptime('20:00', "%H:%M")
-    for id_servicio in lista_servicios:
-        if not hay_estilista_para_horayservicio(hora, id_servicio, fecha,
-                                                id_sucursal) or hora_de_termino > hora_de_cierre:
-            return False
-        else:
-            if lista_servicios[-1] == id_servicio:
-                return True
+    if hora_de_termino > hora_de_cierre:
+        return False
+    else:
+        for id_servicio in lista_servicios:
+            if not hay_estilista_para_horayservicio(hora, id_servicio, fecha,
+                                                    id_sucursal):
+                return False
             else:
-                hora = agregar_tiempo_de_servicio(hora, id_servicio)
+                if lista_servicios[-1] == id_servicio:
+                    return True
+                else:
+                    hora = calcular_tiempo_hora_servicio(id_servicio, hora)
 
     # estilistas = get_estilista_por_sucursal_servicio(id_sucursal, )
     return True
 
 
-def agregar_tiempo_de_servicio(hora, id_servicio):
-    hora_separada = hora.split(':')
-    horas = int(hora_separada[0])
-    minutos = hora_separada[1]
-    hora_siguiente = ''
-    if minutos[0] == '3':
-        return str(horas + 1) + ':00'
-    else:
-        return str(horas) + ':30'
+
 
 
 def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> bool:
     estilistas = get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio)
-    print('LA FECHA QUE BUSCA ES :', fecha)
+
     for estilista in estilistas:
         if not estilista_tiene_cita(hora, estilista['id_usuario'], fecha,
                                     calcular_tiempo_hora_servicio(id_servicio, hora)):

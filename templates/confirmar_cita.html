@@ -156,13 +156,13 @@
                             <div class="col-md-4">
                                     <label for="iva" class="form-label">IVA:</label>
                                     <input type="number" class="form-control" id="iva"
-                                           value="{{ info_cita['monto']*0.16 }}" readonly>
+                                           value="{{ info_cita['iva'] }}" readonly>
 
                                 </div>
                             <div class="col-md-4">
                                     <label for="total" class="form-label">Total:</label>
                                     <input type="number" class="form-control" id="total"
-                                           value="{{ (info_cita['monto']*0.16)+info_cita['monto'] }}" readonly>
+                                           value="{{ info_cita['total'] }}" readonly>
 
                                 </div>
 
