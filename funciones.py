@@ -3,7 +3,10 @@ import smtplib, ssl
 import datetime
 import time
 from email.message import EmailMessage
+import locale
 from bd import *
+
+locale.setlocale(locale.LC_ALL, ("es_ES", "UTF-8"))
 
 
 def mandar_correo_codigo(sender, receiver, password, codigo):

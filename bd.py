@@ -17,7 +17,7 @@ def get_usuarios():
 def get_citas_de_usuario(columna: str, id_usuario: int):
     conexion = obtener_conexion()
     query = "SELECT C.id_cita, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, C.monto FROM cita C WHERE  C." + columna + "=" + str(
-        id_usuario)
+        id_usuario)+" ORDER BY C.fecha"
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -145,7 +145,7 @@ def get_info_sucursal(id_sucursal):
 
 def get_lista_citas():
     conexion = obtener_conexion()
-    query = "SELECT C.id_cita,U.nombre,U.apellido_paterno,U.apellido_materno, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, C.monto,S.nombre as nombre_sucursal FROM cita C, usuario U, sucursal S WHERE C.id_cliente=U.id_usuario AND C.id_sucursal=S.id_sucursal"
+    query = "SELECT C.id_cita,U.nombre,U.apellido_paterno,U.apellido_materno, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, C.monto,S.nombre as nombre_sucursal FROM cita C, usuario U, sucursal S WHERE C.id_cliente=U.id_usuario AND C.id_sucursal=S.id_sucursal ORDER BY C.fecha DESC"
 
     lista = []
     with conexion.cursor() as cursor:
