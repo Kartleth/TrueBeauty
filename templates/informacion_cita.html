@@ -123,7 +123,7 @@
 
                     <div class="col-md-4">
                         <label for="fecha" class="form-label">Fecha</label>
-                        <input  type="text" class="form-control" id="fecha" name="fecha" value="{{ dicc_cita['fecha'] }}"
+                        <input  type="text" class="form-control" id="fecha"  value="{{ dicc_cita['fecha'] }}"
                             readonly>
                         <div class="invalid-feedback">
                             Ingrese una fecha
@@ -132,31 +132,31 @@
 
                     <div class="col-md-4">
                         <label for="hora" class="form-label">Hora (24h)</label>
-                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['hora'] }}"
+                        <input type="text" class="form-control" id="hora"  value="{{ dicc_cita['hora'] }}"
                             readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <label for="hora" class="form-label">Hora de termino(24h)</label>
-                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['hora_fin'] }}"
+                        <label for="hora_fin" class="form-label">Hora de termino(24h)</label>
+                        <input type="text" class="form-control" id="hora_fin"  value="{{ dicc_cita['hora_fin'] }}"
                             readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
                     </div>
                 <div class="col-md-6">
-                        <label for="hora" class="form-label">Nombre de sucursal</label>
-                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['nombre_sucursal'] }}"
+                        <label for="nombre_sucursal" class="form-label">Nombre de sucursal</label>
+                        <input type="text" class="form-control" id="nombre_sucursal"  value="{{ dicc_cita['nombre_sucursal'] }}"
                             readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
                     </div>
                 <div class="col-md-6">
-                        <label for="hora" class="form-label">Dirección</label>
-                        <input type="text" class="form-control" id="hora" name="hora" value="{{ dicc_cita['direccion_sucursal'] }}"
+                        <label for="direccion_sucursal" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="direccion_sucursal"  value="{{ dicc_cita['direccion_sucursal'] }}"
                             readonly>
                         <div class="invalid-feedback">
                             hora requerida.
@@ -190,7 +190,7 @@
             </table>
                     <div class="col-md-4">
                         <label for="subtotal" class="form-label">Subtotal</label>
-                        <input type="number" class="form-control" id="subtotal" name="monto" value="{{ dicc_cita['monto'] }}"
+                        <input type="number" class="form-control" id="subtotal"  value="{{ dicc_cita['monto'] }}"
                             readonly>
                         <div class="invalid-feedback">
 
@@ -198,7 +198,7 @@
                     </div>
                 <div class="col-md-4">
                         <label for="iva" class="form-label">IVA</label>
-                        <input type="number" class="form-control" id="iva" name="iva" value="{{ dicc_cita['iva'] }}"
+                        <input type="number" class="form-control" id="iva"  value="{{ dicc_cita['iva'] }}"
                             readonly>
                         <div class="invalid-feedback">
 
@@ -206,7 +206,7 @@
                     </div>
                 <div class="col-md-4">
                         <label for="total" class="form-label">Total a pagar</label>
-                        <input type="number" class="form-control" id="total" name="total" value="{{ dicc_cita['total'] }}"
+                        <input type="number" class="form-control" id="total" value="{{ dicc_cita['total'] }}"
                             readonly>
                         <div class="invalid-feedback">
                             hora requerida.

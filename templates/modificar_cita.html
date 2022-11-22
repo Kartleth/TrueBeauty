@@ -1,6 +1,5 @@
-<!--ARCHIVO HECHO DE PRUEBA -->
 {% extends 'base.html' %}
-{% block title %}Agendar cita{% endblock %}
+{% block title %}Modificar cita{% endblock %}
 
 {% block body %}
 <!doctype html>
@@ -73,8 +72,10 @@
 
 
                 {% for servicio in lista_servicios %}
+                    {% if servicio['id_servicio'] not in info_cita['lista_id_servicios'] %}
                 <option id="{{ servicio['id_servicio'] }}" value="{{ servicio['id_servicio']+"-"+servicio['precio']
                   }}">{{ servicio['nombre'] }}</option>
+                    {% endif %}
                 {% endfor %}
 
               </select>
@@ -87,8 +88,11 @@
 
               <div class="col-md-12">
                 <ul id="lista-servicios">
+                    {% for servicio in info_cita['lista_servicios'] %}
+                        <li style="display: flex" id="{{ servicio['id_servicio'] }}" ><input class='form-control' type="text" value="{{ servicio['nombre_servicio'] }}   ${{ servicio['precio'] }} " name="serv_{{ servicio['id_servicio'] }}" readonly> <button onclick="quitarServicioDeMonto({{ servicio['id_servicio'] }})" type="button" class="btn" >X</button></li>
+                    {% endfor %}
                 </ul>
-                <label id="precio-total" class="form-label">Total: $0.00</label>
+                <label id="precio-total" class="form-label">Total: ${{ info_cita['monto'] }}</label>
               </div>
             </div>
 
@@ -96,7 +100,7 @@
               <label for="select_sucursal" class="form-label">Sucursal</label>
               <select id="select_sucursal" class="form-select" name="tipo_sucursal" required>
                 {% for sucursal in lista_sucursales %}
-                <option value="{{ sucursal['id_sucursal'] }}">{{ sucursal['nombre'] }}</option>
+                <option value="{{ sucursal['id_sucursal'] }}" {% if sucursal['id_sucursal'] == info_cita['id_sucursal'] %}selected {% endif %}>{{ sucursal['nombre'] }}</option>
                 {% endfor %}
               </select>
               <div class="invalid-feedback">
@@ -108,7 +112,7 @@
             <div class="col-12">
               <div class="form-floating mb-3">
                 <input type="date" class="form-control" id="validationServer04" required name="fecha" min="{{date_min}}"
-                  max="{{date_max}}">
+                  max="{{date_max}}" value="{{ info_cita['fecha'] }}">
                 <label for="validationServer04">Fecha</label>
               </div>
             </div>

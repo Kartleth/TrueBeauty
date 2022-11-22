@@ -41,7 +41,7 @@ def cita_pertenece_a_usuario(columna: str, id_usuario: int, id_cita: int):
 
 def get_info_cita(id_cita: int):
     conexion = obtener_conexion()
-    query = "SELECT C.id_cita,DATE_FORMAT(C.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora,DATE_FORMAT(C.hora_fin, '%H:%i') as hora_fin, SU.nombre as nombre_sucursal, SU.direccion as direccion_sucursal, C.monto,C.iva,C.total, U.nombre as nombre_cliente, U.apellido_paterno as apellido1_cliente, U.apellido_materno as apellido2_cliente, U.correo AS correo FROM cita C, sucursal SU, servicio SE, usuario U WHERE  C.id_sucursal=SU.id_sucursal AND C.id_cliente=U.id_usuario AND C.id_cita=" + str(
+    query = "SELECT C.id_cita,DATE_FORMAT(C.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora,DATE_FORMAT(C.hora_fin, '%H:%i') as hora_fin, SU.nombre as nombre_sucursal, SU.direccion as direccion_sucursal,SU.id_sucursal, C.monto,C.iva,C.total, U.nombre as nombre_cliente, U.apellido_paterno as apellido1_cliente, U.apellido_materno as apellido2_cliente, U.correo AS correo FROM cita C, sucursal SU, servicio SE, usuario U WHERE  C.id_sucursal=SU.id_sucursal AND C.id_cliente=U.id_usuario AND C.id_cita=" + str(
         id_cita)
     lista = []
     with conexion.cursor() as cursor:
@@ -341,7 +341,6 @@ def id_es_de_cliente(id_usuario):
 def get_info_cliente(id_cliente):
     conexion = obtener_conexion()
     query = "SELECT * FROM usuario WHERE id_usuario="+id_cliente
-    print(query)
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -350,6 +349,20 @@ def get_info_cliente(id_cliente):
     conexion.close()
     return lista[0]
 
+
+def get_lista_id_servicios_de_cita(id_cita):
+    conexion = obtener_conexion()
+    query = "SELECT id_servicio FROM cita_servicio WHERE id_cita="+id_cita
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    lista_de_id = []
+    for dicc in lista:
+        lista_de_id.append(str(dicc['id_servicio']))
+    return lista_de_id
 
 
 if __name__ == '__main__':

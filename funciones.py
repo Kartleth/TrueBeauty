@@ -71,7 +71,7 @@ def get_horas_disponibles(id_sucursal, fecha, lista_servicios):
 
 def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
     # buscar que exista estilista disponible a esa hora en esa sucursal
-    hora_de_termino = time.strptime(calcular_hora_fin_de_cita(hora, lista_servicios),"%H:%M")
+    hora_de_termino = time.strptime(calcular_hora_fin_de_cita(hora, lista_servicios), "%H:%M")
     hora_de_cierre = time.strptime('20:00', "%H:%M")
     if hora_de_termino > hora_de_cierre:
         return False
@@ -88,9 +88,6 @@ def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
 
     # estilistas = get_estilista_por_sucursal_servicio(id_sucursal, )
     return True
-
-
-
 
 
 def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> bool:
@@ -196,9 +193,8 @@ def calcular_tiempo_hora_servicio(id_servicio, hora):
 
 def get_dicc_info_cita(id_cita):
     dicc_cita = get_info_cita(id_cita)
-
-    print('formato de cita que se guarda en metodo: ', type(dicc_cita['fecha']))
     dicc_cita['lista_servicios'] = get_lista_info_servicios(id_cita)
+    dicc_cita['lista_id_servicios'] = get_lista_id_servicios_de_cita(id_cita)
     return dicc_cita
 
 
@@ -214,6 +210,12 @@ def calcular_hora_fin_de_cita(hora_de_inicio, lista_servicios):
     for servicio in lista_servicios:
         hora_de_termino = calcular_tiempo_hora_servicio(servicio, hora_de_termino)
     return hora_de_termino
+
+
+def formatear_fecha_para_input(fecha):
+    fecha = datetime.datetime.strptime(fecha, '%d/%m/%Y')
+    fecha = fecha.strftime('%Y-%m-%d')
+    return fecha
 
 
 if __name__ == '__main__':
