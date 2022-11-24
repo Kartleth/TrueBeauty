@@ -43,64 +43,60 @@
       vertical-align: -.125em;
       fill: currentColor;
     }
-
-    .nav-scroller {
-      position: relative;
-      z-index: 2;
-      height: 2.75rem;
-      overflow-y: hidden;
-    }
-
-    .nav-scroller .nav {
-      display: flex;
-      flex-wrap: nowrap;
-      padding-bottom: 1rem;
-      margin-top: -1px;
-      overflow-x: auto;
-      text-align: center;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-    }
   </style>
 
 
-  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Montserrat'>
   <link href="../static/css/login.css" rel="stylesheet">
 </head>
 
-<body class="text-center">
+<body class="text-center"
+  style="background: linear-gradient(120deg, rgba(203,229,247,1) 35%, rgba(91,154,209,1) 100%);">
+  <div class="center">
 
-  <main class="form-signin w-100 m-auto">
-    <form class="form_login" action="" method="POST">
-      <img class="mb-4" src="/static/images/cleopatra.png" alt="" width="72" height="72">
-      <h1 class="font-awesome-4">TRUE BEAUTY</h1>
-      <h5 class="h3 mb-3 fw-normal">Por favor inicia sesión</h5>
-      {% for message in get_flashed_messages() %}
-      <div class="alert alert-secondary alert-dismissible fade show" role="alert">
-        {{message}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endfor %}
+    <main class="form-signin w-100 m-auto" >
+      <form class="form_login" action="" method="POST">
+        <img class="mb-4" src="/static/images/cleopatra.png" alt="" width="72" height="72">
+        <h1 class="font-awesome-4">TRUE BEAUTY</h1>
+        <h5 style="font-family: 'Montserrat'; margin-bottom: 6%;">Por favor inicia sesión</h5>
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
 
-      <div class="form-floating">
-        <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
-        <label for="floatingInput">Email</label>
-      </div>
-      <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
-        <label for="floatingPassword">Contraseña</label>
-      </div>
+        <div class="form-floating">
+          <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
+          <label for="floatingInput" style="font-family: 'Montserrat';">Email</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+          <label for="floatingPassword" style="font-family: 'Montserrat';">Contraseña</label>
+        </div>
 
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> Recordar información
-        </label>
-      </div>
-      <button class="w-100 btn btn-lg btn-primary" type="submit" name="enviar" value="Enviar">Entrar</button>
-      <a href="/forgot_password" class="olvide_contrasenia">No recuerdo mi contraseña</a>
-      <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
-    </form>
-  </main>
+        <div class="checkbox mb-3">
+          <label style="font-family: 'Montserrat'; margin-top: 4%;">
+            <input type="checkbox" value="remember-me"> Recordar información
+          </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit" name="enviar" value="Enviar" style="margin-bottom: 5%;
+        background: #5b9ad1;
+        border: #5b9ad1;
+        font-size: 18px;
+        font-family: 'Montserrat';
+        font-weight: 700;">Entrar</button>
+
+        <a href="/forgot_password" class="olvide_contrasenia" style="font-family: 'Montserrat';">No recuerdo mi
+          contraseña</a>
+        <p class="mt-5 mb-3 text-muted" style="font-family: 'Montserrat';">&copy; 2017–2022</p>
+      </form>
+    </main>
+
+
+  </div>
+
+
 
 
 

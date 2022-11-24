@@ -31,3 +31,23 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.center{
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  width: 400px;
+  background: white;
+  border-radius: 10px;
+  max-width: -webkit-fill-available;
+  max-height: 625px;
+  padding: 10px;
+  display: flex;
+  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
