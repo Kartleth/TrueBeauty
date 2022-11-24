@@ -5,13 +5,89 @@
     <meta charser="utf-8">
     <title>SignUp</title>
     <link rel="icon" href="/static/images/cleopatra.png">
-    <link rel="stylesheet" href="/static/css/registrarse.css">
+    <link rel="stylesheet" href="/static/css/signup.css">
     </link>
     <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Montserrat'>
     </link>
 </head>
 
 <body>
+    <div class="container">
+        
+        <div class="title">Registrarse en TrueBeauty</div>
+        <form action="#">
+            <div class="user-details">
+
+                <div class="input-box-1">
+                    <span class="details">Nombre</span>
+                    <input type="text" class="" placeholder="Ingresa tu nombre" required>
+                </div>
+
+                <div class="input-box">
+                    <span class="details">Apellido materno</span>
+                    <input type="text" class="" placeholder="Apellido paterno" required>
+                </div>
+
+                <div class="input-box">
+                    <span class="details">Apellido paterno</span>
+                    <input type="text" class="" placeholder="Apellido materno" required>
+                </div>
+
+                <div class="input-box">
+                    <span class="details">Email</span>
+                    <input type="email" class="" placeholder="Ingresa tu Email" required>
+                </div>
+
+                <div class="input-box">
+                    <span class="details">Número de teléfono</span>
+                    <input type="tel" class="" placeholder="Ingresa tu número" required>
+                </div>
+
+                <div class="input-box">
+                    <span class="details">Contraseña</span>
+                    <input type="password" class="" placeholder="Ingresa tu contraseña" required>
+                </div>
+
+                <div class="input-box">
+                    <span class="details">Confirmar contraseña</span>
+                    <input type="password" class="" placeholder="Repetir contraseña" required>
+                </div>
+            </div>
+
+            
+
+            <div class="button">
+                <input type="submit" value="Registrarse">
+
+                <div class="login_link">
+                    ¿Ya te registraste?
+                    <a href="/login">Inicie sesión</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+
+</html>
+
+<!-- VERSION PASADA
+
+
+<div class="input-box">
+                    <span class="details">Nombre</span>
+                    <input type="text" class="" placeholder="Ingresa tu nombre" required>
+                </div>
+
+<div class="input-box">
+                    <span class="details">Nombre</span>
+                    <input type="text" class="" placeholder="Ingresa tu nombre" required>
+                </div>
+
+
+
+
+    <body>
     <div class="main-container">
         <div class="center">
             <img src="/static/images/cleopatra.png" alt="" width="48" height="48">
@@ -22,6 +98,18 @@
                     <span></span>
                     <label>Nombre</label>
                 </div>
+
+                <div class="txt_field">
+                    <input type="text" name="" required></input>
+                    <span></span>
+                    <label>Apellido paterno</label>
+                </div>
+
+                <div class="txt_field">
+                    <input type="text" name="" required></input>
+                    <span></span>
+                    <label>Apellido materno</label>
+                </div>
     
                 <div class="txt_field">
                     <input type="email" name="correo" required></input>
@@ -30,9 +118,7 @@
                 </div>
     
                 <div class="txt_field">
-                    <input input type="tel" name="telefono" <!--pattern="\([0-9]{3}\) [0-9]{3}[ -][0-9]{4}"-->
-                        title="A valid telephone number consist of a 3 digits code area between brackets, a space, the three first digits of the number, a space or hypen (-), and four more digits"
-                        required></input>
+                    <input input type="tel" name="telefono" required></input>
                     <span></span>
                     <label>Télefono</label>
                 </div>
@@ -62,11 +148,7 @@
     </div>
     
 </body>
-
-
-</html>
-
-
+--->
 
 
 

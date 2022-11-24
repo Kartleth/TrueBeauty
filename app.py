@@ -73,7 +73,7 @@ def logout():
 def signup():
     if 'logeado' not in session.keys():
         if request.method == 'GET':
-            return render_template("registrarse.html")
+            return render_template("signup.html")
         elif request.method == 'POST':
             correo = request.form['correo']
             nombre = request.form['nombre']
