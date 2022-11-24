@@ -48,7 +48,7 @@ def obtener_servicios(dicc_form: dict) -> list:
     return lista_id_servicios
 
 
-def get_horas_disponibles(id_sucursal, fecha, lista_servicios):
+def get_horas_disponibles(id_sucursal, fecha, lista_servicios, id_cliente):
     # dicc_estilistas_horas_libres = {}
     #
     # estilistas = []
@@ -63,22 +63,25 @@ def get_horas_disponibles(id_sucursal, fecha, lista_servicios):
     print('HORAS POSIBLES DISPONIBLES:' + str(posibles_horas_disponibles))
     horas_disponibles = []
     for hora in posibles_horas_disponibles:
-        if hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
+        if hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente):
             horas_disponibles.append(hora)
 
     return horas_disponibles
 
 
-def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha):
+def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente):
     # buscar que exista estilista disponible a esa hora en esa sucursal
     hora_de_termino = time.strptime(calcular_hora_fin_de_cita(hora, lista_servicios), "%H:%M")
     hora_de_cierre = time.strptime('20:00', "%H:%M")
-    if hora_de_termino > hora_de_cierre:
+    if cliente_ya_tiene_cita(id_cliente, fecha, hora, id_sucursal):
+        return False
+    elif hora_de_termino > hora_de_cierre:
         return False
     else:
         for id_servicio in lista_servicios:
             if not hay_estilista_para_horayservicio(hora, id_servicio, fecha,
-                                                    id_sucursal):
+                                                    id_sucursal) or not hay_espacio_en_estetica(id_sucursal, fecha,
+                                                                                                hora):
                 return False
             else:
                 if lista_servicios[-1] == id_servicio:
@@ -99,6 +102,15 @@ def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> b
             return True
 
     return False
+
+
+def hay_espacio_en_estetica(id_sucursal, fecha, hora):
+    asientos_en_sucursal = get_asientos_de_sucursal(id_sucursal)
+    asientos_ocupados = get_asientos_ocupados_de_sucursal(id_sucursal, fecha, hora)
+    if asientos_ocupados >= asientos_en_sucursal:
+        return False
+    else:
+        return True
 
 
 def crear_dicc_info_cita(id_sucursal, fecha, hora, servicios_seleccionados) -> dict:
@@ -167,7 +179,7 @@ def guardar_cita(fecha, hora, id_usuario, id_sucursal, monto, lista_servicios):
 
 def guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal, id_cita):
     for servicio in lista_servicios:
-        id_estilista = get_estilista_apropiado(servicio, hora, fecha, id_sucursal)[0]
+        id_estilista = get_estilista_apropiado(servicio, hora, fecha, id_sucursal)
 
         tiempo_servicio = get_tiempo_servicio(servicio)
         aumento = datetime.timedelta(minutes=int(tiempo_servicio))
@@ -176,7 +188,7 @@ def guardar_servicios_de_cita(lista_servicios, hora, fecha, id_sucursal, id_cita
         hora_fin = aumento + hora
         hora_fin = hora_fin.strftime("%H:%M")
         hora = hora.strftime("%H:%M")
-        insert_into_cita_servicio(id_cita, servicio, id_estilista['id_usuario'], hora, hora_fin)
+        insert_into_cita_servicio(id_cita, servicio, id_estilista, hora, hora_fin)
         hora = hora_fin
 
 
@@ -216,6 +228,15 @@ def formatear_fecha_para_input(fecha):
     fecha = datetime.datetime.strptime(fecha, '%d/%m/%Y')
     fecha = fecha.strftime('%Y-%m-%d')
     return fecha
+
+
+def get_estilista_apropiado(id_servicio, hora, fecha, id_sucursal):
+    posibles_estilistas = get_posibles_estilistas(id_sucursal, id_servicio)
+    estilistas_desocupados = []
+    for estilista in posibles_estilistas:
+        if not estilista_esta_ocupado(estilista, hora, fecha):
+            estilistas_desocupados.append(estilista)
+    return estilistas_desocupados[0]
 
 
 if __name__ == '__main__':

@@ -73,7 +73,7 @@ def logout():
 def signup():
     if 'logeado' not in session.keys():
         if request.method == 'GET':
-            return render_template("signup.html")
+            return render_template("registrarse.html")
         elif request.method == 'POST':
             correo = request.form['correo']
             nombre = request.form['nombre']
@@ -270,7 +270,11 @@ def hora_cita():
                 id_sucursal = request.args['id_sucursal']
                 fecha = request.args['fecha']
 
-                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'])
+                if 'id_cliente' in session.keys():
+                    id_cliente = session['id_cliente']
+                else:
+                    id_cliente = session['id_usuario']
+                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'], id_cliente)
 
                 if request.method == 'GET':
                     if len(lista_horas_disponibles) == 0:

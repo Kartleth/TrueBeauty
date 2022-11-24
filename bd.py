@@ -17,7 +17,7 @@ def get_usuarios():
 def get_citas_de_usuario(columna: str, id_usuario: int):
     conexion = obtener_conexion()
     query = "SELECT C.id_cita, DATE_FORMAT(C.fecha, '%d/%c/%Y') as fecha, DATE_FORMAT(C.hora, '%H:%i') as hora, C.monto FROM cita C WHERE  C." + columna + "=" + str(
-        id_usuario)+" ORDER BY C.fecha"
+        id_usuario) + " ORDER BY C.fecha"
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -98,6 +98,7 @@ def estilista_tiene_cita(hora, id_estilista, fecha, hora_fin):
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
+
             return False
     conexion.commit()
     conexion.close()
@@ -202,21 +203,22 @@ def get_nombre_servicios_de_cita(id_cita):
     return lista
 
 
-def get_estilista_apropiado(id_servicio, hora, fecha, id_sucursal):
+def get_posibles_estilistas(id_sucursal, id_servicio):
     conexion = obtener_conexion()
-    print(id_servicio, hora, fecha, id_sucursal)
-    query = "SELECT DISTINCT U.id_usuario FROM usuario U, empleado E, estilista_servicio ES, cita_servicio CS, cita C WHERE U.tipo_usuario='estilista' AND E.id_usuario=U.id_usuario AND E.id_sucursal=" + str(
-        id_sucursal) + " AND ES.id_estilista=E.id_usuario AND ES.id_servicio=" + str(
-        id_servicio) + " AND CS.id_estilista=U.id_usuario AND C.id_cita=CS.id_cita AND NOT(  C.fecha='" + fecha + "'AND CS.hora_inicio<'" + hora + "' AND CS.hora_fin>'" + hora + "') LIMIT 1"
-
+    print(id_servicio, id_sucursal)
+    query = "SELECT DISTINCT U.id_usuario AS id_estilista FROM usuario U, empleado E, estilista_servicio ES WHERE U.tipo_usuario='estilista' AND E.id_usuario=U.id_usuario AND E.id_sucursal=" + str(
+        id_sucursal) + " AND ES.id_estilista=E.id_usuario AND ES.id_servicio=" + str(id_servicio)
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
         lista = cursor.fetchall()
     conexion.commit()
     conexion.close()
-    print(str(lista))
-    return lista
+
+    lista_id_estilistas = []
+    for dicc in lista:
+        lista_id_estilistas.append(dicc['id_estilista'])
+    return lista_id_estilistas
 
 
 def get_tiempo_servicio(id_servicio):
@@ -237,7 +239,7 @@ def insert_into_cita_servicio(id_cita, id_servicio, id_estilista, hora_inicio, h
     with conexion.cursor() as cursor:
         cursor.execute(
             "INSERT INTO cita_servicio  VALUES (%s,%s,%s,%s,%s)",
-            (id_cita, id_servicio, id_estilista, hora_inicio, hora_fin))
+            (id_cita, id_servicio, str(id_estilista), hora_inicio, hora_fin))
 
     conexion.commit()
     conexion.close()
@@ -327,8 +329,7 @@ def get_lista_clientes():
 
 def id_es_de_cliente(id_usuario):
     conexion = obtener_conexion()
-    query = "SELECT id_usuario FROM usuario WHERE id_usuario="+id_usuario+" AND tipo_usuario='cliente'"
-    print(query)
+    query = "SELECT id_usuario FROM usuario WHERE id_usuario=" + id_usuario + " AND tipo_usuario='cliente'"
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
@@ -340,7 +341,7 @@ def id_es_de_cliente(id_usuario):
 
 def get_info_cliente(id_cliente):
     conexion = obtener_conexion()
-    query = "SELECT * FROM usuario WHERE id_usuario="+id_cliente
+    query = "SELECT * FROM usuario WHERE id_usuario=" + id_cliente
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -352,7 +353,7 @@ def get_info_cliente(id_cliente):
 
 def get_lista_id_servicios_de_cita(id_cita):
     conexion = obtener_conexion()
-    query = "SELECT id_servicio FROM cita_servicio WHERE id_cita="+id_cita
+    query = "SELECT id_servicio FROM cita_servicio WHERE id_cita=" + id_cita
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -365,5 +366,54 @@ def get_lista_id_servicios_de_cita(id_cita):
     return lista_de_id
 
 
+def get_asientos_de_sucursal(id_sucursal):
+    conexion = obtener_conexion()
+    query = "SELECT asientos FROM sucursal WHERE id_sucursal=" + id_sucursal
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista[0]['asientos']
+
+
+def get_asientos_ocupados_de_sucursal(id_sucursal, fecha, hora):
+    conexion = obtener_conexion()
+    query = "SELECT count(id_cita) as num_asientos_ocupados FROM cita C WHERE  C.id_sucursal="+id_sucursal+" AND C.fecha='"+fecha+"' AND C.hora<='"+hora+"' AND C.hora_fin>'"+hora+"'"
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista[0]['num_asientos_ocupados']
+
+
+def cliente_ya_tiene_cita(id_cliente, fecha, hora, id_sucursal):
+    conexion = obtener_conexion()
+    query = "SELECT id_cita FROM cita WHERE id_cliente=" + id_cliente + " AND id_sucursal=" + id_sucursal + " AND fecha='" + fecha + "' AND hora<='" + hora + "' AND hora_fin>'" + hora + "'"
+
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        if cursor.fetchone() is None:
+            return False
+    conexion.commit()
+    conexion.close()
+    return True
+
+
+def estilista_esta_ocupado(id_estilista, hora, fecha):
+    conexion = obtener_conexion()
+    query = "SELECT * FROM cita C, cita_servicio CS WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND CS.hora_inicio<='" + hora + "' AND CS.hora_fin>'" + hora + "' AND CS.id_estilista=" + str(id_estilista)
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        if cursor.fetchone() is None:
+            return False
+    conexion.commit()
+    conexion.close()
+    return True
+
+
 if __name__ == '__main__':
-    print(str(get_estilista_apropiado(2, '13:30', '2023-10-08', 1)))
+    print('hola')
