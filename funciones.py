@@ -5,6 +5,7 @@ import time
 from email.message import EmailMessage
 import locale
 from bd import *
+import locale
 
 locale.setlocale(locale.LC_ALL, ("es_ES", "UTF-8"))
 
