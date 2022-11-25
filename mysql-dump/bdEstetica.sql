@@ -14,7 +14,7 @@ CREATE TABLE cita(
     iva decimal(10,2) unsigned NOT null,
     total decimal(10,2) unsigned NOT null,
     PRIMARY KEY (id_cita)
-) ENGINE=MyISAM default char set=latin1;
+) ENGINE=InnoDB default char set=latin1;
 
 
 CREATE TABLE servicio(
@@ -24,7 +24,7 @@ CREATE TABLE servicio(
     precio decimal(10,2) NOT NULL,
     tiempo decimal(10,2) NOT null,
     PRIMARY KEY (id_servicio)
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE usuario (
     id_usuario int unsigned AUTO_INCREMENT not null,
@@ -37,7 +37,7 @@ CREATE TABLE usuario (
     tipo_usuario ENUM('gerente','recepcionista','estilista','cliente') NOT NULL,
     PRIMARY KEY (id_usuario)
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE empleado(
     id_empleado int unsigned AUTO_INCREMENT not null,
@@ -46,7 +46,7 @@ CREATE TABLE empleado(
     turno ENUM('matutino','vespertino','tiempo completo'),
     PRIMARY KEY(id_empleado)
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE sucursal(
     id_sucursal int unsigned AUTO_INCREMENT not null,
@@ -57,13 +57,13 @@ CREATE TABLE sucursal(
     asientos int unsigned,
     PRIMARY KEY(id_sucursal)
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE estilista_servicio(
     id_estilista int unsigned not null,
     id_servicio int unsigned not null
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE cita_servicio(
     id_cita int unsigned not null,
@@ -71,7 +71,7 @@ CREATE TABLE cita_servicio(
     id_estilista int unsigned not null,
     hora_inicio time not null,
     hora_fin time not null
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 
 /* CREACION DE LLAVES FORANEAS*/
@@ -88,7 +88,7 @@ ALTER TABLE sucursal ADD FOREIGN KEY(id_gerente) REFERENCES usuario(id_usuario);
 ALTER TABLE estilista_servicio ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
 ALTER TABLE estilista_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
 
-ALTER TABLE cita_servicio ADD FOREIGN KEY(id_cita) REFERENCES cita(id_cita);
+ALTER TABLE cita_servicio ADD FOREIGN KEY(id_cita) REFERENCES cita(id_cita) ON DELETE CASCADE;
 ALTER TABLE cita_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
 ALTER TABLE cita_servicio ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
 
@@ -158,10 +158,10 @@ INSERT INTO estilista_servicio VALUES (10,5);
 INSERT INTO estilista_servicio VALUES (10,6);
 
 
-INSERT INTO cita_servicio VALUES (1,1,3,'10:00','10:45');
-INSERT INTO cita_servicio VALUES (1,2,3,'10:45','11:30');
-INSERT INTO cita_servicio VALUES (1,5,3,'12:00','12:30');
-INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
+INSERT INTO cita_servicio VALUES (4,1,3,'10:00','10:45');
+INSERT INTO cita_servicio VALUES (4,2,3,'10:45','11:30');
+INSERT INTO cita_servicio VALUES (4,5,3,'12:00','12:30');
+INSERT INTO cita_servicio VALUES (4,6,3,'12:30','13:00');
 
 -- # SELECT * FROM usuario;
 -- # /*Estilistas que trabajan en esa sucursal y ofrecen ese servicio */
