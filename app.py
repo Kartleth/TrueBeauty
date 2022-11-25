@@ -7,6 +7,7 @@ from funciones import *
 from random import randint
 from herramientas import *
 from datetime import datetime
+import json 
 
 app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
@@ -593,63 +594,65 @@ def reparacion():
 
 
 # Informes se va a dividir en diaria, mensual y en rango.
-""" 
+
 @app.route("/informe_ventas/diaria", methods=['GET', 'POST'])
-def informe_ventas_diario():
- Se asegura que la cuenta tenga permisos de administrador.
+def informe_ventas_diaria():
+    ''' Se asegura que la cuenta tenga permisos de administrador.
     Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas.
     Si se selecciona alguna fecha en especifico la información cambia dependiendo de la misma.
-    if 'logged_in' in session.keys():
-            if session['logeado']:
-                if session['type'] == 'gerente':
-                    if request.method == 'GET' :
-                        horas = []
-                        fecha = get_cur_datetime()
-                        desde = fecha['now']
-                        hasta = fecha['now']
-                        citas = get_lista_citas_fechas(desde, hasta) #atenciones/citas
-                        usuarios = get_lista_usuarios_fechas(desde, hasta) #crear usuarios
-                        servicios = get_lista_serv_de_atenciones()  #
-                        suma = get_suma_atenciones(desde, hasta)
-                        total_atenciones_subtotal = suma['SUM(subtotal)']
-                        total_atenciones_iva = suma['SUM(iva)']
-                        total_atenciones_total = suma['SUM(total)']
-                        
-                        data_dict = get_datos_grafica_diaria(desde)
+    '''
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                if request.method == 'GET' :
+                    horas = []
+                    fecha = get_cur_datetime()
+                    desde = fecha['now']
+                    hasta = fecha['now']
+                    citas = get_lista_citas_fechas(desde, hasta) 
+                    usuarios = get_lista_usuarios_fechas(desde, hasta) 
+                    servicios = []#get_lista_serv_de_atenciones()  
+                    suma = []#get_suma_atenciones(desde, hasta)
+                    total_atenciones_subtotal = 0#suma['SUM(subtotal)']
+                    total_atenciones_iva = 0#suma['SUM(iva)']
+                    total_atenciones_total = 0#suma['SUM(total)']
+                    
+                    data_dict = {}#get_datos_grafica_diaria(desde)
 
-                        return render_template("reporte.html", lista_usuarios=usuarios,
-                                            total_atenciones_subtotal=total_atenciones_subtotal,
-                                            total_atenciones_iva=total_atenciones_iva,
-                                            total_atenciones_total=total_atenciones_total,
-                                            lista_atenciones=citas, lista_servicios=servicios,
-                                            tipo='Diario', date=fecha['now'], data=json.dumps(data_dict))
-    
-                    if request.method == 'POST':
-                        fecha = request.form['fecha']
-                        citas = get_lista_citas_fechas(fecha, fecha)
-                        usuarios = get_lista_usuarios_fechas(fecha, fecha)
-                        servicios = get_lista_serv_de_atenciones()       
-                        suma = get_suma_atenciones(fecha, fecha)
-                        total_atenciones_subtotal = suma['SUM(subtotal)']
-                        total_atenciones_iva = suma['SUM(iva)']
-                        total_atenciones_total = suma['SUM(total)']
-                        print(fecha, fecha, suma)
+                    return render_template("reporte.html", lista_usuarios=usuarios,
+                                        total_atenciones_subtotal=total_atenciones_subtotal,
+                                        total_atenciones_iva=total_atenciones_iva,
+                                        total_atenciones_total=total_atenciones_total,
+                                        lista_atenciones=citas, lista_servicios=servicios,
+                                        tipo='Diario', date=fecha['now'], data=json.dumps(data_dict))
 
-                        data_dict = get_datos_grafica_diaria(fecha)
-                        return render_template("reporte.html", lista_usuarios=usuarios,
-                                            total_atenciones_subtotal=total_atenciones_subtotal,
-                                            total_atenciones_iva=total_atenciones_iva,
-                                            total_atenciones_total=total_atenciones_total,
-                                            lista_atenciones=citas, lista_servicios=servicios,
-                                            tipo='Diario',
-                                                date=fecha, data=json.dumps(data_dict))
-                else:
-                    abort(403)
+                if request.method == 'POST':
+                    fecha = request.form['fecha']
+                    citas = get_lista_citas_fechas(fecha, fecha)
+                    usuarios = get_lista_usuarios_fechas(fecha, fecha)
+                    servicios = get_lista_serv_de_atenciones()       
+                    suma = get_suma_atenciones(fecha, fecha)
+                    total_atenciones_subtotal = suma['SUM(subtotal)']
+                    total_atenciones_iva = suma['SUM(iva)']
+                    total_atenciones_total = suma['SUM(total)']
+                    print(fecha, fecha, suma)
+
+                    data_dict = get_datos_grafica_diaria(fecha)
+                    return render_template("reporte.html", lista_usuarios=usuarios,
+                                        total_atenciones_subtotal=total_atenciones_subtotal,
+                                        total_atenciones_iva=total_atenciones_iva,
+                                        total_atenciones_total=total_atenciones_total,
+                                        lista_atenciones=citas, lista_servicios=servicios,
+                                        tipo='Diario',
+                                            date=fecha, data=json.dumps(data_dict))
             else:
                 abort(403)
+        else:
+            abort(403)
+    else:
+        abort(403)
         
 
-"""
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

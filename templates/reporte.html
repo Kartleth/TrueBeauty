@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% set log = log %} {% block title %}Informe de ventas {% endblock %} {% block body %} {% include "navbar.html" %}
+{% extends "base.html" %} {% set log = log %} {% block title %}Informe de ventas {% endblock %} {% block body %} 
 
 
 <body onload="tabla('{{data}}')">
@@ -6,7 +6,7 @@
     <!-- Template de la gráfica conseguido de Bootstrap -->
 
     <div class="row">
-        {% with path=request.path %} {% include "menu.html" %} {% endwith %}
+        
         <div class="col-lg-8 container my-5">
             <div class="d-flex mx-2 justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="">Informe de Ventas</h1>
