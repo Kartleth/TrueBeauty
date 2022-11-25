@@ -528,18 +528,37 @@ def info_cuenta(id_usuario=None):
     if 'logeado' in session.keys():
         if session['logeado']:
             if request.method == 'GET':
+                if id_usuario is None:
+                    id_usuario = session['id_usuario']
                 if session['tipo'] == 'estilista' or session['tipo'] == 'cliente':
                     dicc_usuario = get_info_usuario(session['id_usuario'])
                     print(str(dicc_usuario))
-                    return render_template('informacion_usuario.html', info_cuenta=dicc_usuario, tipo_usuario=session['tipo'])
+                    return render_template('informacion_usuario.html', info_cuenta=dicc_usuario,
+                                           tipo_usuario=session['tipo'], id_consultante=session['id_usuario'])
                 else:
-                    if id_usuario is None:
-                        dicc_usuario = get_info_usuario(session['id_usuario'])
-                        return render_template('informacion_usuario.html', info_cuenta=dicc_usuario, tipo_usuario=session['tipo'])
-                    else:
-                        dicc_usuario = get_info_usuario(id_usuario)
-                        return render_template('informacion_usuario.html', info_cuenta=dicc_usuario, tipo_usuario=session['tipo'])
+                    dicc_usuario = get_info_usuario(id_usuario)
+                    return render_template('informacion_usuario.html', info_cuenta=dicc_usuario,
+                                           tipo_usuario=session['tipo'], id_consultante=session['id_usuario'])
             elif request.method == 'POST':
+                if id_usuario is None:
+                    id_usuario = session['id_usuario']
+                correo_a_modificar = request.form['correo']
+                correo_anterior = get_correo_de_usuario(id_usuario)
+                if correo_anterior != correo_a_modificar:
+                    if usuario_existe('correo', correo_a_modificar):
+                        flash('El correo "' + correo_a_modificar + '" ya esta registrado por otro usuario')
+                        return redirect('/info_cuenta/' + str(id_usuario))
+
+                nombre = request.form['nombre']
+                apellido1 = request.form['apellido1']
+                apellido2 = request.form['apellido2']
+                telefono = request.form['telefono']
+                if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                    tipo_usuario = request.form['tipo_usuario']
+                else:
+                    tipo_usuario = session['tipo']
+
+                update_usuario(id_usuario, nombre, apellido1, apellido2, correo_a_modificar, telefono, tipo_usuario)
                 return redirect('/consultar_clientes')
 
         else:

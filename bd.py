@@ -429,6 +429,25 @@ def get_info_usuario(id_usuario):
     return lista[0]
 
 
+def update_usuario(id_usuario,nombre,apellido1,apellido2,correo,telefono,tipo_usuario):
+    conexion = obtener_conexion()
+    query = "UPDATE usuario SET nombre = %s, apellido_paterno= %s, apellido_materno = %s, correo= %s, telefono= %s, tipo_usuario= %s WHERE id_usuario = %s"
+    with conexion.cursor() as cursor:
+        cursor.execute(query, (nombre,apellido1,apellido2,correo,telefono,tipo_usuario,id_usuario))
+    conexion.commit()
+    conexion.close()
+
+
+def get_correo_de_usuario(id_usuario):
+    conexion = obtener_conexion()
+    query = "SELECT correo FROM usuario WHERE id_usuario="+str(id_usuario)
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista[0]['correo']
 
 if __name__ == '__main__':
     print('hola')

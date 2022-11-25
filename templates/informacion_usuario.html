@@ -38,18 +38,18 @@
 
                         <div class="mb-3">
                             <label for="" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="" value="{{ info_cuenta['nombre'] }}">
+                            <input name="nombre" type="text" class="form-control" id="" value="{{ info_cuenta['nombre'] }}">
                         </div>
 
                         <div class="row">
                             <div class="col">
                                 <label for="" class="form-label">Apellido paterno</label>
-                                <input type="text" class="form-control" value="{{ info_cuenta['apellido_paterno'] }}"
+                                <input name="apellido1" type="text" class="form-control" value="{{ info_cuenta['apellido_paterno'] }}"
                                        aria-label="">
                             </div>
                             <div class="col">
                                 <label for="" class="form-label">Apellido materno</label>
-                                <input type="text" class="form-control" value="{{ info_cuenta['apellido_materno'] }}"
+                                <input name="apellido2" type="text" class="form-control" value="{{ info_cuenta['apellido_materno'] }}"
                                        aria-label="">
                             </div>
                         </div>
@@ -57,18 +57,19 @@
                         <div class="row">
                             <div class="col">
                                 <label for="" class="form-label">Teléfono</label>
-                                <input type="tel" class="form-control" id="" value="{{ info_cuenta['telefono'] }}">
+                                <input name="telefono" type="tel" class="form-control" id="" value="{{ info_cuenta['telefono'] }}">
                             </div>
                             <div class="col">
                                 <label for="" class="form-label">Correo</label>
-                                <input type="email" class="form-control" id=""
+                                <input name="correo" type="email" class="form-control" id=""
                                        value="{{ info_cuenta['correo'] }}">
                             </div>
                         </div>
-                        {% if tipo_usuario == 'gerente' or tipo_usuario == 'recepcionista' %}
+
+                            {% if tipo_usuario == 'gerente' %}
                             <div class="mb-3">
                             <label for="tipo_usuario" class="form-label">Tipo de usuario:</label>
-                                <select class="form-select" name="tipo_usuario" id="tipo_usuario" {% if tipo_usuario == 'recepcionista' %}disabled{% endif %}>
+                                <select class="form-select" name="tipo_usuario" id="tipo_usuario" >
                                     <option value="gerente"{% if info_cuenta['tipo_usuario'] == 'gerente' %}selected{% endif %}>Gerente</option>
                                     <option value="recepcionista"{% if info_cuenta['tipo_usuario'] == 'recepcionista' %}selected{% endif %}>Recepcionista</option>
                                     <option value="estilista"{% if info_cuenta['tipo_usuario'] == 'estilista' %}selected{% endif %}>Estilista</option>
@@ -77,14 +78,22 @@
                                 </select>
 
                             </div>
-
-                        {% endif %}
+                            {% endif %}
+                            {% if tipo_usuario == 'recepcionista' %}
+                                <div class="mb-3">
+                            <label for="" class="form-label">Tipo de usuario:</label>
+                            <input name="tipo_usuario" type="text" class="form-control" id="" value="{{ info_cuenta['tipo_usuario'] }}" readonly>
+                        </div>
+                            {% endif %}
 
 
                         <hr class="my-4">
+                    <h4>{{ get_flashed_messages()[0] }}</h4>
                         <div style="display: flex; justify-content: space-between">
                         <button style="margin:1%" class="w-15 btn btn-primary btn-lg" type="submit">Guardar cambios</button>
+                            {% if id_consultante == info_cuenta['id_usuario'] %}
                         <button style="margin:1%" class="w-15 btn btn-primary btn-lg" type="submit">Cambiar contraseña</button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

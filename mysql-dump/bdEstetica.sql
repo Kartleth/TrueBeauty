@@ -198,22 +198,23 @@ INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
 -- WHERE CS.id_estilista=U.id_usuario
 --   AND CS.id_servicio=S.id_servicio
 --   AND CS.id_cita=1;
-SELECT count(*) as num_asientos_ocupados FROM cita_servicio CS, cita C WHERE CS.id_cita=C.id_cita AND C.fecha='13/11/2022' AND C.id_sucursal=1 AND CS.hora_inicio > '10:30' AND CS.hora_fin < '10:30';
-SELECT DISTINCT U.id_usuario FROM usuario U, empleado E, estilista_servicio ES, cita_servicio CS, cita C
-                       WHERE U.tipo_usuario='estilista'
-                          AND E.id_usuario=U.id_usuario
-                          AND E.id_sucursal=1
-                          AND ES.id_estilista=E.id_usuario
-                          AND ES.id_servicio=1
-                          AND CS.id_estilista=U.id_usuario
-                          AND C.id_cita=CS.id_cita
-                          AND NOT( C.fecha='2022-12-01'
-                          AND CS.hora_inicio<'08:00'
-                          AND CS.hora_fin>'08:00') ;
-SELECT CS.id_estilista FROM cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita
-                          AND NOT( C.fecha='2022-12-01'
-                          AND CS.hora_inicio<'08:00'
-                          AND CS.hora_fin>'08:00') ;
+-- SELECT count(*) as num_asientos_ocupados FROM cita_servicio CS, cita C WHERE CS.id_cita=C.id_cita AND C.fecha='13/11/2022' AND C.id_sucursal=1 AND CS.hora_inicio > '10:30' AND CS.hora_fin < '10:30';
+-- SELECT DISTINCT U.id_usuario FROM usuario U, empleado E, estilista_servicio ES, cita_servicio CS, cita C
+--                        WHERE U.tipo_usuario='estilista'
+--                           AND E.id_usuario=U.id_usuario
+--                           AND E.id_sucursal=1
+--                           AND ES.id_estilista=E.id_usuario
+--                           AND ES.id_servicio=1
+--                           AND CS.id_estilista=U.id_usuario
+--                           AND C.id_cita=CS.id_cita
+--                           AND NOT( C.fecha='2022-12-01'
+--                           AND CS.hora_inicio<'08:00'
+--                           AND CS.hora_fin>'08:00') ;
+-- SELECT CS.id_estilista FROM cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita
+--                           AND NOT( C.fecha='2022-12-01'
+--                           AND CS.hora_inicio<'08:00'
+--                           AND CS.hora_fin>'08:00') ;
+--
+--
+-- SELECT count(id_cita) FROM cita C WHERE C.id_sucursal=1 AND C.fecha='2022-12-01' AND C.hora<='8:00' AND C.hora_fin>'8:00'
 
-
-SELECT count(id_cita) FROM cita C WHERE C.id_sucursal=1 AND C.fecha='2022-12-01' AND C.hora<='8:00' AND C.hora_fin>'8:00'
