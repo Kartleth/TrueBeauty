@@ -6,7 +6,7 @@ def insertar_usuario(nombre, apellido_paterno, apellido_materno, correo, contras
     nombre = nombre.title()
     with conexion.cursor() as cursor:
         cursor.execute(
-            "INSERT INTO usuario (nombre,apellido_paterno,apellido_materno,correo,contrasenia,telefono,tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            "INSERT INTO usuario (nombre,apellido_paterno,apellido_materno,correo,contrasenia,telefono,fecha_creacion,tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s,CURDATE(), %s)",
             (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario))
     conexion.commit()
     conexion.close()

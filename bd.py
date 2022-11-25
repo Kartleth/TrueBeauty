@@ -459,7 +459,30 @@ def get_correo_de_usuario(id_usuario):
     conexion.commit()
     conexion.close()
     return lista[0]['correo']
+def get_lista_citas_fechas(fecha1, fecha2) -> list:
+    conexion = obtener_conexion()
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(
+            "SELECT a.id_cita, a.fecha, u.nombre as cliente, a.monto, a.iva, a.total FROM cita a, usuario u WHERE (DATE(fecha) BETWEEN %s and %s) and u.id_usuario=a.id_cliente",
+            (fecha1, fecha2))
+        lista = cursor.fetchall()
 
+    conexion.commit()
+    conexion.close()
+    return lista
+
+
+def get_lista_usuarios_fechas(fecha1, fecha2) -> list:
+    conexion = obtener_conexion()
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT id_usuario, correo, nombre,telefono, tipo_usuario FROM usuario WHERE (fecha_creacion BETWEEN %s and %s) and tipo_usuario = 'cliente'", (fecha1, fecha2))
+        lista = cursor.fetchall()
+
+    conexion.commit()
+    conexion.close()
+    return lista
 
 def get_cliente_que_agendo_cita(id_cita):
     conexion = obtener_conexion()

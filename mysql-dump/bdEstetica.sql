@@ -34,6 +34,7 @@ CREATE TABLE usuario (
     correo varchar(50) NOT NULL,
     contrasenia varchar(200) NOT NULL,
     telefono varchar(15),
+    fecha_creacion DATE NOT NULL,
     tipo_usuario ENUM('gerente','recepcionista','estilista','cliente') NOT NULL,
     PRIMARY KEY (id_usuario)
 
@@ -94,20 +95,20 @@ ALTER TABLE cita_servicio ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_us
 
 /*INSERTS */
 use truebeauty;
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','gerente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','recepcionista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('David','Nuñez','Gurrola','david@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','21354684565','estilista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Karla','Lerma','Molina','karla@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','12145789632','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Joan','Kniffin','Ortiz','joan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','8882564521','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Juan','Perez','Lopez','juan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Jorge','Lopez','Quintana','jorge@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Ilse','Espinoza','Flores','ilse@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623','estilista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Armando','Gonzales','Martinez','armando@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689','estilista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Jared','Barojas','Alcantar','jared@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','3325689854','estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion,tipo_usuario)
+VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761',CURDATE(),'gerente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion, tipo_usuario)
+VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761',CURDATE(),'recepcionista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion, tipo_usuario)
+VALUES('David','Nuñez','Gurrola','david@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','21354684565',CURDATE(),'estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion, tipo_usuario)
+VALUES('Karla','Lerma','Molina','karla@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','12145789632',CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Joan','Kniffin','Ortiz','joan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','8882564521', CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Juan','Perez','Lopez','juan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623', CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Jorge','Lopez','Quintana','jorge@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689', CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Ilse','Espinoza','Flores','ilse@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623', CURDATE(),'estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Armando','Gonzales','Martinez','armando@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689', CURDATE(),'estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Jared','Barojas','Alcantar','jared@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','3325689854', CURDATE(),'estilista');
 
 
 INSERT INTO sucursal(nombre,direccion, telefono, id_gerente, asientos) values ('Villa de seris','Colonia villa de seris, calle isabel #18','6212254887',2,4);
