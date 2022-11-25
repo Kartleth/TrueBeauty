@@ -76,21 +76,22 @@ def signup():
             return render_template("signup.html")
         elif request.method == 'POST':
             correo = request.form['correo']
-            nombre = request.form['nombre']
-            apellido_paterno = request.form['apellido1']
-            apellido_materno = request.form['apellido2']
-            password = request.form['password1']
-            password2 = request.form['password2']
-            telefono = request.form['telefono']
-            tipo_usuario = 'cliente'
             if usuario_existe('correo', correo):
                 flash('El correo pertence a otro usuario existente')
                 return render_template("signup.html")
+            password = request.form['password1']
+            password2 = request.form['password2']
+
             if password != password2:
                 flash('Contraseñas no concuerdan, intente de nuevo')
                 return render_template("signup.html")
             else:
+                nombre = request.form['nombre']
+                apellido_paterno = request.form['apellido1']
+                apellido_materno = request.form['apellido2']
 
+                telefono = request.form['telefono']
+                tipo_usuario = 'cliente'
                 insertar_usuario(nombre, apellido_paterno, apellido_materno, correo, sha256_crypt.hash(password),
                                  telefono, tipo_usuario)
                 return redirect('/login')
@@ -274,7 +275,8 @@ def hora_cita():
                     id_cliente = session['id_cliente']
                 else:
                     id_cliente = session['id_usuario']
-                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'], id_cliente)
+                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'],
+                                                                id_cliente)
 
                 if request.method == 'GET':
                     if len(lista_horas_disponibles) == 0:
@@ -461,7 +463,7 @@ def informacion_cita(id_cita):
                                                    fecha_actual=fecha_actual)
 
                         else:
-                            return redirect('/escoger_cita')
+                            return redirect('/consultar_citas')
                     else:
                         info_cita = get_dicc_info_cita(id_cita)
 
@@ -513,6 +515,32 @@ def modificar_cita(id_cita):
                     return redirect('/')
             else:
                 return redirect('/')
+
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+@app.route('/info_cuenta/', methods=['GET', 'POST'])
+@app.route('/info_cuenta/<int:id_usuario>', methods=['GET', 'POST'])
+def info_cuenta(id_usuario=None):
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if request.method == 'GET':
+                if session['tipo'] == 'estilista' or session['tipo'] == 'cliente':
+                    dicc_usuario = get_info_usuario(session['id_usuario'])
+                    print(str(dicc_usuario))
+                    return render_template('informacion_usuario.html', info_cuenta=dicc_usuario, tipo_usuario=session['tipo'])
+                else:
+                    if id_usuario is None:
+                        dicc_usuario = get_info_usuario(session['id_usuario'])
+                        return render_template('informacion_usuario.html', info_cuenta=dicc_usuario, tipo_usuario=session['tipo'])
+                    else:
+                        dicc_usuario = get_info_usuario(id_usuario)
+                        return render_template('informacion_usuario.html', info_cuenta=dicc_usuario, tipo_usuario=session['tipo'])
+            elif request.method == 'POST':
+                return redirect('/consultar_clientes')
 
         else:
             return redirect('/')

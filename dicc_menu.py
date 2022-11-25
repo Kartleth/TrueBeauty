@@ -60,6 +60,16 @@ diccionario_menu = {
                 '/info_cuenta': 'Mi cuenta',
                 '/logout': 'Cerrar sesión'
                 },
+    'recepcionista': {'/escoger_cita': 'Agendar cita',
+                      '/consultar_citas': 'Ver citas',
+                      '/consultar_servicios': 'Servicios disponibles',
+
+                      '/consultar_clientes': 'Ver clientes',
+
+                      '/registrar_usuario': 'Registrar usuario',
+                      '/info_cuenta': 'Mi cuenta',
+                      '/logout': 'Cerrar sesión'
+                      },
 }
 
 

@@ -46,7 +46,7 @@
                         <td>{{ cliente['correo'] }}</td>
                         <td>{{ cliente['telefono'] }}</td>
                         <td><a href="/escoger_cita/{{ cliente['id_usuario'] }}" class="btn btn-primary btn-sm" >Agendar</a></td>
-                        <td><a href="/#" class="btn btn-primary btn-sm" >Ver</a></td>
+                        <td><a href="/info_cuenta/{{ cliente['id_usuario'] }}" class="btn btn-primary btn-sm" >Ver</a></td>
                     </tr>
 
                 {% endfor %}

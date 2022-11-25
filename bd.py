@@ -392,6 +392,8 @@ def get_asientos_ocupados_de_sucursal(id_sucursal, fecha, hora):
 
 def cliente_ya_tiene_cita(id_cliente, fecha, hora, id_sucursal):
     conexion = obtener_conexion()
+    id_cliente = str(id_cliente)
+    id_sucursal = str(id_sucursal)
     query = "SELECT id_cita FROM cita WHERE id_cliente=" + id_cliente + " AND id_sucursal=" + id_sucursal + " AND fecha='" + fecha + "' AND hora<='" + hora + "' AND hora_fin>'" + hora + "'"
 
     with conexion.cursor() as cursor:
@@ -413,6 +415,19 @@ def estilista_esta_ocupado(id_estilista, hora, fecha):
     conexion.commit()
     conexion.close()
     return True
+
+
+def get_info_usuario(id_usuario):
+    conexion = obtener_conexion()
+    query = "SELECT id_usuario, nombre, apellido_paterno, apellido_materno, correo, telefono, tipo_usuario FROM usuario WHERE id_usuario="+str(id_usuario)
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista[0]
+
 
 
 if __name__ == '__main__':
