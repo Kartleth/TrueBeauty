@@ -10,7 +10,7 @@ CREATE TABLE cita(
     hora_fin time,
     id_cliente int unsigned NOT NULL,
     id_sucursal int unsigned NOT NULL,
-    monto decimal NOT NULL,
+    monto decimal(10,2) NOT NULL,
     iva decimal(10,2) unsigned NOT null,
     total decimal(10,2) unsigned NOT null,
     PRIMARY KEY (id_cita)

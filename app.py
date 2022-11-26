@@ -234,7 +234,7 @@ def escoger_cita(id_cliente=None):
                         return render_template('escoger_cita.html',
                                                lista_sucursales=get_lista_sucursales(),
                                                lista_servicios=get_lista_servicios(),
-                                               date_min=fecha['fecha_actual'],
+                                               date_min=fecha['now'],#fecha['fecha_actual'],
                                                date_max=fecha['fecha_fin'])
                 elif request.method == 'POST':
                     id_sucursal = request.form['tipo_sucursal']
@@ -490,7 +490,7 @@ def modificar_cita(id_cita):
                         return render_template('modificar_cita.html', info_cita=info_cita,
                                                lista_sucursales=get_lista_sucursales(),
                                                lista_servicios=get_lista_servicios(),
-                                               date_min=fecha['fecha_actual'],
+                                               date_min=fecha['now'],#fecha['fecha_actual'],
                                                date_max=fecha['fecha_fin'])
                     else:
                         if cita_pertenece_a_usuario('id_cliente', session['id_usuario'], id_cita):
@@ -500,7 +500,7 @@ def modificar_cita(id_cita):
                             return render_template('modificar_cita.html', info_cita=info_cita,
                                                    lista_sucursales=get_lista_sucursales(),
                                                    lista_servicios=get_lista_servicios(),
-                                                   date_min=fecha['fecha_actual'],
+                                                   date_min=fecha['now'],#fecha['fecha_actual'],
                                                    date_max=fecha['fecha_fin'])
                         else:
                             return redirect('/consultar_citas')
@@ -713,25 +713,24 @@ def informe_ventas_diaria():
                                         lista_citas=citas, lista_servicios=servicios,
                                         tipo='Diario', date=fecha['now'], data=json.dumps(data_dict))
 
-                if request.method == 'POST':
-                    fecha = request.form['fecha']
-                    citas = get_lista_citas_fechas(fecha, fecha)
-                    usuarios = get_lista_usuarios_fechas(fecha, fecha)
-                    servicios = get_lista_serv_de_atenciones()       
-                    suma = get_suma_atenciones(fecha, fecha)
-                    total_atenciones_subtotal = suma['SUM(subtotal)']
-                    total_atenciones_iva = suma['SUM(iva)']
-                    total_atenciones_total = suma['SUM(total)']
-                    print(fecha, fecha, suma)
-
+                if request.method == 'POST':             
+                    fecha = request.form['fecha']                   
+                    citas = get_lista_citas_fechas(fecha, fecha) 
+                    usuarios = get_lista_usuarios_fechas(fecha, fecha) 
+                    servicios = get_lista_serv_de_citas()  
+                    suma = get_suma_citas(fecha, fecha)
+                    total_citas_subtotal = suma['SUM(monto)']
+                    total_citas_iva = suma['SUM(iva)']
+                    total_citas_total = suma['SUM(total)']
+                    
                     data_dict = get_datos_grafica_diaria(fecha)
+
                     return render_template("reporte.html", lista_usuarios=usuarios,
-                                        total_atenciones_subtotal=total_atenciones_subtotal,
-                                        total_atenciones_iva=total_atenciones_iva,
-                                        total_atenciones_total=total_atenciones_total,
-                                        lista_atenciones=citas, lista_servicios=servicios,
-                                        tipo='Diario',
-                                            date=fecha, data=json.dumps(data_dict))
+                                        total_citas_subtotal=total_citas_subtotal,
+                                        total_citas_iva=total_citas_iva,
+                                        total_citas_total=total_citas_total,
+                                        lista_citas=citas, lista_servicios=servicios,
+                                        tipo='Diario', date=fecha, data=json.dumps(data_dict))
             else:
                 abort(403)
         else:

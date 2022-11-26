@@ -507,19 +507,21 @@ def get_suma_citas(fecha1, fecha2):
 
 def get_datos_grafica_diaria(fecha) -> dict:
     dict = {}
-    for hora in range(8,20):
-        datos = get_valores_tabla_diaria(hora,fecha)
-        hora = str(hora)+":00"
-        if datos['suma'] is None:
-            dict[hora]= 0
-        else:
-            dict[hora]=float(datos['suma'])
+    for hora in range(7,20):
+        tiempos=[str(hora)+":00",str(hora)+":30"]
+        for tiempo in tiempos:
+            datos = get_valores_tabla_diaria(tiempo,fecha)
+            hora = str(hora)+":00"
+            if datos['suma'] is None:
+                dict[tiempo]= 0
+            else:
+                dict[tiempo]=float(datos['suma'])
     return dict
 
 def get_valores_tabla_diaria(hora,fecha): #1-5
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
-        cursor.execute("SELECT sum(total) as suma FROM cita WHERE DATE(fecha)=%s AND HOUR(fecha)=%s", (fecha,hora))
+        cursor.execute("SELECT sum(total) as suma FROM cita WHERE DATE(fecha)=%s AND hora=%s", (fecha,hora))
         valores = cursor.fetchone()
     conexion.commit()
     conexion.close()
