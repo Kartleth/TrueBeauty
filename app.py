@@ -452,41 +452,25 @@ def informacion_cita(id_cita):
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
-                if request.method == 'GET':
-                    if session['tipo'] == 'cliente':
-                        if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
 
-                            citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
-                            citas = agregar_fechas_en_formato_datetime(citas)
-                            info_cita = get_dicc_info_cita(id_cita)
-                            fecha_actual = datetime.now()
-                            return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
-                                                   fecha_actual=fecha_actual)
+                if session['tipo'] == 'cliente':
+                    if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
 
-                        else:
-                            return redirect('/consultar_citas')
-                    else:
+                        citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
+                        citas = agregar_fechas_en_formato_datetime(citas)
                         info_cita = get_dicc_info_cita(id_cita)
+                        fecha_actual = datetime.now()
+                        return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
+                                               fecha_actual=fecha_actual)
 
-                        return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita)
-                elif request.method == 'POST':
-                    id_cita = request.form['id_cita']
-
-                    return redirect('/modificar_cita/' + str(id_cita))
-                    # fecha = get_cur_datetime()
-                    # info_cita = get_dicc_info_cita(id_cita)
-                    #
-                    # return render_template('modificar_cita.html', info_cita=info_cita,
-                    #                        lista_sucursales=get_lista_sucursales(),
-                    #                        lista_servicios=get_lista_servicios(),
-                    #                        date_min=fecha['fecha_actual'],
-                    #                        date_max=fecha['fecha_fin'])
+                    else:
+                        return redirect('/consultar_citas')
                 else:
-                    return redirect('/')
+                    info_cita = get_dicc_info_cita(id_cita)
+
+                    return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita)
             else:
                 return redirect('/')
-
-
         else:
             return redirect('/')
     else:
@@ -508,12 +492,33 @@ def modificar_cita(id_cita):
                                                lista_servicios=get_lista_servicios(),
                                                date_min=fecha['fecha_actual'],
                                                date_max=fecha['fecha_fin'])
-                    elif request.method == 'POST':
-                        return redirect('/')
                     else:
-                        return redirect('/')
+                        if cita_pertenece_a_usuario('id_cliente', session['id_usuario'], id_cita):
+                            fecha = get_cur_datetime()
+                            info_cita = get_dicc_info_cita(id_cita)
+                            info_cita['fecha'] = formatear_fecha_para_input(info_cita['fecha'])
+                            return render_template('modificar_cita.html', info_cita=info_cita,
+                                                   lista_sucursales=get_lista_sucursales(),
+                                                   lista_servicios=get_lista_servicios(),
+                                                   date_min=fecha['fecha_actual'],
+                                                   date_max=fecha['fecha_fin'])
+                        else:
+                            return redirect('/consultar_citas')
+
+                elif request.method == 'POST':
+
+                    session['lista_servicios_sel'] = obtener_servicios(request.form.to_dict())
+                    if len(session['lista_servicios_sel']) == 0:
+                        flash('Por favor, seleccione algún servicio para continuar')
+
+                        return redirect('modifcar_cita/' + str(id_cita))
+                    id_sucursal = request.form['tipo_sucursal']
+                    fecha = request.form['fecha']
+                    id_cliente = get_cliente_que_agendo_cita(id_cita)
+                    return redirect(url_for('modificar_hora_cita', id_sucursal=id_sucursal, fecha=fecha, id_cliente=id_cliente, id_cita=id_cita))
                 else:
                     return redirect('/')
+
             else:
                 return redirect('/')
 
@@ -521,6 +526,88 @@ def modificar_cita(id_cita):
             return redirect('/')
     else:
         return redirect('/')
+
+
+@app.route('/modificar_hora_cita', methods=['GET', 'POST'])
+def modificar_hora_cita():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys():
+                id_sucursal = int(request.args['id_sucursal'])
+                fecha = request.args['fecha']
+                id_cliente = str(request.args['id_cliente'])
+                id_cita = str(request.args['id_cita'])
+                if id_sucursal == int(get_sucursal_de_cita(id_cita)):
+                    lista_horas_disponibles = get_horas_disponibles( str(id_sucursal), fecha, session['lista_servicios_sel'],id_cliente,id_cita)
+                else:
+                    lista_horas_disponibles = get_horas_disponibles(str(id_sucursal),fecha,session['lista_servicios_sel'],id_cliente)
+
+                if request.method == 'GET':
+                    if len(lista_horas_disponibles) == 0:
+                        flash(
+                            'No hay horas disponibles con esos requerimientos. Por favor, escoge otra fecha, otra sucursal u otros servicios.' + str(
+                                lista_horas_disponibles))
+
+                        return redirect('/modificar_cita/' + id_cita)
+
+                    else:
+                        return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
+                elif request.method == 'POST':
+                    hora = request.form['hora']
+
+                    return redirect(url_for('confirmar_cambios_cita', fecha=fecha, id_sucursal=id_sucursal, hora=hora, id_cliente=id_cliente,id_cita=id_cita))
+
+            else:
+                flash('Por favor, primero escoga la cita que quiere modificar')
+                return redirect('/consultar_citas')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+@app.route('/confirmar_cambios_cita', methods=['GET', 'POST'])
+def confirmar_cambios_cita():
+    if 'logeado' in session.keys():
+
+        if session['logeado']:
+            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys():
+                id_sucursal = request.args['id_sucursal']
+                fecha = request.args['fecha']
+                hora = request.args['hora']
+                id_cliente = str(request.args['id_cliente'])
+                id_cita = str(request.args['id_cita'])
+
+                if request.method == 'GET':
+                    dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
+                    dicc_info_cita['iva'] = round(dicc_info_cita['monto'] * 0.16, 2)
+                    dicc_info_cita['total'] = round(dicc_info_cita['iva'] + dicc_info_cita['monto'], 2)
+
+                    dicc_info_cliente = get_info_cliente(id_cliente)
+                    return render_template('confirmar_cita.html', info_cita=dicc_info_cita,
+                                           info_cliente=dicc_info_cliente)
+
+                elif request.method == 'POST':
+                    fecha = request.form['fecha']
+                    id_sucursal = str(request.form['id_sucursal'])
+                    hora = request.form['hora']
+
+                    monto = request.form['monto']
+
+                    delete_cita(id_cita)
+                    guardar_cita(fecha, hora, id_cliente, id_sucursal, monto, session['lista_servicios_sel'])
+
+                    session.pop('lista_servicios_sel')
+                    return redirect('/consultar_citas')
+            else:
+                return redirect('/consultar_citas')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+
 
 
 @app.route('/info_cuenta/', methods=['GET', 'POST'])
