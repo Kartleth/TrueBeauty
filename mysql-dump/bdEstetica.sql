@@ -159,10 +159,10 @@ INSERT INTO estilista_servicio VALUES (10,5);
 INSERT INTO estilista_servicio VALUES (10,6);
 
 
-INSERT INTO cita_servicio VALUES (4,1,3,'10:00','10:45');
-INSERT INTO cita_servicio VALUES (4,2,3,'10:45','11:30');
-INSERT INTO cita_servicio VALUES (4,5,3,'12:00','12:30');
-INSERT INTO cita_servicio VALUES (4,6,3,'12:30','13:00');
+INSERT INTO cita_servicio VALUES (1,1,3,'10:00','10:45');
+INSERT INTO cita_servicio VALUES (1,2,3,'10:45','11:30');
+INSERT INTO cita_servicio VALUES (1,5,3,'12:00','12:30');
+INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
 
 -- # SELECT * FROM usuario;
 -- # /*Estilistas que trabajan en esa sucursal y ofrecen ese servicio */

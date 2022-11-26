@@ -452,14 +452,16 @@ def informacion_cita(id_cita):
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
-
+                if not cita_existe(id_cita):
+                    return redirect('/consultar_citas')
+                fecha_actual = datetime.now()
                 if session['tipo'] == 'cliente':
                     if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
 
                         citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
                         citas = agregar_fechas_en_formato_datetime(citas)
                         info_cita = get_dicc_info_cita(id_cita)
-                        fecha_actual = datetime.now()
+
                         return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
                                                fecha_actual=fecha_actual)
 
@@ -468,7 +470,7 @@ def informacion_cita(id_cita):
                 else:
                     info_cita = get_dicc_info_cita(id_cita)
 
-                    return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita)
+                    return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita, fecha_actual=fecha_actual)
             else:
                 return redirect('/')
         else:
@@ -482,7 +484,14 @@ def modificar_cita(id_cita):
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
+                if not cita_existe(id_cita):
+                    return redirect('/consultar_citas')
                 if request.method == 'GET':
+
+                    if cita_ya_paso(id_cita):
+                        flash('No puedes modificar citas que ya pasaron')
+                        return redirect('/informacion_cita/'+str(id_cita))
+
                     if session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
                         fecha = get_cur_datetime()
                         info_cita = get_dicc_info_cita(id_cita)
@@ -653,6 +662,34 @@ def info_cuenta(id_usuario=None):
             return redirect('/')
     else:
         return redirect('/')
+
+
+@app.route('/eliminar_cita/<id_cita>', methods = ['GET','POST'])
+def eliminar_cita(id_cita):
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] != 'estilista':
+                if not cita_existe(id_cita):
+                    return redirect('/consultar_citas')
+                if session['tipo'] == 'cliente' and not cita_pertenece_a_usuario('id_cliente',session['id_usuario'], id_cita):
+                    abort(403)
+                if cita_ya_paso(id_cita):
+                    flash('No puedes eliminar citas pasadas')
+                    return redirect('/información_cita/'+str(id_cita))
+
+                if request.method == 'GET':
+                    info_cita = get_dicc_info_cita(id_cita)
+                    return render_template('eliminar_cita.html',dicc_cita=info_cita)
+                elif request.method == 'POST':
+                    delete_cita(id_cita)
+                    return redirect('/consultar_citas')
+            else:
+                abort(403)
+        else:
+            abort(403)
+    else:
+        abort(403)
+
 
 
 @app.route('/consultar_clientes')

@@ -54,11 +54,26 @@ def get_horas_disponibles(id_sucursal, fecha, lista_servicios, id_cliente, id_ci
     for i in range(8, 20):
         posibles_horas_disponibles.append(f"{i}:00")
         posibles_horas_disponibles.append(f"{i}:30")
-    print('HORAS POSIBLES DISPONIBLES:' + str(posibles_horas_disponibles))
     horas_disponibles = []
     for hora in posibles_horas_disponibles:
         if hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente, id_cita_a_modificar):
             horas_disponibles.append(hora)
+    horas_disponibles = quitar_horas_del_pasado(horas_disponibles,fecha)
+    return horas_disponibles
+
+def quitar_horas_del_pasado(horas_disponibles,fecha_cita):
+    fecha_actual = datetime.datetime.now()
+    fecha_cita = datetime.datetime.strptime(fecha_cita,'%Y-%m-%d')
+
+    if fecha_actual >= fecha_cita:
+        copia_horas_disponibles = horas_disponibles.copy()
+
+        for hora in copia_horas_disponibles:
+            hora_formateada = datetime.datetime.strptime(hora,"%H:%M").time()
+            fecha_hora = datetime.datetime.combine(fecha_cita,hora_formateada)
+
+            if fecha_hora < fecha_actual:
+                horas_disponibles.remove(hora)
 
     return horas_disponibles
 
@@ -200,6 +215,9 @@ def calcular_tiempo_hora_servicio(id_servicio, hora):
 
 def get_dicc_info_cita(id_cita):
     dicc_cita = get_info_cita(id_cita)
+    hora_formateada = datetime.datetime.strptime(dicc_cita['hora'], '%H:%M').time()
+    fecha_formateada = datetime.datetime.strptime(dicc_cita['fecha'], '%d/%m/%Y')
+    dicc_cita['fecha_hora'] = datetime.datetime.combine(fecha_formateada,hora_formateada)
     dicc_cita['lista_servicios'] = get_lista_info_servicios(id_cita)
     dicc_cita['lista_id_servicios'] = get_lista_id_servicios_de_cita(id_cita)
     return dicc_cita
@@ -207,7 +225,9 @@ def get_dicc_info_cita(id_cita):
 
 def agregar_fechas_en_formato_datetime(citas):
     for cita in citas:
-        cita['fecha_datetime'] = datetime.datetime.strptime(cita['fecha'], '%d/%m/%Y')
+        hora_formateada = datetime.datetime.strptime(cita['hora'],'%H:%M').time()
+        fecha_formateada = datetime.datetime.strptime(cita['fecha'], '%d/%m/%Y')
+        cita['fecha_datetime'] = datetime.datetime.combine(fecha_formateada,hora_formateada)
         cita['fecha_escrita'] = cita['fecha_datetime'].strftime('%d de %B de %Y')
     return citas
 
@@ -234,8 +254,15 @@ def get_estilista_apropiado(id_servicio, hora, fecha, id_sucursal):
     return estilistas_desocupados[0]
 
 
-
-
+def cita_ya_paso(id_cita):
+    fecha,hora = get_fecha_hora_de_cita(id_cita)
+    hora_formateada = datetime.datetime.strptime(hora, '%H:%M').time()
+    fecha_formateada = datetime.datetime.strptime(fecha, '%d/%m/%Y')
+    fecha_hora_cita = datetime.datetime.combine(fecha_formateada, hora_formateada)
+    if fecha_hora_cita < datetime.datetime.now():
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
     horas_salida = datetime.timedelta(minutes=180)

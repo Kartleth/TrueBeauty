@@ -561,5 +561,29 @@ def delete_cita(id_cita):
     conexion.close()
 
 
+
+def get_fecha_hora_de_cita(id_cita):
+    conexion = obtener_conexion()
+    query = "SELECT DATE_FORMAT(fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(hora, '%H:%i') as hora FROM cita WHERE id_cita=" + str(id_cita)
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista[0]['fecha'], lista[0]['hora']
+
+
+def cita_existe(id_cita):
+    conexion = obtener_conexion()
+    query = "SELECT id_cita FROM cita WHERE id_cita="+str(id_cita)
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        if cursor.fetchone() is None:
+            return False
+    conexion.commit()
+    conexion.close()
+    return True
+
 if __name__ == '__main__':
     print('hola')
