@@ -112,6 +112,24 @@
 
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+             <li class="nav-item dropdown">
+
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Mi cuenta
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-dark">
+
+                <li><a class="dropdown-item" href="/info_cuenta/">Información personal</a></li>
+
+                  <hr class="dropdown-divider">
+
+                <li><a class="dropdown-item" href="/logout">Cerrar sesión</a></li>
+              </ul>
+
+            </li>
+
             {% if accesos %}
             {% for link,nombre in accesos.items() %}
             <li class="nav-item">
@@ -120,32 +138,11 @@
             {% endfor %}
             {% endif %}
 
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/#">Home</a>
-            </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
 
-            <li class="nav-item dropdown">
 
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Dropdown
-              </a>
 
-              <ul class="dropdown-menu dropdown-menu-dark">
-                  <li><a class="dropdown-item" href="#"> Aqui deberia de aparecer: {{ logeado }}</a></li>
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
 
-            </li>
           </ul>
         </div>
       </div>
