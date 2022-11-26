@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Clientes registrados{% endblock %}
+{% block body %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Custom styles for this template -->
+    <link href="/static/css/consultar_cita.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <main class="container">
+        <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+            <img class="me-3" src="/static/images/consultar_cita.png" alt="" width="48" height="48">
+            <div class="lh-1">
+                <h1 class="h6 mb-0 text-white lh-1">Consultar los clientes registrados:</h1>
+                <small>Aquí podrás ver todos los clientes</small>
+            </div>
+        </div>
+
+
+        <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h5>{{ get_flashed_messages()[0] }}</h5>
+            <h6 class="border-bottom pb-2 mb-0">Clientes</h6>
+<div class="col-auto mb-3 ">
+                <input class="form-control" type="text" id="searchbox" onkeyup="buscarCliente( 'searchbox', 'usuarios') " placeholder="Buscar cliente... ">
+            </div>
+
+            <table id="usuarios" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col" >Tipo</th>
+                        <th scope="col" >Ver usuario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for usuario in lista_usuarios %}
+                     <tr>
+                        <td scope="row">{{ usuario['nombre'] }} {{ usuario['apellido_paterno'] }} {{ usuario['apellido_materno'] }}</td>
+                        <td>{{ usuario['correo'] }}</td>
+                        <td>{{ usuario['telefono'] }}</td>
+                        <td>{{ usuario['tipo_usuario'] }} </td>
+                        <td><a href="/info_cuenta/{{ usuario['id_usuario'] }}" class="btn btn-primary btn-sm" >Detalles</a></td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            <small class="d-block text-end mt-3">
+                <a href="/#" class="btn btn-primary btn-sm">Agregar nuevo usuario</a>
+            </small>
+        </div>
+
+
+    </main>
+
+
+
+
+    <script>
+        function buscarCliente(id, table_id) {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue, j, count, tamanio;
+    input = document.getElementById(id);
+    filter = input.value.toLowerCase();
+    table = document.getElementById(table_id);
+    tr = table.getElementsByTagName("tr");
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+        count = 0;
+        tamanio = tr[i].getElementsByTagName("td").length - 1;
+        for (j = 0; j < tamanio; j++) {
+            td = tr[i].getElementsByTagName("td")[j];
+
+            if (td) {
+                txtValue = td.textContent.toLowerCase() || td.innerText.toLowerCase();
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    // tr[i].style.display = "";
+                } else {
+                    count++;
+                    // tr[i].style.display = "none";
+
+                }
+
+            }
+
+        }
+        if (count === tamanio) {
+            tr[i].style.display = "none";
+        } else {
+            tr[i].style.display = "";
+        }
+    }
+}
+    </script>
+</body>
+
+</html>
+{% endblock %}

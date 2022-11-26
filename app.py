@@ -706,6 +706,21 @@ def consultar_clientes():
     else:
         return redirect('/')
 
+@app.route('/consultar_usuarios')
+def consultar_usuarios():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente':
+                usuarios = get_lista_usuarios()
+                return render_template('consultar_usuarios.html', lista_usuarios=usuarios)
+            else:
+                return redirect('/')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
 
 @app.route('/informacion_usuario')
 def informacion_usuario():

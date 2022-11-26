@@ -321,7 +321,7 @@ def hay_servicio_con_ese_nombre(nombre):
 
 def get_lista_clientes():
     conexion = obtener_conexion()
-    query = "SELECT * FROM usuario WHERE tipo_usuario='cliente'"
+    query = "SELECT id_usuario, nombre, apellido_paterno, apellido_materno, correo, telefono,  tipo_usuario FROM usuario WHERE tipo_usuario='cliente'"
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -584,6 +584,19 @@ def cita_existe(id_cita):
     conexion.commit()
     conexion.close()
     return True
+
+
+def get_lista_usuarios():
+    conexion = obtener_conexion()
+    query = "SELECT id_usuario, nombre, apellido_paterno, apellido_materno, correo,telefono, tipo_usuario FROM usuario"
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
 
 if __name__ == '__main__':
     print('hola')
