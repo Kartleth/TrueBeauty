@@ -224,7 +224,7 @@ def escoger_cita(id_cliente=None):
                             return render_template('escoger_cita.html',
                                                    lista_sucursales=get_lista_sucursales(),
                                                    lista_servicios=get_lista_servicios(),
-                                                   date_min=fecha['fecha_actual'],
+                                                   date_min=fecha['now'],#date_min=fecha['fecha_actual'],
                                                    date_max=fecha['fecha_fin'])
                     elif session['tipo'] == 'cliente':
                         return redirect('/escoger_cita')
@@ -611,19 +611,19 @@ def informe_ventas_diaria():
                     hasta = fecha['now']
                     citas = get_lista_citas_fechas(desde, hasta) 
                     usuarios = get_lista_usuarios_fechas(desde, hasta) 
-                    servicios = []#get_lista_serv_de_atenciones()  
-                    suma = []#get_suma_atenciones(desde, hasta)
-                    total_atenciones_subtotal = 0#suma['SUM(subtotal)']
-                    total_atenciones_iva = 0#suma['SUM(iva)']
-                    total_atenciones_total = 0#suma['SUM(total)']
+                    servicios = get_lista_serv_de_citas()  
+                    suma = get_suma_citas(desde, hasta)
+                    total_citas_subtotal = suma['SUM(monto)']
+                    total_citas_iva = suma['SUM(iva)']
+                    total_citas_total = suma['SUM(total)']
                     
-                    data_dict = {}#get_datos_grafica_diaria(desde)
+                    data_dict = get_datos_grafica_diaria(desde)
 
                     return render_template("reporte.html", lista_usuarios=usuarios,
-                                        total_atenciones_subtotal=total_atenciones_subtotal,
-                                        total_atenciones_iva=total_atenciones_iva,
-                                        total_atenciones_total=total_atenciones_total,
-                                        lista_atenciones=citas, lista_servicios=servicios,
+                                        total_citas_subtotal=total_citas_subtotal,
+                                        total_citas_iva=total_citas_iva,
+                                        total_citas_total=total_citas_total,
+                                        lista_citas=citas, lista_servicios=servicios,
                                         tipo='Diario', date=fecha['now'], data=json.dumps(data_dict))
 
                 if request.method == 'POST':

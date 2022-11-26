@@ -474,5 +474,45 @@ def get_lista_usuarios_fechas(fecha1, fecha2) -> list:
     conexion.close()
     return lista
 
+def get_lista_serv_de_citas() -> list:
+    conexion = obtener_conexion()
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT * FROM cita_servicio a, servicio s WHERE a.id_servicio=s.id_servicio")
+        lista = cursor.fetchall()
+
+    conexion.commit()
+    conexion.close()
+    return lista
+
+def get_suma_citas(fecha1, fecha2):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT SUM(total), SUM(iva), SUM(monto) FROM cita WHERE (DATE(fecha) BETWEEN %s and %s)",
+                       (fecha1, fecha2))
+        atencion = cursor.fetchone()
+    conexion.commit()
+    conexion.close()
+    return atencion
+
+def get_datos_grafica_diaria(fecha) -> dict:
+    dict = {}
+    for hora in range(8,20):
+        datos = get_valores_tabla_diaria(hora,fecha)
+        hora = str(hora)+":00"
+        if datos['suma'] is None:
+            dict[hora]= 0
+        else:
+            dict[hora]=float(datos['suma'])
+    return dict
+
+def get_valores_tabla_diaria(hora,fecha): #1-5
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT sum(total) as suma FROM cita WHERE DATE(fecha)=%s AND HOUR(fecha)=%s", (fecha,hora))
+        valores = cursor.fetchone()
+    conexion.commit()
+    conexion.close()
+    return valores
 if __name__ == '__main__':
     print('hola')
