@@ -56,10 +56,11 @@
 
             </table>
 
-
+            {% if tipo_usuario =='gerente' %}
             <small class="d-block text-end mt-3">
-                <a href="/escoger_cita" class="btn btn-primary btn-sm">Agregar nuevo servicio</a>
+                <a href="/agregar_servicio" class="btn btn-primary btn-sm">Agregar nuevo servicio</a>
             </small>
+        {% endif %}
         </div>
 
 

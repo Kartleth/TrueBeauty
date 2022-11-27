@@ -1,6 +1,8 @@
 import os
+import random
 import smtplib, ssl
 import datetime
+import string
 import time
 from email.message import EmailMessage
 import locale
@@ -40,6 +42,48 @@ def mandar_correo_codigo(sender, receiver, password, codigo):
         # Close connection to server
 
 
+def mandar_correo_de_password(sender, receiver, password_cuenta_email, password_cuenta_cliente ):
+    email_subject = 'Bienvenido a True Beauty'
+    sender_email_address = sender
+    receiver_email_address = receiver
+    email_smtp = "smtp.gmail.com"
+    email_password = password_cuenta_email
+
+    # Create an email message object
+    message = EmailMessage()
+
+    # Configure email headers
+    message['Subject'] = email_subject
+    message['From'] = sender_email_address
+    message['To'] = receiver_email_address
+
+    # Set email body text
+    mensaje = "Gracias por confiar en nostros.\nLa contraseña de su cuenta es: "+password_cuenta_cliente+" .\nInicie sesiion y cambie su contraseña para asegurar la seguridad de su cuenta.\n"
+
+    message.set_content(mensaje)
+
+    context = ssl.create_default_context()
+    # Set smtp server and port
+    with smtplib.SMTP_SSL(email_smtp, 465, context=context) as smtp:
+        # Login to email account
+        smtp.login(sender_email_address, email_password)
+
+        # Send email
+        smtp.sendmail(sender_email_address, receiver_email_address, message.as_string())
+
+        # Close connection to server
+
+def generar_password():
+    letras = list(string.ascii_letters)
+    numeros = [str(num) for num in range(0,100)]
+    letras.extend(numeros)
+    password = ''
+    for x in range(10):
+        password += random.choice(letras)
+    return password
+
+
+
 def obtener_servicios(dicc_form: dict) -> list:
     lista_id_servicios = []
     for llave in dicc_form.keys():
@@ -49,40 +93,49 @@ def obtener_servicios(dicc_form: dict) -> list:
     return lista_id_servicios
 
 
-def get_horas_disponibles(id_sucursal, fecha, lista_servicios, id_cliente):
-    # dicc_estilistas_horas_libres = {}
-    #
-    # estilistas = []
-    # for id_servicio in lista_servicios:
-    #     estilistas.append(get_lista_estilista_por_sucursal_servicio(id_sucursal,id_servicio))
-    # print(str(estilistas))
-
+def get_horas_disponibles(id_sucursal, fecha, lista_servicios, id_cliente, id_cita_a_modificar=None):
     posibles_horas_disponibles = []
     for i in range(8, 20):
         posibles_horas_disponibles.append(f"{i}:00")
         posibles_horas_disponibles.append(f"{i}:30")
-    print('HORAS POSIBLES DISPONIBLES:' + str(posibles_horas_disponibles))
     horas_disponibles = []
     for hora in posibles_horas_disponibles:
-        if hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente):
+        if hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente, id_cita_a_modificar):
             horas_disponibles.append(hora)
+    horas_disponibles = quitar_horas_del_pasado(horas_disponibles,fecha)
+    return horas_disponibles
+
+def quitar_horas_del_pasado(horas_disponibles,fecha_cita):
+    fecha_actual = datetime.datetime.now()
+    fecha_cita = datetime.datetime.strptime(fecha_cita,'%Y-%m-%d')
+
+    if fecha_actual >= fecha_cita:
+        copia_horas_disponibles = horas_disponibles.copy()
+
+        for hora in copia_horas_disponibles:
+            hora_formateada = datetime.datetime.strptime(hora,"%H:%M").time()
+            fecha_hora = datetime.datetime.combine(fecha_cita,hora_formateada)
+
+            if fecha_hora < fecha_actual:
+                horas_disponibles.remove(hora)
 
     return horas_disponibles
 
 
-def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente):
+def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente, id_cita_a_modificar):
     # buscar que exista estilista disponible a esa hora en esa sucursal
     hora_de_termino = time.strptime(calcular_hora_fin_de_cita(hora, lista_servicios), "%H:%M")
     hora_de_cierre = time.strptime('20:00', "%H:%M")
-    if cliente_ya_tiene_cita(id_cliente, fecha, hora, id_sucursal):
+
+    if cliente_ya_tiene_cita(id_cliente, fecha, hora, id_sucursal, id_cita_a_modificar):
         return False
     elif hora_de_termino > hora_de_cierre:
         return False
     else:
         for id_servicio in lista_servicios:
             if not hay_estilista_para_horayservicio(hora, id_servicio, fecha,
-                                                    id_sucursal) or not hay_espacio_en_estetica(id_sucursal, fecha,
-                                                                                                hora):
+                                                    id_sucursal, id_cita_a_modificar) or not hay_espacio_en_estetica(id_sucursal, fecha,
+                                                                                                hora, id_cita_a_modificar):
                 return False
             else:
                 if lista_servicios[-1] == id_servicio:
@@ -94,20 +147,20 @@ def hora_esta_disponible(hora, lista_servicios, id_sucursal, fecha, id_cliente):
     return True
 
 
-def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal) -> bool:
+def hay_estilista_para_horayservicio(hora, id_servicio, fecha, id_sucursal, id_cita_a_modificar) -> bool:
     estilistas = get_lista_estilista_por_sucursal_servicio(id_sucursal, id_servicio)
 
     for estilista in estilistas:
         if not estilista_tiene_cita(hora, estilista['id_usuario'], fecha,
-                                    calcular_tiempo_hora_servicio(id_servicio, hora)):
+                                    calcular_tiempo_hora_servicio(id_servicio, hora), id_cita_a_modificar):
             return True
 
     return False
 
 
-def hay_espacio_en_estetica(id_sucursal, fecha, hora):
+def hay_espacio_en_estetica(id_sucursal, fecha, hora, id_cita_a_modificar):
     asientos_en_sucursal = get_asientos_de_sucursal(id_sucursal)
-    asientos_ocupados = get_asientos_ocupados_de_sucursal(id_sucursal, fecha, hora)
+    asientos_ocupados = get_asientos_ocupados_de_sucursal(id_sucursal, fecha, hora, id_cita_a_modificar)
     if asientos_ocupados >= asientos_en_sucursal:
         return False
     else:
@@ -206,6 +259,9 @@ def calcular_tiempo_hora_servicio(id_servicio, hora):
 
 def get_dicc_info_cita(id_cita):
     dicc_cita = get_info_cita(id_cita)
+    hora_formateada = datetime.datetime.strptime(dicc_cita['hora'], '%H:%M').time()
+    fecha_formateada = datetime.datetime.strptime(dicc_cita['fecha'], '%d/%m/%Y')
+    dicc_cita['fecha_hora'] = datetime.datetime.combine(fecha_formateada,hora_formateada)
     dicc_cita['lista_servicios'] = get_lista_info_servicios(id_cita)
     dicc_cita['lista_id_servicios'] = get_lista_id_servicios_de_cita(id_cita)
     return dicc_cita
@@ -213,7 +269,9 @@ def get_dicc_info_cita(id_cita):
 
 def agregar_fechas_en_formato_datetime(citas):
     for cita in citas:
-        cita['fecha_datetime'] = datetime.datetime.strptime(cita['fecha'], '%d/%m/%Y')
+        hora_formateada = datetime.datetime.strptime(cita['hora'],'%H:%M').time()
+        fecha_formateada = datetime.datetime.strptime(cita['fecha'], '%d/%m/%Y')
+        cita['fecha_datetime'] = datetime.datetime.combine(fecha_formateada,hora_formateada)
         cita['fecha_escrita'] = cita['fecha_datetime'].strftime('%d de %B de %Y')
     return citas
 
@@ -240,12 +298,24 @@ def get_estilista_apropiado(id_servicio, hora, fecha, id_sucursal):
     return estilistas_desocupados[0]
 
 
-if __name__ == '__main__':
-    horas_salida = datetime.timedelta(minutes=180)
-    h1 = datetime.datetime.strptime('10:30', "%H:%M")
+def cita_ya_paso(id_cita):
+    fecha,hora = get_fecha_hora_de_cita(id_cita)
+    hora_formateada = datetime.datetime.strptime(hora, '%H:%M').time()
+    fecha_formateada = datetime.datetime.strptime(fecha, '%d/%m/%Y')
+    fecha_hora_cita = datetime.datetime.combine(fecha_formateada, hora_formateada)
+    if fecha_hora_cita < datetime.datetime.now():
+        return True
+    else:
+        return False
 
-    hora_fin = h1 + horas_salida
-    print(hora_fin)
+if __name__ == '__main__':
+    for i in range(100):
+        print(generar_password())
+    # horas_salida = datetime.timedelta(minutes=180)
+    # h1 = datetime.datetime.strptime('10:30', "%H:%M")
+    #
+    # hora_fin = h1 + horas_salida
+    # print(hora_fin)
 
     # print(str(get_lista_info_citas_usuario('id_cliente', 1)))
     # print(get_horas_disponibles('1', '2023-10-08', ['1', '2', '3']))

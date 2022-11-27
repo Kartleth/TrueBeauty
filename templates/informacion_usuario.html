@@ -2,79 +2,110 @@
 {% block title %}Informacion usuario{% endblock %}
 
 {% block body %}
-<!doctype html>
-<html lang="en">
+    <!doctype html>
+    <html lang="en">
 
-<head>
-    
-    <title>Información de usuario</title>
-    <link href="/static/css/informacion_usuario.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link href="/static/css/informacion_usuario.css" rel="stylesheet">
+    <head>
 
-</head>
+        <title>Información de usuario</title>
+        <link href="/static/css/informacion_usuario.css" rel="stylesheet"
+              integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+              crossorigin="anonymous">
+        <link href="/static/css/informacion_usuario.css" rel="stylesheet">
 
-<body class="bg-light">
+    </head>
+
+    <body class="bg-light">
 
     <div class="container" style="margin-top: 5%;">
         <main>
-            <div class="py-5 text-center">
-                <img class="d-block mx-auto mb-4" src="/static/images/cleopatra.png" alt="" width="57" height="57">
-                <h2>True Beauty</h2>
-                <p class="lead">Información sobre ti y tus preferencias en los servicios de True Beauty. Información
-                    personal y opciones para gestionarla.</p>
-            </div>
+            <form method="POST">
+                <div class="py-5 text-center">
+                    <img class="d-block mx-auto mb-4" src="/static/images/cleopatra.png" alt="" width="57" height="57">
+                    <h2>True Beauty</h2>
+                    {% if info_cuenta['tipo_usuario'] == 'gerente' or info_cuenta['tipo_usuario'] == 'recepcionista' %}
+                        <p class="lead">Información sobre {{ info_cuenta['nombre'] }} {{ info_cuenta['apellido_paterno'] }} {{ info_cuenta['apellido_materno'] }}.</p>
+                    {% else %}
+                         <p class="lead">Información sobre ti y tus preferencias en los servicios de True Beauty. Información
+                        personal y opciones para gestionarla.</p>
+                    {% endif %}
 
-            <div class="card">
-                <h5 class="card-header">Información personal</h5>
-                <div class="card-body">
-
-                    <div class="mb-3">
-                        <label for="" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="" disabled="disabled" placeholder="Karla">
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <label for="" class="form-label">Apellido paterno</label>
-                            <input type="text" class="form-control" disabled="disabled" placeholder="Lerma"
-                                aria-label="">
-                        </div>
-                        <div class="col">
-                            <label for="" class="form-label">Apellido materno</label>
-                            <input type="text" class="form-control" disabled="disabled" placeholder="Molina"
-                                aria-label="">
-                        </div>
-                    </div>
-
-                    <div class="mb-3" style="margin-top: 1%;">
-                        <label for="" class="form-label">Teléfono</label>
-                        <input type="tel" class="form-control" id="" disabled="disabled" placeholder="662 128 4028">
-                    </div>
-
-                    <hr class="my-4">
-                    <button class="w-15 btn btn-primary btn-lg" type="submit">Editar Información</button>
                 </div>
-            </div>
-
-
-            <div class="card" style="margin-top: 1.5%;">
-                <h5 class="card-header">Información de correo</h5>
-
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="" class="form-label">Correo</label>
-                        <input type="email" class="form-control" id="" disabled="disabled"
-                            placeholder="Karla@gmail.com">
+{% for message in get_flashed_messages() %}
+                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                {% endfor %}
+                <div class="card">
+                    <h5 class="card-header">Información personal</h5>
+                    <div class="card-body">
 
-                    <hr class="my-4">
+                        <div class="mb-3">
+                            <label for="" class="form-label">Nombre</label>
+                            <input name="nombre" type="text" class="form-control" id="" value="{{ info_cuenta['nombre'] }}">
+                        </div>
 
-                    <button class="w-15 btn btn-primary btn-lg" type="submit">Editar contraseña</button>
+                        <div class="row">
+                            <div class="col">
+                                <label for="" class="form-label">Apellido paterno</label>
+                                <input name="apellido1" type="text" class="form-control" value="{{ info_cuenta['apellido_paterno'] }}"
+                                       aria-label="">
+                            </div>
+                            <div class="col">
+                                <label for="" class="form-label">Apellido materno</label>
+                                <input name="apellido2" type="text" class="form-control" value="{{ info_cuenta['apellido_materno'] }}"
+                                       aria-label="">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="" class="form-label">Teléfono</label>
+                                <input name="telefono" type="tel" class="form-control" id="" value="{{ info_cuenta['telefono'] }}">
+                            </div>
+                            <div class="col">
+                                <label for="" class="form-label">Correo</label>
+                                <input name="correo" type="email" class="form-control" id=""
+                                       value="{{ info_cuenta['correo'] }}">
+                            </div>
+                        </div>
+
+                            {% if tipo_usuario == 'gerente' %}
+                            <div class="mb-3">
+                            <label for="tipo_usuario" class="form-label">Tipo de usuario:</label>
+                                <select class="form-select" name="tipo_usuario" id="tipo_usuario" >
+                                    <option value="gerente"{% if info_cuenta['tipo_usuario'] == 'gerente' %}selected{% endif %}>Gerente</option>
+                                    <option value="recepcionista"{% if info_cuenta['tipo_usuario'] == 'recepcionista' %}selected{% endif %}>Recepcionista</option>
+                                    <option value="estilista"{% if info_cuenta['tipo_usuario'] == 'estilista' %}selected{% endif %}>Estilista</option>
+                                    <option value="cliente"{% if info_cuenta['tipo_usuario'] == 'cliente' %}selected{% endif %}>Cliente</option>
+
+                                </select>
+
+                            </div>
+                            {% endif %}
+                            {% if tipo_usuario == 'recepcionista' %}
+                                <div class="mb-3">
+                            <label for="" class="form-label">Tipo de usuario:</label>
+                            <input name="tipo_usuario" type="text" class="form-control" id="" value="{{ info_cuenta['tipo_usuario'] }}" readonly>
+                        </div>
+                            {% endif %}
+
+
+                        <hr class="my-4">
+
+                        <div style="display: flex; justify-content: space-between">
+                        <button style="margin:1%" class="w-15 btn btn-primary btn-lg" type="submit">Guardar cambios</button>
+                            {% if id_consultante == info_cuenta['id_usuario'] %}
+                        <a style="margin:1%" class="w-15 btn btn-primary btn-lg" href="/cambiar_password">Cambiar contraseña</a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <hr class="my-4">
             </form>
+
+
+
         </main>
     </div>
 
@@ -91,11 +122,11 @@
 
 
     <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-        crossorigin="anonymous"></script>
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
 
     <script src="form-validation.js"></script>
-</body>
+    </body>
 
-</html>
+    </html>
 {% endblock %}

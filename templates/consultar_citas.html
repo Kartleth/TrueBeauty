@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Consultar cita{% endblock %}
+{% block title %}Consultar citas{% endblock %}
 {% block body %}
 <!doctype html>
 <html lang="en">
@@ -40,7 +40,7 @@
 
           <div class="btn-group" role="group" aria-label="Basic outlined example">
             <a type="button" class="btn btn-outline-primary" href="/informacion_cita/{{ cita['id_cita'] }}">Ver cita</a>
-            <a type="button" class="btn btn-outline-primary" href="/fecha_cita">Cambiar cita</a>
+            <a type="button" class="btn btn-outline-primary" href="/modificar_cita/{{ cita['id_cita'] }}">Cambiar cita</a>
           </div>
         </p>
 
@@ -49,7 +49,7 @@
         {% endfor %}
 
       <small class="d-block text-end mt-3">
-        <a href="/fecha_cita">Agendar cita nueva</a>
+        <a href="/escoger_cita/" class="btn btn-lg btn-primary">Agendar cita nueva</a>
       </small>
     </div>
   </main>

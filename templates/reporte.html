@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% set log = log %} {% block title %}Informe de ventas {% endblock %} {% block body %} {% include "navbar.html" %}
+{% extends "base.html" %} {% set log = log %} {% block title %}Informe de ventas {% endblock %} {% block body %} 
 
 
 <body onload="tabla('{{data}}')">
@@ -6,7 +6,7 @@
     <!-- Template de la gráfica conseguido de Bootstrap -->
 
     <div class="row">
-        {% with path=request.path %} {% include "menu.html" %} {% endwith %}
+        
         <div class="col-lg-8 container my-5">
             <div class="d-flex mx-2 justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="">Informe de Ventas</h1>
@@ -14,10 +14,10 @@
                     <button type="button" class="me-2 btn btn-sm btn-outline-secondary" onclick="download('Informe{{tipo}}{{date}}')">Exportar</button>
 
                     <div class="dropdown">
-                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                 {{tipo}}
                 </button>
-                        <ul class="dropdown-menu fade-down" aria-labelledby="dropdownMenuButton1">
+                        <ul class="dropdown-menu fade-down" aria-labelledby="dropdownMenuButton2">
                             <li><a class="dropdown-item" href="/informe_ventas/diaria">Diario</a></li>
                             <li><a class="dropdown-item" href="/informe_ventas/mensual">Mensual</a></li>
                             <li><a class="dropdown-item" href="/informe_ventas/rango">Rango</a></li>
@@ -64,21 +64,21 @@
                 <div class="col-3 ">
                     <div class="">
 
-                        <input type="number" placeholder="Subtotal" class="form-control" id="subtotal" required min="0.00" value={{total_atenciones_subtotal}} name="subtotal" readonly>
+                        <input type="number" placeholder="Subtotal" class="form-control" id="subtotal" required min="0.00" value={{total_citas_subtotal}} name="subtotal" readonly>
                         <label class="form-label" for="subtotal">Subtotal</label>
 
                     </div>
 
                     <div class="">
 
-                        <input type="number" placeholder="IVA" class="form-control " id="iva" min="0.00" value={{total_atenciones_iva}} required name="iva" readonly>
+                        <input type="number" placeholder="IVA" class="form-control " id="iva" min="0.00" value={{total_citas_iva}} required name="iva" readonly>
                         <label class="form-label" for="iva">IVA</label>
 
                     </div>
 
                     <div class="">
 
-                        <input type="number" placeholder="Total" class="form-control " id="total" required min="0.00" value={{total_atenciones_total}} name="total" readonly>
+                        <input type="number" placeholder="Total" class="form-control " id="total" required min="0.00" value={{total_citas_total}} name="total" readonly>
                         <label class="form-label" for="total">Total</label>
 
                     </div>
@@ -89,7 +89,7 @@
             </div>
             <div class="d-flex mx-2 justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
-                <h4 class="">Atenciones</h4>
+                <h4 class="">Citas</h4>
 
             </div>
             <div class="mx-2 table-responsive">
@@ -108,17 +108,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            {% for atencion in lista_atenciones %}
-                            <th scope="row">{{atencion['id']}}</th>
-                            <td>{{atencion['fecha']}}</td>
+                            {% for cita in lista_citas %}
+                            <th scope="row">{{cita['id_cita']}}</th>
+                            <td>{{cita['fecha']}}</td>
                             <td>
-                                {% for servicio in lista_servicios %} {% if servicio['atencion_id'] == atencion['id']%}
+                                {% for servicio in lista_servicios %} {% if servicio['id_cita'] == cita['id_cita']%}
                                 <p>{{servicio['nombre']}} - {{servicio['precio']}}</p>
                                 {% endif %} {% endfor %}
                             </td>                    
-                            <td>{{atencion['subtotal']}}</td>
-                            <td>{{atencion['iva']}}</td>
-                            <td>{{atencion['total']}}</td>
+                            <td>{{cita['monto']}}</td>
+                            <td>{{cita['iva']}}</td>
+                            <td>{{cita['total']}}</td>
 
 
                         </tr>
@@ -127,10 +127,10 @@
                             <th scope="col">Total</th>
                             <th scope="col"></th>
                             <th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col">{{total_atenciones_subtotal}}</th>
-                            <th scope="col">{{total_atenciones_iva}}</th>
-                            <th scope="col">{{total_atenciones_total}}</th>
+                            
+                            <th scope="col">{{total_citas_subtotal}}</th>
+                            <th scope="col">{{total_citas_iva}}</th>
+                            <th scope="col">{{total_citas_total}}</th>
                         </tr>
                     </tbody>
                 </table>
@@ -155,7 +155,7 @@
                             <td>{{usuario['nombre']}}</td>
                             <td>{{usuario['correo']}}</td>
                             <td>{{usuario['telefono']}}</td>
-                            <td><a href="/mod_usuario/{{usuario['username']}}" class="btn boton_pie">Modificar</a></td>
+                            <td><a href="/mod_usuario/{{usuario['correo']}}" class="btn boton_pie">Modificar</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -169,4 +169,5 @@
 
 
 </body>
+
 {% endblock %} {% block footer %} {% endblock %}

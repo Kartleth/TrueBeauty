@@ -40,15 +40,13 @@ diccionario_menu = {
     'cliente': {'/escoger_cita': 'Agendar cita',
                 '/consultar_citas': 'Mis citas',
                 '/consultar_servicios': 'Servicios disponibles',
-                '/info_cuenta': 'Mi cuenta',
-                '/logout': 'Cerrar sesión'
+
                 },
     'estilista': {
         '/consultar_citas': 'Mis citas',
         '/consultar_servicios': 'Servicios disponibles',
-        '/info_cuenta': 'Mi cuenta',
-        '/informe_estilista': 'Informe de mis citas',
-        '/logout': 'Cerrar sesión'
+
+
     },
     'gerente': {'/escoger_cita': 'Agendar cita',
                 '/consultar_citas': 'Ver citas',
@@ -57,9 +55,17 @@ diccionario_menu = {
                 '/consultar_clientes': 'Ver clientes',
                 '/consultar_usuarios': 'Ver usuarios',
                 '/registrar_usuario': 'Registrar usuario',
-                '/info_cuenta': 'Mi cuenta',
-                '/logout': 'Cerrar sesión'
+
                 },
+    'recepcionista': {'/escoger_cita': 'Agendar cita',
+                      '/consultar_citas': 'Ver citas',
+                      '/consultar_servicios': 'Servicios disponibles',
+
+                      '/consultar_clientes': 'Ver clientes',
+
+                      '/registrar_usuario': 'Registrar usuario',
+
+                      },
 }
 
 

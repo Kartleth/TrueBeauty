@@ -7,6 +7,7 @@ from funciones import *
 from random import randint
 from herramientas import *
 from datetime import datetime
+import json 
 
 app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
@@ -76,21 +77,22 @@ def signup():
             return render_template("signup.html")
         elif request.method == 'POST':
             correo = request.form['correo']
-            nombre = request.form['nombre']
-            apellido_paterno = request.form['apellido1']
-            apellido_materno = request.form['apellido2']
-            password = request.form['password1']
-            password2 = request.form['password2']
-            telefono = request.form['telefono']
-            tipo_usuario = 'cliente'
             if usuario_existe('correo', correo):
                 flash('El correo pertence a otro usuario existente')
                 return render_template("signup.html")
+            password = request.form['password1']
+            password2 = request.form['password2']
+
             if password != password2:
                 flash('Contraseñas no concuerdan, intente de nuevo')
                 return render_template("signup.html")
             else:
+                nombre = request.form['nombre']
+                apellido_paterno = request.form['apellido1']
+                apellido_materno = request.form['apellido2']
 
+                telefono = request.form['telefono']
+                tipo_usuario = 'cliente'
                 insertar_usuario(nombre, apellido_paterno, apellido_materno, correo, sha256_crypt.hash(password),
                                  telefono, tipo_usuario)
                 return redirect('/login')
@@ -222,7 +224,7 @@ def escoger_cita(id_cliente=None):
                             return render_template('escoger_cita.html',
                                                    lista_sucursales=get_lista_sucursales(),
                                                    lista_servicios=get_lista_servicios(),
-                                                   date_min=fecha['fecha_actual'],
+                                                   date_min=fecha['now'],#date_min=fecha['fecha_actual'],
                                                    date_max=fecha['fecha_fin'])
                     elif session['tipo'] == 'cliente':
                         return redirect('/escoger_cita')
@@ -232,7 +234,7 @@ def escoger_cita(id_cliente=None):
                         return render_template('escoger_cita.html',
                                                lista_sucursales=get_lista_sucursales(),
                                                lista_servicios=get_lista_servicios(),
-                                               date_min=fecha['fecha_actual'],
+                                               date_min=fecha['now'],#fecha['fecha_actual'],
                                                date_max=fecha['fecha_fin'])
                 elif request.method == 'POST':
                     id_sucursal = request.form['tipo_sucursal']
@@ -274,7 +276,8 @@ def hora_cita():
                     id_cliente = session['id_cliente']
                 else:
                     id_cliente = session['id_usuario']
-                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'], id_cliente)
+                lista_horas_disponibles = get_horas_disponibles(id_sucursal, fecha, session['lista_servicios_sel'],
+                                                                id_cliente)
 
                 if request.method == 'GET':
                     if len(lista_horas_disponibles) == 0:
@@ -374,9 +377,13 @@ def consultar_servicios():
 def consultar_citas():
     if 'logeado' in session.keys():
         if session['logeado']:
-            if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
+            if session['tipo'] == 'cliente':
                 citas = get_lista_info_citas_usuario('id_' + session['tipo'], session['id_usuario'])
                 return render_template("consultar_citas.html", lista_citas=citas)
+            elif session['tipo'] == 'estilista':
+                servicios_programados = get_citas_de_estilista(session['id_usuario'])
+                return render_template('consultar_citas_de_estilista.html', servicios_programados=servicios_programados)
+
             elif session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
                 lista_citas = get_lista_info_citas()
                 return render_template('consultar_citas_gerente_recepcionista.html', citas=lista_citas)
@@ -449,41 +456,27 @@ def informacion_cita(id_cita):
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
-                if request.method == 'GET':
-                    if session['tipo'] == 'cliente':
-                        if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
+                if not cita_existe(id_cita):
+                    return redirect('/consultar_citas')
+                fecha_actual = datetime.now()
+                if session['tipo'] == 'cliente':
+                    if cita_pertenece_a_usuario('id_' + str(session['tipo']), session['id_usuario'], id_cita):
 
-                            citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
-                            citas = agregar_fechas_en_formato_datetime(citas)
-                            info_cita = get_dicc_info_cita(id_cita)
-                            fecha_actual = datetime.now()
-                            return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
-                                                   fecha_actual=fecha_actual)
-
-                        else:
-                            return redirect('/escoger_cita')
-                    else:
+                        citas = get_citas_de_usuario('id_' + str(session['tipo']), session['id_usuario'])
+                        citas = agregar_fechas_en_formato_datetime(citas)
                         info_cita = get_dicc_info_cita(id_cita)
 
-                        return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita)
-                elif request.method == 'POST':
-                    id_cita = request.form['id_cita']
+                        return render_template("informacion_cita.html", lista_citas=citas, dicc_cita=info_cita,
+                                               fecha_actual=fecha_actual)
 
-                    return redirect('/modificar_cita/' + str(id_cita))
-                    # fecha = get_cur_datetime()
-                    # info_cita = get_dicc_info_cita(id_cita)
-                    #
-                    # return render_template('modificar_cita.html', info_cita=info_cita,
-                    #                        lista_sucursales=get_lista_sucursales(),
-                    #                        lista_servicios=get_lista_servicios(),
-                    #                        date_min=fecha['fecha_actual'],
-                    #                        date_max=fecha['fecha_fin'])
+                    else:
+                        return redirect('/consultar_citas')
                 else:
-                    return redirect('/')
+                    info_cita = get_dicc_info_cita(id_cita)
+
+                    return render_template("info_cita_gerente_recepcionista.html", dicc_cita=info_cita, fecha_actual=fecha_actual)
             else:
                 return redirect('/')
-
-
         else:
             return redirect('/')
     else:
@@ -495,7 +488,14 @@ def modificar_cita(id_cita):
     if 'logeado' in session.keys():
         if session['logeado']:
             if session['tipo'] != 'estilista':
+                if not cita_existe(id_cita):
+                    return redirect('/consultar_citas')
                 if request.method == 'GET':
+
+                    if cita_ya_paso(id_cita):
+                        flash('No puedes modificar citas que ya pasaron')
+                        return redirect('/informacion_cita/'+str(id_cita))
+
                     if session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
                         fecha = get_cur_datetime()
                         info_cita = get_dicc_info_cita(id_cita)
@@ -503,14 +503,35 @@ def modificar_cita(id_cita):
                         return render_template('modificar_cita.html', info_cita=info_cita,
                                                lista_sucursales=get_lista_sucursales(),
                                                lista_servicios=get_lista_servicios(),
-                                               date_min=fecha['fecha_actual'],
+                                               date_min=fecha['now'],#fecha['fecha_actual'],
                                                date_max=fecha['fecha_fin'])
-                    elif request.method == 'POST':
-                        return redirect('/')
                     else:
-                        return redirect('/')
+                        if cita_pertenece_a_usuario('id_cliente', session['id_usuario'], id_cita):
+                            fecha = get_cur_datetime()
+                            info_cita = get_dicc_info_cita(id_cita)
+                            info_cita['fecha'] = formatear_fecha_para_input(info_cita['fecha'])
+                            return render_template('modificar_cita.html', info_cita=info_cita,
+                                                   lista_sucursales=get_lista_sucursales(),
+                                                   lista_servicios=get_lista_servicios(),
+                                                   date_min=fecha['now'],#fecha['fecha_actual'],
+                                                   date_max=fecha['fecha_fin'])
+                        else:
+                            return redirect('/consultar_citas')
+
+                elif request.method == 'POST':
+
+                    session['lista_servicios_sel'] = obtener_servicios(request.form.to_dict())
+                    if len(session['lista_servicios_sel']) == 0:
+                        flash('Por favor, seleccione algún servicio para continuar')
+
+                        return redirect('modifcar_cita/' + str(id_cita))
+                    id_sucursal = request.form['tipo_sucursal']
+                    fecha = request.form['fecha']
+                    id_cliente = get_cliente_que_agendo_cita(id_cita)
+                    return redirect(url_for('modificar_hora_cita', id_sucursal=id_sucursal, fecha=fecha, id_cliente=id_cliente, id_cita=id_cita))
                 else:
                     return redirect('/')
+
             else:
                 return redirect('/')
 
@@ -520,6 +541,161 @@ def modificar_cita(id_cita):
         return redirect('/')
 
 
+@app.route('/modificar_hora_cita', methods=['GET', 'POST'])
+def modificar_hora_cita():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys():
+                id_sucursal = int(request.args['id_sucursal'])
+                fecha = request.args['fecha']
+                id_cliente = str(request.args['id_cliente'])
+                id_cita = str(request.args['id_cita'])
+                if id_sucursal == int(get_sucursal_de_cita(id_cita)):
+                    lista_horas_disponibles = get_horas_disponibles( str(id_sucursal), fecha, session['lista_servicios_sel'],id_cliente,id_cita)
+                else:
+                    lista_horas_disponibles = get_horas_disponibles(str(id_sucursal),fecha,session['lista_servicios_sel'],id_cliente)
+
+                if request.method == 'GET':
+                    if len(lista_horas_disponibles) == 0:
+                        flash(
+                            'No hay horas disponibles con esos requerimientos. Por favor, escoge otra fecha, otra sucursal u otros servicios.' + str(
+                                lista_horas_disponibles))
+
+                        return redirect('/modificar_cita/' + id_cita)
+
+                    else:
+                        return render_template("hora_cita.html", horas_disponibles=lista_horas_disponibles)
+                elif request.method == 'POST':
+                    hora = request.form['hora']
+
+                    return redirect(url_for('confirmar_cambios_cita', fecha=fecha, id_sucursal=id_sucursal, hora=hora, id_cliente=id_cliente,id_cita=id_cita))
+
+            else:
+                flash('Por favor, primero escoga la cita que quiere modificar')
+                return redirect('/consultar_citas')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+@app.route('/confirmar_cambios_cita', methods=['GET', 'POST'])
+def confirmar_cambios_cita():
+    if 'logeado' in session.keys():
+
+        if session['logeado']:
+            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys():
+                id_sucursal = request.args['id_sucursal']
+                fecha = request.args['fecha']
+                hora = request.args['hora']
+                id_cliente = str(request.args['id_cliente'])
+                id_cita = str(request.args['id_cita'])
+
+                if request.method == 'GET':
+                    dicc_info_cita = crear_dicc_info_cita(id_sucursal, fecha, hora, session['lista_servicios_sel'])
+                    dicc_info_cita['iva'] = round(dicc_info_cita['monto'] * 0.16, 2)
+                    dicc_info_cita['total'] = round(dicc_info_cita['iva'] + dicc_info_cita['monto'], 2)
+
+                    dicc_info_cliente = get_info_cliente(id_cliente)
+                    return render_template('confirmar_cita.html', info_cita=dicc_info_cita,
+                                           info_cliente=dicc_info_cliente)
+
+                elif request.method == 'POST':
+                    fecha = request.form['fecha']
+                    id_sucursal = str(request.form['id_sucursal'])
+                    hora = request.form['hora']
+
+                    monto = request.form['monto']
+
+                    delete_cita(id_cita)
+                    guardar_cita(fecha, hora, id_cliente, id_sucursal, monto, session['lista_servicios_sel'])
+
+                    session.pop('lista_servicios_sel')
+                    return redirect('/consultar_citas')
+            else:
+                return redirect('/consultar_citas')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+
+
+
+@app.route('/info_cuenta/', methods=['GET', 'POST'])
+@app.route('/info_cuenta/<int:id_usuario>', methods=['GET', 'POST'])
+def info_cuenta(id_usuario=None):
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if request.method == 'GET':
+                if id_usuario is None:
+                    id_usuario = session['id_usuario']
+                if session['tipo'] == 'estilista' or session['tipo'] == 'cliente':
+                    dicc_usuario = get_info_usuario(session['id_usuario'])
+                    print(str(dicc_usuario))
+                    return render_template('informacion_usuario.html', info_cuenta=dicc_usuario,
+                                           tipo_usuario=session['tipo'], id_consultante=session['id_usuario'])
+                else:
+                    dicc_usuario = get_info_usuario(id_usuario)
+                    return render_template('informacion_usuario.html', info_cuenta=dicc_usuario,
+                                           tipo_usuario=session['tipo'], id_consultante=session['id_usuario'])
+            elif request.method == 'POST':
+                if id_usuario is None:
+                    id_usuario = session['id_usuario']
+                correo_a_modificar = request.form['correo']
+                correo_anterior = get_correo_de_usuario(id_usuario)
+                if correo_anterior != correo_a_modificar:
+                    if usuario_existe('correo', correo_a_modificar):
+                        flash('El correo "' + correo_a_modificar + '" ya esta registrado por otro usuario')
+                        return redirect('/info_cuenta/' + str(id_usuario))
+
+                nombre = request.form['nombre']
+                apellido1 = request.form['apellido1']
+                apellido2 = request.form['apellido2']
+                telefono = request.form['telefono']
+                if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                    tipo_usuario = request.form['tipo_usuario']
+                else:
+                    tipo_usuario = session['tipo']
+
+                update_usuario(id_usuario, nombre, apellido1, apellido2, correo_a_modificar, telefono, tipo_usuario)
+                return redirect('/consultar_clientes')
+
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+@app.route('/eliminar_cita/<id_cita>', methods = ['GET','POST'])
+def eliminar_cita(id_cita):
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] != 'estilista':
+                if not cita_existe(id_cita):
+                    return redirect('/consultar_citas')
+                if session['tipo'] == 'cliente' and not cita_pertenece_a_usuario('id_cliente',session['id_usuario'], id_cita):
+                    abort(403)
+                if cita_ya_paso(id_cita):
+                    flash('No puedes eliminar citas pasadas')
+                    return redirect('/información_cita/'+str(id_cita))
+
+                if request.method == 'GET':
+                    info_cita = get_dicc_info_cita(id_cita)
+                    return render_template('eliminar_cita.html',dicc_cita=info_cita)
+                elif request.method == 'POST':
+                    delete_cita(id_cita)
+                    return redirect('/consultar_citas')
+            else:
+                abort(403)
+        else:
+            abort(403)
+    else:
+        abort(403)
+
+
+
 @app.route('/consultar_clientes')
 def consultar_clientes():
     if 'logeado' in session.keys():
@@ -527,6 +703,85 @@ def consultar_clientes():
             if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
                 clientes = get_lista_clientes()
                 return render_template('consultar_clientes.html', lista_clientes=clientes)
+            else:
+                return redirect('/')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+@app.route('/consultar_usuarios')
+def consultar_usuarios():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente':
+                usuarios = get_lista_usuarios()
+                return render_template('consultar_usuarios.html', lista_usuarios=usuarios)
+            else:
+                return redirect('/')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+@app.route('/cambiar_password', methods=['GET', 'POST'])
+def cambiar_password():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if request.method == 'GET':
+                return render_template('cambiar_password.html')
+            elif request.method == 'POST':
+                password = request.form['old_password']
+                print('ANTIGUA CONTRASEÑA --> ',password)
+                usr = get_usuario('id_usuario', session['id_usuario'])
+                if sha256_crypt.verify(password, usr['contrasenia']):
+                    new_password1 = request.form['new_password1']
+                    new_password2 = request.form['new_password2']
+                    if new_password1 != new_password2:
+                        flash('Contraseñas no concuerdan, intente de nuevo')
+                        return redirect('/cambiar_password')
+                    else:
+                        print('Contraseña a cambiar -->',password)
+                        update_password(session['id_usuario'] ,sha256_crypt.hash(new_password1))
+                        flash('Contraseña cambiada exitosamente')
+                        return redirect('/info_cuenta')
+                else:
+
+                    flash('Contraseña incorrecta')
+                    return redirect('/cambiar_password')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
+@app.route('/registrar_usuario', methods=['GET', 'POST'])
+def registrar_usuario():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                if request.method == 'GET':
+                    return render_template('registrar_usuario.html', tipo_usuario=session['tipo'])
+                elif request.method == 'POST':
+                    correo = request.form['correo']
+                    if usuario_existe('correo', correo):
+                        flash('El correo "' + correo + '" ya esta registrado por otro usuario')
+                        return redirect(
+                            'registrar_usuario')
+
+                    nombre = request.form['nombre']
+                    apellido1 = request.form['apellido1']
+                    apellido2 = request.form['apellido2']
+                    telefono = request.form['telefono']
+
+                    tipo_usuario = request.form['tipo_usuario']
+                    password = generar_password()
+
+                    insertar_usuario(nombre, apellido1, apellido2, correo, sha256_crypt.hash(password),
+                                     telefono, tipo_usuario)
+                    mandar_correo_de_password('petvetreal@gmail.com', correo, 'aozykokpzeaqcnzv',password)
+                    return redirect('/')
             else:
                 return redirect('/')
         else:
@@ -546,63 +801,64 @@ def reparacion():
 
 
 # Informes se va a dividir en diaria, mensual y en rango.
-""" 
+
 @app.route("/informe_ventas/diaria", methods=['GET', 'POST'])
-def informe_ventas_diario():
- Se asegura que la cuenta tenga permisos de administrador.
+def informe_ventas_diaria():
+    ''' Se asegura que la cuenta tenga permisos de administrador.
     Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas.
     Si se selecciona alguna fecha en especifico la información cambia dependiendo de la misma.
-    if 'logged_in' in session.keys():
-            if session['logeado']:
-                if session['type'] == 'gerente':
-                    if request.method == 'GET' :
-                        horas = []
-                        fecha = get_cur_datetime()
-                        desde = fecha['now']
-                        hasta = fecha['now']
-                        citas = get_lista_citas_fechas(desde, hasta) #atenciones/citas
-                        usuarios = get_lista_usuarios_fechas(desde, hasta) #crear usuarios
-                        servicios = get_lista_serv_de_atenciones()  #
-                        suma = get_suma_atenciones(desde, hasta)
-                        total_atenciones_subtotal = suma['SUM(subtotal)']
-                        total_atenciones_iva = suma['SUM(iva)']
-                        total_atenciones_total = suma['SUM(total)']
-                        
-                        data_dict = get_datos_grafica_diaria(desde)
+    '''
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                if request.method == 'GET' :
+                    horas = []
+                    fecha = get_cur_datetime()
+                    desde = fecha['now']
+                    hasta = fecha['now']
+                    citas = get_lista_citas_fechas(desde, hasta) 
+                    usuarios = get_lista_usuarios_fechas(desde, hasta) 
+                    servicios = get_lista_serv_de_citas()  
+                    suma = get_suma_citas(desde, hasta)
+                    total_citas_subtotal = suma['SUM(monto)']
+                    total_citas_iva = suma['SUM(iva)']
+                    total_citas_total = suma['SUM(total)']
+                    
+                    data_dict = get_datos_grafica_diaria(desde)
 
-                        return render_template("reporte.html", lista_usuarios=usuarios,
-                                            total_atenciones_subtotal=total_atenciones_subtotal,
-                                            total_atenciones_iva=total_atenciones_iva,
-                                            total_atenciones_total=total_atenciones_total,
-                                            lista_atenciones=citas, lista_servicios=servicios,
-                                            tipo='Diario', date=fecha['now'], data=json.dumps(data_dict))
-    
-                    if request.method == 'POST':
-                        fecha = request.form['fecha']
-                        citas = get_lista_citas_fechas(fecha, fecha)
-                        usuarios = get_lista_usuarios_fechas(fecha, fecha)
-                        servicios = get_lista_serv_de_atenciones()       
-                        suma = get_suma_atenciones(fecha, fecha)
-                        total_atenciones_subtotal = suma['SUM(subtotal)']
-                        total_atenciones_iva = suma['SUM(iva)']
-                        total_atenciones_total = suma['SUM(total)']
-                        print(fecha, fecha, suma)
+                    return render_template("reporte.html", lista_usuarios=usuarios,
+                                        total_citas_subtotal=total_citas_subtotal,
+                                        total_citas_iva=total_citas_iva,
+                                        total_citas_total=total_citas_total,
+                                        lista_citas=citas, lista_servicios=servicios,
+                                        tipo='Diario', date=fecha['now'], data=json.dumps(data_dict))
 
-                        data_dict = get_datos_grafica_diaria(fecha)
-                        return render_template("reporte.html", lista_usuarios=usuarios,
-                                            total_atenciones_subtotal=total_atenciones_subtotal,
-                                            total_atenciones_iva=total_atenciones_iva,
-                                            total_atenciones_total=total_atenciones_total,
-                                            lista_atenciones=citas, lista_servicios=servicios,
-                                            tipo='Diario',
-                                                date=fecha, data=json.dumps(data_dict))
-                else:
-                    abort(403)
+                if request.method == 'POST':             
+                    fecha = request.form['fecha']                   
+                    citas = get_lista_citas_fechas(fecha, fecha) 
+                    usuarios = get_lista_usuarios_fechas(fecha, fecha) 
+                    servicios = get_lista_serv_de_citas()  
+                    suma = get_suma_citas(fecha, fecha)
+                    total_citas_subtotal = suma['SUM(monto)']
+                    total_citas_iva = suma['SUM(iva)']
+                    total_citas_total = suma['SUM(total)']
+                    
+                    data_dict = get_datos_grafica_diaria(fecha)
+
+                    return render_template("reporte.html", lista_usuarios=usuarios,
+                                        total_citas_subtotal=total_citas_subtotal,
+                                        total_citas_iva=total_citas_iva,
+                                        total_citas_total=total_citas_total,
+                                        lista_citas=citas, lista_servicios=servicios,
+                                        tipo='Diario', date=fecha, data=json.dumps(data_dict))
             else:
                 abort(403)
+        else:
+            abort(403)
+    else:
+        abort(403)
         
 
-"""
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

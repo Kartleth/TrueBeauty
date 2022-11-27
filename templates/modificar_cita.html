@@ -67,7 +67,7 @@
                 <h4>{{ get_flashed_messages()[0] }}</h4>
               <label for="comboListServicios" class="form-label">Tipo de servicio</label>
 
-              <select id="comboListServicios" onchange="mostrarPrecio()" class="form-select" name="tipo_servicio"
+              <select id="comboListServicios" onload="checarSiComboListEstaVacio()" onchange="mostrarPrecio()" class="form-select" name="tipo_servicio"
                 required>
 
 
@@ -249,6 +249,7 @@
 
     }
 
+
     let checarSiComboListEstaVacio= ()=>{
         let numServicios = document.getElementById('comboListServicios').childElementCount;
         /*Desactivar si ya no tiene servicios o activar si tiene alguno*/
@@ -260,6 +261,7 @@
 
 
     }
+    window.addEventListener("load",checarSiComboListEstaVacio());
   </script>
 </body>
 

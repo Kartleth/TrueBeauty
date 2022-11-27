@@ -10,11 +10,11 @@ CREATE TABLE cita(
     hora_fin time,
     id_cliente int unsigned NOT NULL,
     id_sucursal int unsigned NOT NULL,
-    monto decimal NOT NULL,
+    monto decimal(10,2) NOT NULL,
     iva decimal(10,2) unsigned NOT null,
     total decimal(10,2) unsigned NOT null,
     PRIMARY KEY (id_cita)
-) ENGINE=MyISAM default char set=latin1;
+) ENGINE=InnoDB default char set=latin1;
 
 
 CREATE TABLE servicio(
@@ -24,7 +24,7 @@ CREATE TABLE servicio(
     precio decimal(10,2) NOT NULL,
     tiempo decimal(10,2) NOT null,
     PRIMARY KEY (id_servicio)
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE usuario (
     id_usuario int unsigned AUTO_INCREMENT not null,
@@ -34,10 +34,11 @@ CREATE TABLE usuario (
     correo varchar(50) NOT NULL,
     contrasenia varchar(200) NOT NULL,
     telefono varchar(15),
+    fecha_creacion DATE NOT NULL,
     tipo_usuario ENUM('gerente','recepcionista','estilista','cliente') NOT NULL,
     PRIMARY KEY (id_usuario)
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE empleado(
     id_empleado int unsigned AUTO_INCREMENT not null,
@@ -46,7 +47,7 @@ CREATE TABLE empleado(
     turno ENUM('matutino','vespertino','tiempo completo'),
     PRIMARY KEY(id_empleado)
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE sucursal(
     id_sucursal int unsigned AUTO_INCREMENT not null,
@@ -57,13 +58,13 @@ CREATE TABLE sucursal(
     asientos int unsigned,
     PRIMARY KEY(id_sucursal)
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE estilista_servicio(
     id_estilista int unsigned not null,
     id_servicio int unsigned not null
 
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 CREATE TABLE cita_servicio(
     id_cita int unsigned not null,
@@ -71,7 +72,7 @@ CREATE TABLE cita_servicio(
     id_estilista int unsigned not null,
     hora_inicio time not null,
     hora_fin time not null
-)ENGINE=MyISAM default char set=latin1;
+)ENGINE=InnoDB default char set=latin1;
 
 
 /* CREACION DE LLAVES FORANEAS*/
@@ -88,26 +89,26 @@ ALTER TABLE sucursal ADD FOREIGN KEY(id_gerente) REFERENCES usuario(id_usuario);
 ALTER TABLE estilista_servicio ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
 ALTER TABLE estilista_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
 
-ALTER TABLE cita_servicio ADD FOREIGN KEY(id_cita) REFERENCES cita(id_cita);
+ALTER TABLE cita_servicio ADD FOREIGN KEY(id_cita) REFERENCES cita(id_cita) ON DELETE CASCADE;
 ALTER TABLE cita_servicio ADD FOREIGN KEY(id_servicio) REFERENCES servicio(id_servicio);
 ALTER TABLE cita_servicio ADD FOREIGN KEY(id_estilista) REFERENCES usuario(id_usuario);
 
 /*INSERTS */
 use truebeauty;
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','gerente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761','recepcionista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('David','Nuñez','Gurrola','david@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','21354684565','estilista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario)
-VALUES('Karla','Lerma','Molina','karla@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','12145789632','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Joan','Kniffin','Ortiz','joan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','8882564521','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Juan','Perez','Lopez','juan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Jorge','Lopez','Quintana','jorge@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689','cliente');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Ilse','Espinoza','Flores','ilse@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623','estilista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Armando','Gonzales','Martinez','armando@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689','estilista');
-INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, tipo_usuario) VALUES ('Jared','Barojas','Alcantar','jared@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','3325689854','estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion,tipo_usuario)
+VALUES('Admin','Admin','Admin','truebeauty@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761',CURDATE(),'gerente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion, tipo_usuario)
+VALUES('Luis Ernesto','Hernández','López','a220213915@unison.mx','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6621935761',CURDATE(),'recepcionista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion, tipo_usuario)
+VALUES('David','Nuñez','Gurrola','david@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','21354684565',CURDATE(),'estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono,fecha_creacion, tipo_usuario)
+VALUES('Karla','Lerma','Molina','karla@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','12145789632',CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Joan','Kniffin','Ortiz','joan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','8882564521', CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Juan','Perez','Lopez','juan@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623', CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Jorge','Lopez','Quintana','jorge@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689', CURDATE(),'cliente');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Ilse','Espinoza','Flores','ilse@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6632545623', CURDATE(),'estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Armando','Gonzales','Martinez','armando@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','6634525689', CURDATE(),'estilista');
+INSERT INTO usuario (nombre, apellido_paterno, apellido_materno, correo, contrasenia, telefono, fecha_creacion, tipo_usuario) VALUES ('Jared','Barojas','Alcantar','jared@gmail.com','$5$rounds=535000$656MRtarbYnV5bBM$1kwFoigovLgyRQz/Q/UL0wn61L34fFOhHPkKiZiig62','3325689854', CURDATE(),'estilista');
 
 
 INSERT INTO sucursal(nombre,direccion, telefono, id_gerente, asientos) values ('Villa de seris','Colonia villa de seris, calle isabel #18','6212254887',2,4);
@@ -120,9 +121,9 @@ INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Corte de cabel
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Manicura','Se le arregla las uñas',999.99,30);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Pedicura','Se le arregla las uñas de las patas',999.99,30);
 
-INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto,iva,total) VALUES ('2023-10-08','8:30','9:00',4,1,1000,160,1160);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-12-10','10:00','12:00',4,1,12021,1923.36,13944.36);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-12-10','14:00','16:00',4,1,3000,480,3480);
+INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-11-27','13:00','14:30',4,1,3799.98,608,4407.98);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-11-28','08:00','09:40',7,1,2799.97,448,3247.97);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-11-29','08:00','09:00',7,1,1999.98,320,2319.98);
 
 INSERT INTO empleado(id_usuario,id_sucursal,turno) values(3,1,'tiempo completo');
 INSERT INTO empleado(id_usuario,id_sucursal,turno) values(8,1,'tiempo completo');
@@ -158,10 +159,14 @@ INSERT INTO estilista_servicio VALUES (10,5);
 INSERT INTO estilista_servicio VALUES (10,6);
 
 
-INSERT INTO cita_servicio VALUES (1,1,3,'10:00','10:45');
-INSERT INTO cita_servicio VALUES (1,2,3,'10:45','11:30');
-INSERT INTO cita_servicio VALUES (1,5,3,'12:00','12:30');
-INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
+INSERT INTO cita_servicio VALUES (1,1,3,'13:00','13:45');
+INSERT INTO cita_servicio VALUES (1,2,3,'13:45','14:30');
+INSERT INTO cita_servicio VALUES (2,3,3,'8:00','8:45');
+INSERT INTO cita_servicio VALUES (2,4,3,'8:45','9:10');
+INSERT INTO cita_servicio VALUES (2,5,3,'9:10','9:40');
+INSERT INTO cita_servicio VALUES (3,5,3,'8:00','8:30');
+INSERT INTO cita_servicio VALUES (3,6,3,'8:30','9:00');
+
 
 -- # SELECT * FROM usuario;
 -- # /*Estilistas que trabajan en esa sucursal y ofrecen ese servicio */
@@ -198,22 +203,23 @@ INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
 -- WHERE CS.id_estilista=U.id_usuario
 --   AND CS.id_servicio=S.id_servicio
 --   AND CS.id_cita=1;
-SELECT count(*) as num_asientos_ocupados FROM cita_servicio CS, cita C WHERE CS.id_cita=C.id_cita AND C.fecha='13/11/2022' AND C.id_sucursal=1 AND CS.hora_inicio > '10:30' AND CS.hora_fin < '10:30';
-SELECT DISTINCT U.id_usuario FROM usuario U, empleado E, estilista_servicio ES, cita_servicio CS, cita C
-                       WHERE U.tipo_usuario='estilista'
-                          AND E.id_usuario=U.id_usuario
-                          AND E.id_sucursal=1
-                          AND ES.id_estilista=E.id_usuario
-                          AND ES.id_servicio=1
-                          AND CS.id_estilista=U.id_usuario
-                          AND C.id_cita=CS.id_cita
-                          AND NOT( C.fecha='2022-12-01'
-                          AND CS.hora_inicio<'08:00'
-                          AND CS.hora_fin>'08:00') ;
-SELECT CS.id_estilista FROM cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita
-                          AND NOT( C.fecha='2022-12-01'
-                          AND CS.hora_inicio<'08:00'
-                          AND CS.hora_fin>'08:00') ;
+-- SELECT count(*) as num_asientos_ocupados FROM cita_servicio CS, cita C WHERE CS.id_cita=C.id_cita AND C.fecha='13/11/2022' AND C.id_sucursal=1 AND CS.hora_inicio > '10:30' AND CS.hora_fin < '10:30';
+-- SELECT DISTINCT U.id_usuario FROM usuario U, empleado E, estilista_servicio ES, cita_servicio CS, cita C
+--                        WHERE U.tipo_usuario='estilista'
+--                           AND E.id_usuario=U.id_usuario
+--                           AND E.id_sucursal=1
+--                           AND ES.id_estilista=E.id_usuario
+--                           AND ES.id_servicio=1
+--                           AND CS.id_estilista=U.id_usuario
+--                           AND C.id_cita=CS.id_cita
+--                           AND NOT( C.fecha='2022-12-01'
+--                           AND CS.hora_inicio<'08:00'
+--                           AND CS.hora_fin>'08:00') ;
+-- SELECT CS.id_estilista FROM cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita
+--                           AND NOT( C.fecha='2022-12-01'
+--                           AND CS.hora_inicio<'08:00'
+--                           AND CS.hora_fin>'08:00') ;
+--
+--
+-- SELECT count(id_cita) FROM cita C WHERE C.id_sucursal=1 AND C.fecha='2022-12-01' AND C.hora<='8:00' AND C.hora_fin>'8:00'
 
-
-SELECT count(id_cita) FROM cita C WHERE C.id_sucursal=1 AND C.fecha='2022-12-01' AND C.hora<='8:00' AND C.hora_fin>'8:00'

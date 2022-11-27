@@ -15,7 +15,7 @@
     <div class="container">
         
         <div class="title">Registrarse en TrueBeauty</div>
-        <form action="#">
+        <form method="POST">
             <div class="user-details">
 
                 <div class="input-box-1">
@@ -24,33 +24,33 @@
                 </div>
 
                 <div class="input-box">
-                    <span class="details">Apellido materno</span>
+                    <span class="details">Apellido paterno</span>
                     <input type="text" class="" placeholder="Ingresa tu apellido paterno" required>
                 </div>
 
                 <div class="input-box">
-                    <span class="details">Apellido paterno</span>
+                    <span class="details">Apellido materno</span>
                     <input type="text" class="" placeholder="Ingresa tu apellido materno" required>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Email</span>
-                    <input type="email" class="" placeholder="Ingresa tu Email" required>
+                    <input type="email" class="" name="correo" placeholder="Ingresa tu Email" required>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Número de teléfono</span>
-                    <input type="tel" class="" placeholder="Ingresa tu número" required>
+                    <input type="tel" class="" name="telefono" placeholder="Ingresa tu número" required>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Contraseña</span>
-                    <input type="password" class="" placeholder="Ingresa tu contraseña" required>
+                    <input type="password" class="" name="password1" placeholder="Ingresa tu contraseña" required>
                 </div>
 
                 <div class="input-box">
                     <span class="details">Confirmar contraseña</span>
-                    <input type="password" class="" placeholder="Repetir contraseña" required>
+                    <input type="password" class="" name="password2" placeholder="Repetir contraseña" required>
                 </div>
             </div>
 
