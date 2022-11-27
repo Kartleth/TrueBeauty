@@ -275,7 +275,7 @@ def get_servicio(id_servicio):
 
 def get_lista_info_servicios(id_cita):
     conexion = obtener_conexion()
-    query = "SELECT cs.id_servicio, S.nombre AS nombre_servicio, S.descripcion ,S.precio ,U.nombre AS nombre_estilista, U.apellido_paterno as apellido1_estilista  FROM cita_servicio CS, usuario U, servicio S WHERE CS.id_estilista=U.id_usuario AND CS.id_servicio=S.id_servicio AND CS.id_cita=" + id_cita
+    query = "SELECT CS.id_servicio, S.nombre AS nombre_servicio, S.descripcion ,S.precio ,U.nombre AS nombre_estilista, U.apellido_paterno as apellido1_estilista  FROM cita_servicio CS, usuario U, servicio S WHERE CS.id_estilista=U.id_usuario AND CS.id_servicio=S.id_servicio AND CS.id_cita=" + id_cita
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
