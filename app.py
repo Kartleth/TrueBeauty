@@ -721,6 +721,36 @@ def consultar_usuarios():
         return redirect('/')
 
 
+@app.route('/cambiar_password', methods=['GET', 'POST'])
+def cambiar_password():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if request.method == 'GET':
+                return render_template('cambiar_password.html')
+            elif request.method == 'POST':
+                password = request.form['old_password']
+                print('ANTIGUA CONTRASEÑA --> ',password)
+                usr = get_usuario('id_usuario', session['id_usuario'])
+                if sha256_crypt.verify(password, usr['contrasenia']):
+                    new_password1 = request.form['new_password1']
+                    new_password2 = request.form['new_password2']
+                    if new_password1 != new_password2:
+                        flash('Contraseñas no concuerdan, intente de nuevo')
+                        return redirect('/cambiar_password')
+                    else:
+                        print('Contraseña a cambiar -->',password)
+                        update_password(session['id_usuario'] ,sha256_crypt.hash(new_password1))
+                        flash('Contraseña cambiada exitosamente')
+                        return redirect('/info_cuenta')
+                else:
+
+                    flash('Contraseña incorrecta')
+                    return redirect('/cambiar_password')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
 
 @app.route('/informacion_usuario')
 def informacion_usuario():

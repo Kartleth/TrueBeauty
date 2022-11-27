@@ -40,6 +40,11 @@ def mandar_correo_codigo(sender, receiver, password, codigo):
         # Close connection to server
 
 
+# def mandar_correo_de_password():
+
+
+
+
 def obtener_servicios(dicc_form: dict) -> list:
     lista_id_servicios = []
     for llave in dicc_form.keys():

@@ -597,6 +597,14 @@ def get_lista_usuarios():
     conexion.close()
     return lista
 
+def update_password(id_usuario,password):
+    conexion = obtener_conexion()
+    query = "UPDATE usuario SET contrasenia= %s WHERE id_usuario = %s"
+    with conexion.cursor() as cursor:
+        cursor.execute(query, (password, id_usuario))
+    conexion.commit()
+    conexion.close()
+
 
 if __name__ == '__main__':
     print('hola')

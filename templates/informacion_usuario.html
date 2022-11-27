@@ -31,7 +31,12 @@
                     {% endif %}
 
                 </div>
-
+{% for message in get_flashed_messages() %}
+                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
                 <div class="card">
                     <h5 class="card-header">Información personal</h5>
                     <div class="card-body">
@@ -88,11 +93,11 @@
 
 
                         <hr class="my-4">
-                    <h4>{{ get_flashed_messages()[0] }}</h4>
+
                         <div style="display: flex; justify-content: space-between">
                         <button style="margin:1%" class="w-15 btn btn-primary btn-lg" type="submit">Guardar cambios</button>
                             {% if id_consultante == info_cuenta['id_usuario'] %}
-                        <button style="margin:1%" class="w-15 btn btn-primary btn-lg" type="submit">Cambiar contraseña</button>
+                        <a style="margin:1%" class="w-15 btn btn-primary btn-lg" href="/cambiar_password">Cambiar contraseña</a>
                             {% endif %}
                         </div>
                     </div>

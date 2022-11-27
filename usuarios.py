@@ -43,7 +43,7 @@ def get_usuario(column: str, valor: str):
 
 def usuario_existe(column: str, valor: str):
     conexion = obtener_conexion()
-    query = "SELECT * FROM usuario WHERE " + column + "=%s"
+    query = "SELECT id_usuario FROM usuario WHERE " + column + "=%s"
     with conexion.cursor() as cursor:
         cursor.execute(query, (valor))
         if cursor.fetchone() is None:
