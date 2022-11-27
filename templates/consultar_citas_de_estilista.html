@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Consultar citas{% endblock %}
+{% block body %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Custom styles for this template -->
+    <link href="/static/css/consultar_cita.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <main class="container">
+        <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+            <img class="me-3" src="/static/images/consultar_cita.png" alt="" width="48" height="48">
+            <div class="lh-1">
+                <h1 class="h6 mb-0 text-white lh-1">Consulta las horas en que ofrecerás un servicio:</h1>
+                <small>¡Bienvenido a la sección de servicios!</small>
+            </div>
+        </div>
+
+
+        <div class="my-3 p-3 bg-body rounded shadow-sm">
+            <h6 class="border-bottom pb-2 mb-0">Servicios programados</h6>
+
+
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Sucursal</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora de inicio</th>
+                        <th scope="col">Hora de termino</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                {% for cita in servicios_programados %}
+                     <tr>
+                        <th scope="row">{{ cita['nombre_sucursal'] }}</th>
+                        <td>{{ cita['nombre_servicio'] }}</td>
+                        <td>{{ cita['fecha'] }}</td>
+                        <td>{{ cita['hora_inicio'] }} horas</td>
+                        <td>{{ cita['hora_fin'] }} horas</td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% if tipo_usuario =='gerente' %}
+            <small class="d-block text-end mt-3">
+                <a href="/consultar_servicios" class="btn btn-primary btn-sm">Información de servicios</a>
+            </small>
+        {% endif %}
+        </div>
+
+
+    </main>
+
+    <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+
+    <script src="offcanvas.js"></script>
+</body>
+
+</html>
+{% endblock %}

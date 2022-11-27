@@ -121,9 +121,9 @@ INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Corte de cabel
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Manicura','Se le arregla las uñas',999.99,30);
 INSERT INTO servicio(nombre,descripcion, precio, tiempo) VALUES ('Pedicura','Se le arregla las uñas de las patas',999.99,30);
 
-INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto,iva,total) VALUES ('2023-10-08','8:30','9:00',4,1,1000,160,1160);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-12-10','10:00','12:00',4,1,12021,1923.36,13944.36);
-INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-12-10','14:00','16:00',4,1,3000,480,3480);
+INSERT INTO cita(fecha, hora, hora_fin, id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-11-27','13:00','14:30',4,1,3799.98,608,4407.98);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-11-28','08:00','09:40',7,1,2799.97,448,3247.97);
+INSERT INTO cita(fecha, hora,hora_fin,  id_cliente, id_sucursal,monto,iva,total) VALUES ('2022-11-29','08:00','09:00',7,1,1999.98,320,2319.98);
 
 INSERT INTO empleado(id_usuario,id_sucursal,turno) values(3,1,'tiempo completo');
 INSERT INTO empleado(id_usuario,id_sucursal,turno) values(8,1,'tiempo completo');
@@ -159,10 +159,14 @@ INSERT INTO estilista_servicio VALUES (10,5);
 INSERT INTO estilista_servicio VALUES (10,6);
 
 
-INSERT INTO cita_servicio VALUES (1,1,3,'10:00','10:45');
-INSERT INTO cita_servicio VALUES (1,2,3,'10:45','11:30');
-INSERT INTO cita_servicio VALUES (1,5,3,'12:00','12:30');
-INSERT INTO cita_servicio VALUES (1,6,3,'12:30','13:00');
+INSERT INTO cita_servicio VALUES (1,1,3,'13:00','13:45');
+INSERT INTO cita_servicio VALUES (1,2,3,'13:45','14:30');
+INSERT INTO cita_servicio VALUES (2,3,3,'8:00','8:45');
+INSERT INTO cita_servicio VALUES (2,4,3,'8:45','9:10');
+INSERT INTO cita_servicio VALUES (2,5,3,'9:10','9:40');
+INSERT INTO cita_servicio VALUES (3,5,3,'8:00','8:30');
+INSERT INTO cita_servicio VALUES (3,6,3,'8:30','9:00');
+
 
 -- # SELECT * FROM usuario;
 -- # /*Estilistas que trabajan en esa sucursal y ofrecen ese servicio */

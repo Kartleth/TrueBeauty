@@ -617,5 +617,16 @@ def update_password(id_usuario, password):
     conexion.close()
 
 
+def get_citas_de_estilista(id_estilista):
+    conexion = obtener_conexion()
+    query = "SELECT DATE_FORMAT(C.fecha, '%d/%m/%Y') as fecha, CS.hora_inicio, CS.hora_fin, SE.nombre as nombre_servicio, SU.nombre as nombre_sucursal FROM cita C, cita_servicio CS, sucursal SU, servicio SE WHERE CS.id_servicio=SE.id_servicio AND C.id_cita=CS.id_cita AND C.id_sucursal=SU.id_sucursal AND CS.id_estilista="+str(id_estilista)+" ORDER BY fecha"
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(query)
+        lista = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return lista
+
 if __name__ == '__main__':
     print('hola')

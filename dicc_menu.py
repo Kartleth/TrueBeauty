@@ -46,7 +46,6 @@ diccionario_menu = {
         '/consultar_citas': 'Mis citas',
         '/consultar_servicios': 'Servicios disponibles',
 
-        '/informe_estilista': 'Informe de mis citas',
 
     },
     'gerente': {'/escoger_cita': 'Agendar cita',

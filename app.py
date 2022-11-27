@@ -377,9 +377,13 @@ def consultar_servicios():
 def consultar_citas():
     if 'logeado' in session.keys():
         if session['logeado']:
-            if session['tipo'] == 'cliente' or session['tipo'] == 'estilista':
+            if session['tipo'] == 'cliente':
                 citas = get_lista_info_citas_usuario('id_' + session['tipo'], session['id_usuario'])
                 return render_template("consultar_citas.html", lista_citas=citas)
+            elif session['tipo'] == 'estilista':
+                servicios_programados = get_citas_de_estilista(session['id_usuario'])
+                return render_template('consultar_citas_de_estilista.html', servicios_programados=servicios_programados)
+
             elif session['tipo'] == 'recepcionista' or session['tipo'] == 'gerente':
                 lista_citas = get_lista_info_citas()
                 return render_template('consultar_citas_gerente_recepcionista.html', citas=lista_citas)
