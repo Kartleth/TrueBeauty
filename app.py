@@ -752,6 +752,40 @@ def cambiar_password():
         return redirect('/')
 
 
+@app.route('/registrar_usuario', methods=['GET', 'POST'])
+def registrar_usuario():
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                if request.method == 'GET':
+                    return render_template('registrar_usuario.html', tipo_usuario=session['tipo'])
+                elif request.method == 'POST':
+                    correo = request.form['correo']
+                    if usuario_existe('correo', correo):
+                        flash('El correo "' + correo + '" ya esta registrado por otro usuario')
+                        return redirect(
+                            'registrar_usuario')
+
+                    nombre = request.form['nombre']
+                    apellido1 = request.form['apellido1']
+                    apellido2 = request.form['apellido2']
+                    telefono = request.form['telefono']
+
+                    tipo_usuario = request.form['tipo_usuario']
+                    password = generar_password()
+
+                    insertar_usuario(nombre, apellido1, apellido2, correo, sha256_crypt.hash(password),
+                                     telefono, tipo_usuario)
+                    mandar_correo_de_password('petvetreal@gmail.com', correo, 'aozykokpzeaqcnzv',password)
+                    return redirect('/')
+            else:
+                return redirect('/')
+        else:
+            return redirect('/')
+    else:
+        return redirect('/')
+
+
 @app.route('/informacion_usuario')
 def informacion_usuario():
     return render_template("informacion_usuario.html")

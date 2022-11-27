@@ -93,16 +93,15 @@ def estilista_tiene_cita(hora, id_estilista, fecha, hora_fin, id_cita_a_modifica
     conexion = obtener_conexion()
     if id_cita_a_modificar is None:
         query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND CS.hora_inicio<='" + hora + "' AND CS.hora_fin>'" + hora + "' AND CS.id_estilista=" + str(
-        id_estilista)
+            id_estilista)
     else:
         query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND CS.hora_inicio<='" + hora + "' AND CS.hora_fin>'" + hora + "' AND CS.id_estilista=" + str(
-            id_estilista)+" AND NOT C.id_cita="+id_cita_a_modificar
+            id_estilista) + " AND NOT C.id_cita=" + id_cita_a_modificar
     # query = "SELECT CS.id_estilista from cita_servicio CS, cita C WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND (C.hora BETWEEN '" + hora + "' AND '" + str(hora_fin) + "') AND CS.id_estilista=" + str(
     #     id_estilista)
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
-
             return False
     conexion.commit()
     conexion.close()
@@ -241,8 +240,7 @@ def insert_into_cita_servicio(id_cita, id_servicio, id_estilista, hora_inicio, h
     conexion = obtener_conexion()
 
     with conexion.cursor() as cursor:
-        cursor.execute(
-            "INSERT INTO cita_servicio  VALUES (%s,%s,%s,%s,%s)",
+        cursor.execute("INSERT INTO cita_servicio  VALUES (%s,%s,%s,%s,%s)",
             (id_cita, id_servicio, str(id_estilista), hora_inicio, hora_fin))
 
     conexion.commit()
@@ -385,9 +383,9 @@ def get_asientos_de_sucursal(id_sucursal):
 def get_asientos_ocupados_de_sucursal(id_sucursal, fecha, hora, id_cita_a_modificar):
     conexion = obtener_conexion()
     if id_cita_a_modificar is None:
-        query = "SELECT count(id_cita) as num_asientos_ocupados FROM cita C WHERE  C.id_sucursal="+id_sucursal+" AND C.fecha='"+fecha+"' AND C.hora<='"+hora+"' AND C.hora_fin>'"+hora+"'"
+        query = "SELECT count(id_cita) as num_asientos_ocupados FROM cita C WHERE  C.id_sucursal=" + id_sucursal + " AND C.fecha='" + fecha + "' AND C.hora<='" + hora + "' AND C.hora_fin>'" + hora + "'"
     else:
-        query = "SELECT count(id_cita) as num_asientos_ocupados FROM cita C WHERE  C.id_sucursal="+id_sucursal+" AND C.fecha='"+fecha+"' AND C.hora<='"+hora+"' AND C.hora_fin>'"+hora+"' AND NOT C.id_cita="+id_cita_a_modificar
+        query = "SELECT count(id_cita) as num_asientos_ocupados FROM cita C WHERE  C.id_sucursal=" + id_sucursal + " AND C.fecha='" + fecha + "' AND C.hora<='" + hora + "' AND C.hora_fin>'" + hora + "' AND NOT C.id_cita=" + id_cita_a_modificar
 
     lista = []
     with conexion.cursor() as cursor:
@@ -406,7 +404,7 @@ def cliente_ya_tiene_cita(id_cliente, fecha, hora, id_sucursal, id_cita_a_modifi
         query = "SELECT id_cita FROM cita WHERE id_cliente=" + id_cliente + " AND id_sucursal=" + id_sucursal + " AND fecha='" + fecha + "' AND hora<='" + hora + "' AND hora_fin>'" + hora + "'"
     else:
 
-        query = "SELECT id_cita FROM cita WHERE id_cliente=" + id_cliente + " AND id_sucursal=" + id_sucursal + " AND fecha='" + fecha + "' AND hora<='" + hora + "' AND hora_fin>'" + hora + "' AND NOT id_cita="+id_cita_a_modificar
+        query = "SELECT id_cita FROM cita WHERE id_cliente=" + id_cliente + " AND id_sucursal=" + id_sucursal + " AND fecha='" + fecha + "' AND hora<='" + hora + "' AND hora_fin>'" + hora + "' AND NOT id_cita=" + id_cita_a_modificar
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
@@ -418,7 +416,8 @@ def cliente_ya_tiene_cita(id_cliente, fecha, hora, id_sucursal, id_cita_a_modifi
 
 def estilista_esta_ocupado(id_estilista, hora, fecha):
     conexion = obtener_conexion()
-    query = "SELECT * FROM cita C, cita_servicio CS WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND CS.hora_inicio<='" + hora + "' AND CS.hora_fin>'" + hora + "' AND CS.id_estilista=" + str(id_estilista)
+    query = "SELECT * FROM cita C, cita_servicio CS WHERE C.id_cita=CS.id_cita AND C.fecha='" + fecha + "' AND CS.hora_inicio<='" + hora + "' AND CS.hora_fin>'" + hora + "' AND CS.id_estilista=" + str(
+        id_estilista)
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
@@ -430,7 +429,8 @@ def estilista_esta_ocupado(id_estilista, hora, fecha):
 
 def get_info_usuario(id_usuario):
     conexion = obtener_conexion()
-    query = "SELECT id_usuario, nombre, apellido_paterno, apellido_materno, correo, telefono, tipo_usuario FROM usuario WHERE id_usuario="+str(id_usuario)
+    query = "SELECT id_usuario, nombre, apellido_paterno, apellido_materno, correo, telefono, tipo_usuario FROM usuario WHERE id_usuario=" + str(
+        id_usuario)
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -440,18 +440,18 @@ def get_info_usuario(id_usuario):
     return lista[0]
 
 
-def update_usuario(id_usuario,nombre,apellido1,apellido2,correo,telefono,tipo_usuario):
+def update_usuario(id_usuario, nombre, apellido1, apellido2, correo, telefono, tipo_usuario):
     conexion = obtener_conexion()
     query = "UPDATE usuario SET nombre = %s, apellido_paterno= %s, apellido_materno = %s, correo= %s, telefono= %s, tipo_usuario= %s WHERE id_usuario = %s"
     with conexion.cursor() as cursor:
-        cursor.execute(query, (nombre,apellido1,apellido2,correo,telefono,tipo_usuario,id_usuario))
+        cursor.execute(query, (nombre, apellido1, apellido2, correo, telefono, tipo_usuario, id_usuario))
     conexion.commit()
     conexion.close()
 
 
 def get_correo_de_usuario(id_usuario):
     conexion = obtener_conexion()
-    query = "SELECT correo FROM usuario WHERE id_usuario="+str(id_usuario)
+    query = "SELECT correo FROM usuario WHERE id_usuario=" + str(id_usuario)
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -459,6 +459,8 @@ def get_correo_de_usuario(id_usuario):
     conexion.commit()
     conexion.close()
     return lista[0]['correo']
+
+
 def get_lista_citas_fechas(fecha1, fecha2) -> list:
     conexion = obtener_conexion()
     lista = []
@@ -477,12 +479,15 @@ def get_lista_usuarios_fechas(fecha1, fecha2) -> list:
     conexion = obtener_conexion()
     lista = []
     with conexion.cursor() as cursor:
-        cursor.execute("SELECT id_usuario, correo, nombre,telefono, tipo_usuario FROM usuario WHERE (fecha_creacion BETWEEN %s and %s) and tipo_usuario = 'cliente'", (fecha1, fecha2))
+        cursor.execute(
+            "SELECT id_usuario, correo, nombre,telefono, tipo_usuario FROM usuario WHERE (fecha_creacion BETWEEN %s and %s) and tipo_usuario = 'cliente'",
+            (fecha1, fecha2))
         lista = cursor.fetchall()
 
     conexion.commit()
     conexion.close()
     return lista
+
 
 def get_lista_serv_de_citas() -> list:
     conexion = obtener_conexion()
@@ -495,6 +500,7 @@ def get_lista_serv_de_citas() -> list:
     conexion.close()
     return lista
 
+
 def get_suma_citas(fecha1, fecha2):
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
@@ -505,27 +511,31 @@ def get_suma_citas(fecha1, fecha2):
     conexion.close()
     return atencion
 
+
 def get_datos_grafica_diaria(fecha) -> dict:
     dict = {}
-    for hora in range(7,20):
-        tiempos=[str(hora)+":00",str(hora)+":30"]
+    for hora in range(7, 20):
+        tiempos = [str(hora) + ":00", str(hora) + ":30"]
         for tiempo in tiempos:
-            datos = get_valores_tabla_diaria(tiempo,fecha)
-            hora = str(hora)+":00"
+            datos = get_valores_tabla_diaria(tiempo, fecha)
+            hora = str(hora) + ":00"
             if datos['suma'] is None:
-                dict[tiempo]= 0
+                dict[tiempo] = 0
             else:
-                dict[tiempo]=float(datos['suma'])
+                dict[tiempo] = float(datos['suma'])
     return dict
 
-def get_valores_tabla_diaria(hora,fecha): #1-5
+
+def get_valores_tabla_diaria(hora, fecha):  # 1-5
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
-        cursor.execute("SELECT sum(total) as suma FROM cita WHERE DATE(fecha)=%s AND hora=%s", (fecha,hora))
+        cursor.execute("SELECT sum(total) as suma FROM cita WHERE DATE(fecha)=%s AND hora=%s", (fecha, hora))
         valores = cursor.fetchone()
     conexion.commit()
     conexion.close()
     return valores
+
+
 def get_cliente_que_agendo_cita(id_cita):
     conexion = obtener_conexion()
     query = "SELECT id_cliente FROM cita WHERE id_cita=" + str(id_cita)
@@ -552,7 +562,7 @@ def get_sucursal_de_cita(id_cita):
 
 def delete_cita(id_cita):
     conexion = obtener_conexion()
-    query = "DELETE FROM cita WHERE id_cita="+id_cita
+    query = "DELETE FROM cita WHERE id_cita=" + id_cita
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -561,10 +571,10 @@ def delete_cita(id_cita):
     conexion.close()
 
 
-
 def get_fecha_hora_de_cita(id_cita):
     conexion = obtener_conexion()
-    query = "SELECT DATE_FORMAT(fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(hora, '%H:%i') as hora FROM cita WHERE id_cita=" + str(id_cita)
+    query = "SELECT DATE_FORMAT(fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(hora, '%H:%i') as hora FROM cita WHERE id_cita=" + str(
+        id_cita)
     lista = []
     with conexion.cursor() as cursor:
         cursor.execute(query)
@@ -576,7 +586,7 @@ def get_fecha_hora_de_cita(id_cita):
 
 def cita_existe(id_cita):
     conexion = obtener_conexion()
-    query = "SELECT id_cita FROM cita WHERE id_cita="+str(id_cita)
+    query = "SELECT id_cita FROM cita WHERE id_cita=" + str(id_cita)
     with conexion.cursor() as cursor:
         cursor.execute(query)
         if cursor.fetchone() is None:
@@ -597,7 +607,8 @@ def get_lista_usuarios():
     conexion.close()
     return lista
 
-def update_password(id_usuario,password):
+
+def update_password(id_usuario, password):
     conexion = obtener_conexion()
     query = "UPDATE usuario SET contrasenia= %s WHERE id_usuario = %s"
     with conexion.cursor() as cursor:

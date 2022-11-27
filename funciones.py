@@ -1,6 +1,8 @@
 import os
+import random
 import smtplib, ssl
 import datetime
+import string
 import time
 from email.message import EmailMessage
 import locale
@@ -40,8 +42,45 @@ def mandar_correo_codigo(sender, receiver, password, codigo):
         # Close connection to server
 
 
-# def mandar_correo_de_password():
+def mandar_correo_de_password(sender, receiver, password_cuenta_email, password_cuenta_cliente ):
+    email_subject = 'Bienvenido a True Beauty'
+    sender_email_address = sender
+    receiver_email_address = receiver
+    email_smtp = "smtp.gmail.com"
+    email_password = password_cuenta_email
 
+    # Create an email message object
+    message = EmailMessage()
+
+    # Configure email headers
+    message['Subject'] = email_subject
+    message['From'] = sender_email_address
+    message['To'] = receiver_email_address
+
+    # Set email body text
+    mensaje = "Gracias por confiar en nostros.\nLa contraseña de su cuenta es: "+password_cuenta_cliente+" .\nInicie sesiion y cambie su contraseña para asegurar la seguridad de su cuenta.\n"
+
+    message.set_content(mensaje)
+
+    context = ssl.create_default_context()
+    # Set smtp server and port
+    with smtplib.SMTP_SSL(email_smtp, 465, context=context) as smtp:
+        # Login to email account
+        smtp.login(sender_email_address, email_password)
+
+        # Send email
+        smtp.sendmail(sender_email_address, receiver_email_address, message.as_string())
+
+        # Close connection to server
+
+def generar_password():
+    letras = list(string.ascii_letters)
+    numeros = [str(num) for num in range(0,100)]
+    letras.extend(numeros)
+    password = ''
+    for x in range(10):
+        password += random.choice(letras)
+    return password
 
 
 
@@ -270,11 +309,13 @@ def cita_ya_paso(id_cita):
         return False
 
 if __name__ == '__main__':
-    horas_salida = datetime.timedelta(minutes=180)
-    h1 = datetime.datetime.strptime('10:30', "%H:%M")
-
-    hora_fin = h1 + horas_salida
-    print(hora_fin)
+    for i in range(100):
+        print(generar_password())
+    # horas_salida = datetime.timedelta(minutes=180)
+    # h1 = datetime.datetime.strptime('10:30', "%H:%M")
+    #
+    # hora_fin = h1 + horas_salida
+    # print(hora_fin)
 
     # print(str(get_lista_info_citas_usuario('id_cliente', 1)))
     # print(get_horas_disponibles('1', '2023-10-08', ['1', '2', '3']))
