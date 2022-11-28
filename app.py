@@ -237,6 +237,10 @@ def new_password():
 def inicio():
     return render_template("inicio.html")
 
+@app.route('/servicios')
+def servicios():
+    return render_template("servicios.html")
+
 
 @app.route('/inicio_cliente')
 def inicio_cliente():

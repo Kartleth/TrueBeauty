@@ -1,0 +1,24 @@
+.btn{
+    border-radius: 30px;
+  }
+  
+  a.btn-servicio {
+  
+    color: #fff;
+    padding: 14px 30px;
+    margin: 32px auto;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    background: linear-gradient(-135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);
+    cursor: pointer;
+    transition: opacity 0.4s;
+    border-radius: 30px;
+    text-decoration:none;
+  }
+  
+  a.btn-servicio:hover {
+    opacity: 0.9;
+    text-decoration:none;
+    color: #FFF;
+  }
