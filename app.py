@@ -316,7 +316,7 @@ def fecha_cita():
 def hora_cita():
     if 'logeado' in session.keys():
         if session['logeado']:
-            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys():
+            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys() and 'lista_servicios_sel' in session.keys():
                 id_sucursal = request.args['id_sucursal']
                 fecha = request.args['fecha']
 
@@ -361,7 +361,7 @@ def confirmar_cita():
     if 'logeado' in session.keys():
 
         if session['logeado']:
-            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys():
+            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys() and 'lista_servicios_sel' in session.keys():
                 id_sucursal = request.args['id_sucursal']
                 fecha = request.args['fecha']
                 hora = request.args['hora']
@@ -593,7 +593,7 @@ def modificar_cita(id_cita):
 def modificar_hora_cita():
     if 'logeado' in session.keys():
         if session['logeado']:
-            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys():
+            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys() and 'lista_servicios_sel' in session.keys():
                 id_sucursal = int(request.args['id_sucursal'])
                 fecha = request.args['fecha']
                 id_cliente = str(request.args['id_cliente'])
@@ -632,7 +632,7 @@ def confirmar_cambios_cita():
     if 'logeado' in session.keys():
 
         if session['logeado']:
-            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys():
+            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys() and 'lista_servicios_sel' in session.keys():
                 id_sucursal = request.args['id_sucursal']
                 fecha = request.args['fecha']
                 hora = request.args['hora']
