@@ -47,6 +47,7 @@ def inicio_sesion():
             usr = get_usuario('correo', correo)
             # password = sha256_crypt.encrypt(str(password))
             if sha256_crypt.verify(password, usr['contrasenia']):
+                session.clear()
                 session['id_usuario'] = usr['id_usuario']
                 session['nombre'] = usr['nombre']
                 session['correo'] = usr['correo']
@@ -361,7 +362,7 @@ def confirmar_cita():
     if 'logeado' in session.keys():
 
         if session['logeado']:
-            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys() and 'lista_servicios_sel' in session.keys():
+            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys() and 'hora' in request.args.keys() and 'lista_servicios_sel' in session.keys():
                 id_sucursal = request.args['id_sucursal']
                 fecha = request.args['fecha']
                 hora = request.args['hora']
@@ -632,7 +633,7 @@ def confirmar_cambios_cita():
     if 'logeado' in session.keys():
 
         if session['logeado']:
-            if 'id_sucursal' in request.args.keys() or 'fecha' in request.args.keys() or 'hora' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys() and 'lista_servicios_sel' in session.keys():
+            if 'id_sucursal' in request.args.keys() and 'fecha' in request.args.keys() and 'hora' in request.args.keys() and 'id_cliente' in request.args.keys() and 'id_cita' in request.args.keys() and 'lista_servicios_sel' in session.keys():
                 id_sucursal = request.args['id_sucursal']
                 fecha = request.args['fecha']
                 hora = request.args['hora']
