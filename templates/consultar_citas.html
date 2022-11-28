@@ -39,8 +39,8 @@
           Cita agendada para el {{ cita['fecha'] }} a las {{ cita['hora'] }} horas.
 
         <div class="btn-group" role="group" aria-label="Basic outlined example">
-          <a type="button" class="btn btn-outline-primary" href="/informacion_cita/{{ cita['id_cita'] }}">Ver cita</a>
-          <a type="button" class="btn btn-outline-primary" href="/modificar_cita/{{ cita['id_cita'] }}">Cambiar cita</a>
+          <a type="button" class="btn btn-outline ver-cita-cambiar-cita" href="/informacion_cita/{{ cita['id_cita'] }}">Ver cita</a>
+          <a type="button" class="btn btn-outline ver-cita-cambiar-cita" href="/modificar_cita/{{ cita['id_cita'] }}">Cambiar cita</a>
         </div>
         </p>
 
@@ -49,7 +49,7 @@
       {% endfor %}
 
       <small class="d-block text-end mt-3">
-        <a href="/escoger_cita/" class="btn btn-lg btn-primary">Agendar cita nueva</a>
+        <a href="/escoger_cita/" type="button" class="btn-agendar">Agendar cita nueva</a>
       </small>
     </div>
   </main>
