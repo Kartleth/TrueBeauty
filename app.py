@@ -808,6 +808,9 @@ def cambiar_password():
     else:
         return redirect('/')
 
+@app.route('/productos_en_venta')
+def productos_en_venta():
+    return render_template("productos_venta.html")
 
 @app.route('/registrar_usuario', methods=['GET', 'POST'])
 def registrar_usuario():

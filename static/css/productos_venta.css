@@ -1,0 +1,72 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #ffffff;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.side img {
+    width: 20%;
+    max-width: 20%;
+    margin-top: 4%;
+}
+
+.login-container {
+    max-width: 450px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+a.btn {
+    font-weight: bold;
+
+}
+
+a.btn-inicio {
+
+    color: #fff;
+    padding: 14px 64px;
+    margin: 32px auto;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    background: linear-gradient(-135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);
+    cursor: pointer;
+    transition: opacity 0.4s;
+    border-radius: 30px;
+    text-decoration: none;
+}
+
+a.btn-inicio:hover {
+    opacity: 0.8;
+    text-decoration: none;
+    color: #FFF;
+}
+
+/* ----  Responsiveness   ----  */
+@media (max-width: 780px) {
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .side {
+        display: none;
+    }
+}
