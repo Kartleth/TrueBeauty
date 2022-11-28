@@ -48,7 +48,7 @@ section.side {
 .separator {
   width: 150px;
   height: 4px;
-  background: linear-gradient(135deg, rgba(203,229,247,1) 35%, rgba(91,154,209,1) 100%);
+  background: linear-gradient(135deg, rgba(203, 229, 247, 1) 35%, rgba(91, 154, 209, 1) 100%);
   margin: 24px;
 }
 
@@ -72,9 +72,16 @@ section.side {
   margin-bottom: 24px;
 }
 
-.olvide_contrasenia{
+.olvide_contrasenia {
   font-family: 'Montserrat';
-    text-align: center;
+  text-align: center;
+}
+
+.recover_password {
+  font-family: 'Montserrat';
+  font-size: 23px;
+  margin-bottom: revert;
+
 }
 
 input,
@@ -93,17 +100,17 @@ input {
   padding: 14px 64px;
 }
 
-input ~ i {
+input~i {
   position: absolute;
   left: 32px;
   top: 50%;
   transform: translateY(-50%);
   color: #888;
-  transition: color   0.4s;
+  transition: color 0.4s;
 }
 
-input:focus ~ i {
-  color: rgba(91,154,209,1);
+input:focus~i {
+  color: rgba(91, 154, 209, 1);
 }
 
 button.submit {
@@ -126,14 +133,12 @@ button.submit:hover {
 @media (max-width: 780px) {
 
   body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .side {
-      display: none;
+    display: none;
   }
 }
-
-
