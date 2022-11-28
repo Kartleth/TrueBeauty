@@ -5,11 +5,7 @@
     color: #ffffff;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 
 section {
     display: flex;
