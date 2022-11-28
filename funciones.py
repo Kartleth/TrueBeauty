@@ -6,14 +6,20 @@ import string
 import time
 from email.message import EmailMessage
 import locale
+from bd import obtener_conexion
 from bd import *
 import locale
+from calendar import monthrange
+from datetime import datetime, timedelta
 
 locale.setlocale(locale.LC_ALL, ("es_ES", "UTF-8"))
 
 
-def mandar_correo_codigo(sender, receiver, password, codigo):
-    email_subject = 'Código de Cambio de Contraseña'
+def mandar_correo_codigo(sender, receiver, password, codigo, tipo):
+    if tipo=='password':
+        email_subject = 'Código de Cambio de Contraseña'
+    elif tipo =='signup':
+        email_subject = 'Verifica tu correo'
     sender_email_address = sender
     receiver_email_address = receiver
     email_smtp = "smtp.gmail.com"
@@ -28,8 +34,10 @@ def mandar_correo_codigo(sender, receiver, password, codigo):
     message['To'] = receiver_email_address
 
     # Set email body text
-    message.set_content(f"Su código para cambiar su contraseña es {codigo}")
-
+    if tipo=='password': # cambiar contraseña
+        message.set_content(f"Su código para cambiar su contraseña es {codigo}")
+    elif tipo=='signup': # confirmar correo
+        message.set_content(f"Su código para confirmar su correo es {codigo}")
     context = ssl.create_default_context()
     # Set smtp server and port
     with smtplib.SMTP_SSL(email_smtp, 465, context=context) as smtp:
@@ -307,6 +315,58 @@ def cita_ya_paso(id_cita):
         return True
     else:
         return False
+    
+def get_datos_grafica_diaria(fecha) -> dict:
+    dict = {}
+    for hora in range(7, 20):
+        tiempos = [str(hora) + ":00", str(hora) + ":30"]
+        for tiempo in tiempos:
+            datos = get_valores_tabla_diaria(tiempo, fecha)
+            hora = str(hora) + ":00"
+            if datos['suma'] is None:
+                dict[tiempo] = 0
+            else:
+                dict[tiempo] = float(datos['suma'])
+    return dict
+
+def get_datos_grafica_mensual(fecha) -> dict:
+    fecha = fecha.split("-")
+    dias = monthrange(int(fecha[0]),int(fecha[1]))
+    print(dias[1])
+    dict = {}
+    for i in range(dias[1]):
+        i = i+1
+        datos = get_valores_tabla_mensual(i,fecha[1],fecha[0])
+        if datos['suma'] is None:
+            dict[i]= 0
+        else:
+            dict[i]=float(datos['suma'])
+    return dict
+
+def get_datos_grafica_rango(fecha1, fecha2) -> list:
+    fechas = get_days_between(fecha1, fecha2)
+    dict = {}
+    if len(fechas) <= 1:
+        dict = get_datos_grafica_diaria(fecha1)
+    else:
+    	for fecha in fechas:
+         datos = get_valores_tabla_mensual(fecha.day,fecha.month,fecha.year)
+         fecha = datetime.strftime(fecha, "%Y-%m-%d")
+         if datos['suma'] is None:
+             dict[fecha]= 0
+         else:
+             dict[fecha]=float(datos['suma'])
+    return dict
+
+def get_days_between(fecha1, fecha2) -> list:
+    start_date = datetime.strptime(fecha1, '%Y-%m-%d') 
+    end_date = datetime.strptime(fecha2, '%Y-%m-%d')
+    delta = end_date - start_date   # returns timedelta
+    lista_fechas = []
+    for i in range(delta.days + 1):
+        day = start_date + timedelta(days=i)
+        lista_fechas.append(day)
+    return lista_fechas
 
 if __name__ == '__main__':
     for i in range(100):

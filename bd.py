@@ -511,21 +511,6 @@ def get_suma_citas(fecha1, fecha2):
     conexion.close()
     return atencion
 
-
-def get_datos_grafica_diaria(fecha) -> dict:
-    dict = {}
-    for hora in range(7, 20):
-        tiempos = [str(hora) + ":00", str(hora) + ":30"]
-        for tiempo in tiempos:
-            datos = get_valores_tabla_diaria(tiempo, fecha)
-            hora = str(hora) + ":00"
-            if datos['suma'] is None:
-                dict[tiempo] = 0
-            else:
-                dict[tiempo] = float(datos['suma'])
-    return dict
-
-
 def get_valores_tabla_diaria(hora, fecha):  # 1-5
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
@@ -534,6 +519,17 @@ def get_valores_tabla_diaria(hora, fecha):  # 1-5
     conexion.commit()
     conexion.close()
     return valores
+
+
+def get_valores_tabla_mensual(dia, mes, anio):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT sum(total) as suma FROM cita WHERE  DayOfMonth(fecha)=%s and Month(fecha)=%s and year(fecha)=%s",(dia, mes,anio))
+        valores = cursor.fetchone()
+    conexion.commit()
+    conexion.close()
+    return valores
+
 
 
 def get_cliente_que_agendo_cita(id_cita):

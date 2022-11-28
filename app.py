@@ -105,7 +105,7 @@ def signup():
                 session['usuario_codigo'] = correo
                 session['codigo'] = codigo
                 # MANDAR CODIGO POR CORREO DE LA PERSONA
-                mandar_correo_codigo('petvetreal@gmail.com', correo, 'aozykokpzeaqcnzv', codigo)            
+                mandar_correo_codigo('petvetreal@gmail.com', correo, 'aozykokpzeaqcnzv', codigo, 'signup')            
                 flash(mensaje)
                 session['bool']=True
                 session['nombre']=nombre 
@@ -121,26 +121,26 @@ def signup():
         return redirect("/")
     
 
-@app.route('/confirmar_correo', methods=['GET','POST'])
-def confirmar_correo():  
-    """ Se asegura que el codigo sea correcto.1|
-    Se redirige para cambiar contraseña a '/new_password'"""
-    if 'logeado' not in session.keys():
+# @app.route('/confirmar_correo', methods=['GET','POST'])
+# def confirmar_correo():  
+#     """ Se asegura que el codigo sea correcto.1|
+#     Se redirige para cambiar contraseña a '/new_password'"""
+#     if 'logeado' not in session.keys():
         
-        if request.method == 'GET':
-            return render_template('reset_code.html')
-        elif request.method == 'POST':
-            codigo_usuario = request.form['codigo']
-            username = session['usuario_codigo']
-            codigo = session['codigo']
-            if codigo_usuario == codigo:
-                return redirect('/new_password')
-            else:
-                mensaje = 'Codigo Incorrecto, pruebe de nuevo'
-                flash(mensaje)
-                return render_template('reset_code.html')
-    else:
-        return redirect("/")
+#         if request.method == 'GET':
+#             return render_template('reset_code.html')
+#         elif request.method == 'POST':
+#             codigo_usuario = request.form['codigo']
+#             username = session['usuario_codigo']
+#             codigo = session['codigo']
+#             if codigo_usuario == codigo:
+#                 return redirect('/new_password')
+#             else:
+#                 mensaje = 'Codigo Incorrecto, pruebe de nuevo'
+#                 flash(mensaje)
+#                 return render_template('reset_code.html')
+#     else:
+#         return redirect("/")
 
 
 @app.route('/error')
@@ -171,7 +171,7 @@ def forgot_password():
                 session['codigo'] = codigo
                 session['bool']= False
                 # MANDAR CODIGO POR CORREO DE LA PERSONA
-                mandar_correo_codigo('petvetreal@gmail.com', usr['correo'], 'aozykokpzeaqcnzv', codigo)
+                mandar_correo_codigo('petvetreal@gmail.com', usr['correo'], 'aozykokpzeaqcnzv', codigo, 'password')
                 flash(mensaje)
                 return redirect('/reset_code')
             else:
@@ -914,6 +914,72 @@ def informe_ventas_diaria():
     else:
         abort(403)
         
+        
+@app.route("/informe_ventas/rango", methods=['GET', 'POST'])
+def informe_ventas_rango():
+    ''' Se asegura que la cuenta tenga permisos de administrador.
+    Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas.
+    Si se selecciona alguna fecha en especifico la información cambia dependiendo de la misma.
+    '''
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                if request.method == 'GET' :
+                    horas = []
+                    fecha = get_cur_datetime()
+                    desde = fecha['now']
+                    hasta = fecha['now']
+                    citas = get_lista_citas_fechas(desde, hasta) 
+                    usuarios = get_lista_usuarios_fechas(desde, hasta) 
+                    servicios = get_lista_serv_de_citas()  
+                    suma = get_suma_citas(desde, hasta)
+                    total_citas_subtotal = suma['SUM(monto)']
+                    total_citas_iva = suma['SUM(iva)']
+                    total_citas_total = suma['SUM(total)']
+                    
+                    data_dict = get_datos_grafica_rango(desde, hasta)
+
+                    return render_template("reporte.html", lista_usuarios=usuarios,
+                                        total_citas_subtotal=total_citas_subtotal,
+                                        total_citas_iva=total_citas_iva,
+                                        total_citas_total=total_citas_total,
+                                        lista_citas=citas, lista_servicios=servicios,
+                                        tipo='Rango', date_desde=desde,date_hasta=hasta, data=json.dumps(data_dict))
+
+                if request.method == 'POST':             
+                    desde = request.form['desde']   
+                    hasta = request.form['hasta']
+                    desde_date= time.strptime(desde, "%Y-%m-%d")
+                    hasta_date= time.strptime(hasta, "%Y-%m-%d")
+                    if desde_date <= hasta_date:             
+                        citas = get_lista_citas_fechas(desde, hasta) 
+                        usuarios = get_lista_usuarios_fechas(desde, hasta) 
+                        servicios = get_lista_serv_de_citas()  
+                        suma = get_suma_citas(desde, hasta)
+                        total_citas_subtotal = suma['SUM(monto)']
+                        total_citas_iva = suma['SUM(iva)']
+                        total_citas_total = suma['SUM(total)']
+                        
+                        data_dict = get_datos_grafica_rango(desde, hasta)
+
+                        return render_template("reporte.html", lista_usuarios=usuarios,
+                                            total_citas_subtotal=total_citas_subtotal,
+                                            total_citas_iva=total_citas_iva,
+                                            total_citas_total=total_citas_total,
+                                            lista_citas=citas, lista_servicios=servicios,
+                                            tipo='Rango', date_desde=desde,date_hasta=hasta, data=json.dumps(data_dict))
+                    else:
+                        flash('Ingrese una fecha Mayor')
+                        return render_template("reporte.html",
+                                               date_desde=desde, date_hasta=hasta,
+                                               tipo='Rango')
+            else:   
+                abort(403)
+        else:
+            abort(403)
+    else:
+        abort(403)
+
 
 
 if __name__ == '__main__':
