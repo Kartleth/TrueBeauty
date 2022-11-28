@@ -70,7 +70,7 @@ button.submit {
 }
 
 button.submit:hover {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 button {
@@ -84,9 +84,18 @@ button {
   align-items: center;
 }
 
+.btn{
+  color: #5194C4;
+}
+
 .btn-agregar{
   color: #fff;
-  background:  rgb(81, 148, 196);
+  background:  linear-gradient(-135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);
   display: inline-block;
-  border-radius: 15px
+  border-radius: 8px;
+  margin: inherit;
+}
+
+button.btn-agregar:hover {
+  background:  linear-gradient(135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);
 }
