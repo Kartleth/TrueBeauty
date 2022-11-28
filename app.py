@@ -79,7 +79,8 @@ def signup():
             correo = request.form['correo']
             if usuario_existe('correo', correo):
                 flash('El correo pertence a otro usuario existente')
-                return render_template("signup.html")
+                #return render_template("signup.html")
+                return redirect('/signup')
             password = request.form['password1']
             password2 = request.form['password2']
 
@@ -89,13 +90,54 @@ def signup():
             else:
                 nombre = request.form['nombre']
                 apellido_paterno = request.form['apellido1']
-                apellido_materno = request.form['apellido2']
+                apellido_materno = request.form['apellido2']            
 
                 telefono = request.form['telefono']
                 tipo_usuario = 'cliente'
-                insertar_usuario(nombre, apellido_paterno, apellido_materno, correo, sha256_crypt.hash(password),
-                                 telefono, tipo_usuario)
-                return redirect('/login')
+                # insertar_usuario(nombre, apellido_paterno, apellido_materno, correo, sha256_crypt.hash(password),
+                #                  telefono, tipo_usuario)               
+                mensaje = f'Se envió un código de confirmación a su correo a ({correo})'
+                codigo = ''
+                for i in range(4):
+                    numero = randint(0, 9)
+                    codigo += str(numero)
+                session['usuario_codigo'] = correo
+                session['codigo'] = codigo
+                # MANDAR CODIGO POR CORREO DE LA PERSONA
+                mandar_correo_codigo('petvetreal@gmail.com', correo, 'aozykokpzeaqcnzv', codigo)            
+                flash(mensaje)
+                session['bool']=True
+                session['nombre']=nombre 
+                session['apellido_paterno']=apellido_paterno
+                session['apellido_materno']=apellido_materno
+                session['password']=password
+                session['telefono']=telefono
+                session['tipo_usuario']=tipo_usuario
+                
+                return redirect('/reset_code')
+                
+    else:
+        return redirect("/")
+    
+
+@app.route('/confirmar_correo', methods=['GET','POST'])
+def confirmar_correo():  
+    """ Se asegura que el codigo sea correcto.1|
+    Se redirige para cambiar contraseña a '/new_password'"""
+    if 'logeado' not in session.keys():
+        
+        if request.method == 'GET':
+            return render_template('reset_code.html')
+        elif request.method == 'POST':
+            codigo_usuario = request.form['codigo']
+            username = session['usuario_codigo']
+            codigo = session['codigo']
+            if codigo_usuario == codigo:
+                return redirect('/new_password')
+            else:
+                mensaje = 'Codigo Incorrecto, pruebe de nuevo'
+                flash(mensaje)
+                return render_template('reset_code.html')
     else:
         return redirect("/")
 
@@ -126,6 +168,7 @@ def forgot_password():
                     codigo += str(numero)
                 session['usuario_codigo'] = usr['correo']
                 session['codigo'] = codigo
+                session['bool']= False
                 # MANDAR CODIGO POR CORREO DE LA PERSONA
                 mandar_correo_codigo('petvetreal@gmail.com', usr['correo'], 'aozykokpzeaqcnzv', codigo)
                 flash(mensaje)
@@ -149,8 +192,13 @@ def reset_code():
             codigo_usuario = request.form['codigo']
             username = session['usuario_codigo']
             codigo = session['codigo']
-            if codigo_usuario == codigo:
+            if codigo_usuario == codigo and session['bool']==False:
                 return redirect('/new_password')
+            elif codigo_usuario == codigo and session['bool']:
+                insertar_usuario(session['nombre'], session['apellido_paterno'], session['apellido_materno'], username, sha256_crypt.hash(session['password']),
+                                  session['telefono'], session['tipo_usuario']) 
+                return redirect('/login')
+            
             else:
                 mensaje = 'Codigo Incorrecto, pruebe de nuevo'
                 flash(mensaje)
