@@ -2,6 +2,62 @@
 <html lang="en">
 
 <head>
+  <link rel="icon" href="/static/images/cleopatra.png">
+  <title>Login</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <section class="side">
+    <img src="/static/images/barber.svg" alt="">
+  </section>
+
+  <section class="main">
+    <div class="login-container">
+      <img src="/static/images/cleopatra.png" alt="" style="height: 60px; width: 60px; margin-bottom: 21px;">
+      <p class="title">TRUE BEAUTY</p>
+      <div class="separator"></div>
+      <p class="welcome-message">Por favor, ingresa los datos solicitados para ingresar sesión</p>
+
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+
+      <form class="login-form" method="POST">
+        <div class="form-control">
+          <input type="email" id="floatingInput" name="email" placeholder="Email" required>
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="form-control">
+          <input type="password" id="floatingPassword" name="password" placeholder="Contraseña" required>
+          <i class="fas fa-lock"></i>
+        </div>
+
+        <a href="/forgot_password" class="olvide_contrasenia" >No recuerdo mi
+          contraseña</a>
+
+        <button class="submit" type="submit" name="enviar" value="Enviar">Entrar</button>
+      </form>
+    </div>
+  </section>
+
+</body>
+
+</html>
+<!--<!DOCTYPE html>
+<html lang="en">
+
+<head>
   <meta charset="utf-8">
   <link rel="icon" href="/static/images/cleopatra.png">
   <title>Login</title>
@@ -124,4 +180,4 @@
 </body>
 
 
-</html>
+</html>--->
