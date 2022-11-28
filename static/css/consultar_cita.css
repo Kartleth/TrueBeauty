@@ -60,7 +60,7 @@ a.btn{
 }
 
 
-a.btn-agendar {
+a.btn-detalles {
 
   color: #fff;
   padding: 14px 64px;
@@ -75,7 +75,7 @@ a.btn-agendar {
   text-decoration:none;
 }
 
-a.btn-agendar:hover {
+a.btn-detalles:hover {
   opacity: 0.8;
   text-decoration:none;
   color: #FFF;
@@ -97,5 +97,12 @@ button.cambiarPassword {
 
 button.cambiarPassword:hover {
   opacity: 0.8;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #599aca!important;
+  border-color: #599aca!important;
+  border-radius: 30px!important;
 }
 

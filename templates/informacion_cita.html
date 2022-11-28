@@ -2,17 +2,17 @@
 {% block title %}Información de cita{% endblock %}
 
 {% block body %}
-    <!doctype html>
-    <html lang="en">
+<!doctype html>
+<html lang="en">
 
-    <head>
-        <!-- Custom styles for this template -->
-        {#
+<head>
+    <!-- Custom styles for this template -->
+    {#
     <link href="informacion_cita.css" rel="stylesheet">#}
-    </head>
+</head>
 
 
-    <body>
+<body>
 
 
     <main class="d-flex flex-nowrap">
@@ -28,17 +28,16 @@
             <ul style="margin-bottom:10%" class="nav nav-pills flex-column ">
 
                 {% for cita in lista_citas %}
-                    {% if fecha_actual <=  cita['fecha_datetime'] %}
-                        <li class="nav-item">
-                            <a href="/informacion_cita/{{ cita['id_cita'] }}"
-                               class="nav-link {% if cita['id_cita']== dicc_cita['id_cita'] %}active{% else %} link-dark{% endif %}"
-                               aria-current="page">
+                {% if fecha_actual <= cita['fecha_datetime'] %} <li class="nav-item">
+                    <a href="/informacion_cita/{{ cita['id_cita'] }}"
+                        class="nav-link {% if cita['id_cita']== dicc_cita['id_cita'] %}active{% else %} link-dark{% endif %}"
+                        aria-current="page">
 
-                                {{ cita['fecha_escrita'] }} a las {{ cita['hora'] }} horas
-                            </a>
-                        </li>
+                        {{ cita['fecha_escrita'] }} a las {{ cita['hora'] }} horas
+                    </a>
+                    </li>
                     {% endif %}
-                {% endfor %}
+                    {% endfor %}
             </ul>
             <!--
             <li>
@@ -67,16 +66,16 @@
             <ul class="nav nav-pills flex-column mb-auto">
 
                 {% for cita in lista_citas %}
-                    {% if fecha_actual >  cita['fecha_datetime'] %}
-                        <li class="nav-item">
-                            <a href="/informacion_cita/{{ cita['id_cita'] }}"
-                               class="nav-link {% if cita['id_cita']== dicc_cita['id_cita'] %}active{% else %} link-dark{% endif %}"
-                               aria-current="page">
+                {% if fecha_actual > cita['fecha_datetime'] %}
+                <li class="nav-item">
+                    <a href="/informacion_cita/{{ cita['id_cita'] }}"
+                        class="nav-link {% if cita['id_cita']== dicc_cita['id_cita'] %}active{% else %} link-dark{% endif %}"
+                        aria-current="page">
 
-                                {{ cita['fecha_escrita'] }} a las {{ cita['hora'] }}
-                            </a>
-                        </li>
-                    {% endif %}
+                        {{ cita['fecha_escrita'] }} a las {{ cita['hora'] }}
+                    </a>
+                </li>
+                {% endif %}
                 {% endfor %}
             </ul>
 
@@ -105,7 +104,7 @@
                 <div class="row g-3" style="padding-left: 7%; padding-top: 0%; margin-top: -9%;">
 
                     <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm"
-                         style="background-color:  #7CB8EB">
+                        style="background-color:  #7CB8EB">
                         <img class="me-3" src="/static/images/calendario_fecha_cita.png" alt="" width="48" height="48">
                         <div class="lh-1">
                             <h1 class="h6 mb-0 text-white lh-1">Cita en {{ dicc_cita['nombre_sucursal'] }}</h1>
@@ -115,10 +114,12 @@
                     </div>
 
 
+                    <h4 class="border-bottom pb-2 mb-0">Información de cita</h4>
+
+
                     <div class="col-md-4">
                         <label for="fecha" class="form-label">Fecha</label>
-                        <input type="text" class="form-control" id="fecha" value="{{ dicc_cita['fecha'] }}"
-                               readonly>
+                        <input type="text" class="form-control" id="fecha" value="{{ dicc_cita['fecha'] }}" readonly>
                         <div class="invalid-feedback">
                             Ingrese una fecha
                         </div>
@@ -126,8 +127,7 @@
 
                     <div class="col-md-4">
                         <label for="hora" class="form-label">Hora (24h)</label>
-                        <input type="text" class="form-control" id="hora" value="{{ dicc_cita['hora'] }}"
-                               readonly>
+                        <input type="text" class="form-control" id="hora" value="{{ dicc_cita['hora'] }}" readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
@@ -135,7 +135,7 @@
                     <div class="col-md-4">
                         <label for="hora_fin" class="form-label">Hora de termino(24h)</label>
                         <input type="text" class="form-control" id="hora_fin" value="{{ dicc_cita['hora_fin'] }}"
-                               readonly>
+                            readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
@@ -143,8 +143,7 @@
                     <div class="col-md-6">
                         <label for="nombre_sucursal" class="form-label">Nombre de sucursal</label>
                         <input type="text" class="form-control" id="nombre_sucursal"
-                               value="{{ dicc_cita['nombre_sucursal'] }}"
-                               readonly>
+                            value="{{ dicc_cita['nombre_sucursal'] }}" readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
@@ -152,8 +151,7 @@
                     <div class="col-md-6">
                         <label for="direccion_sucursal" class="form-label">Dirección</label>
                         <input type="text" class="form-control" id="direccion_sucursal"
-                               value="{{ dicc_cita['direccion_sucursal'] }}"
-                               readonly>
+                            value="{{ dicc_cita['direccion_sucursal'] }}" readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
@@ -162,15 +160,15 @@
                     <h4 class="border-bottom pb-2 mb-0">Servicios a realizar</h4>
                     <table class="table table-striped table-hover">
                         <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Estilista</th>
-                            <th scope="col">Precio</th>
-                        </tr>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Estilista</th>
+                                <th scope="col">Precio</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {% for servicio in dicc_cita['lista_servicios'] %}
+                            {% for servicio in dicc_cita['lista_servicios'] %}
                             <tr>
                                 <th scope="row">{{ servicio['nombre_servicio'] }}</th>
                                 <td>{{ servicio['descripcion'] }}</td>
@@ -179,7 +177,7 @@
                                 <td>${{ servicio['precio'] }}</td>
                             </tr>
 
-                        {% endfor %}
+                            {% endfor %}
 
                         </tbody>
 
@@ -187,23 +185,21 @@
                     <div class="col-md-4">
                         <label for="subtotal" class="form-label">Subtotal</label>
                         <input type="number" class="form-control" id="subtotal" value="{{ dicc_cita['monto'] }}"
-                               readonly>
+                            readonly>
                         <div class="invalid-feedback">
 
                         </div>
                     </div>
                     <div class="col-md-4">
                         <label for="iva" class="form-label">IVA</label>
-                        <input type="number" class="form-control" id="iva" value="{{ dicc_cita['iva'] }}"
-                               readonly>
+                        <input type="number" class="form-control" id="iva" value="{{ dicc_cita['iva'] }}" readonly>
                         <div class="invalid-feedback">
 
                         </div>
                     </div>
                     <div class="col-md-4">
                         <label for="total" class="form-label">Total a pagar</label>
-                        <input type="number" class="form-control" id="total" value="{{ dicc_cita['total'] }}"
-                               readonly>
+                        <input type="number" class="form-control" id="total" value="{{ dicc_cita['total'] }}" readonly>
                         <div class="invalid-feedback">
                             hora requerida.
                         </div>
@@ -212,12 +208,13 @@
                     <hr>
                     <div style="display: flex; justify-content: space-between; padding-bottom: 3rem">
                         <a class="btn btn-lg btn-primary" href="/consultar_citas">Todas las citas</a>
-                        {% if fecha_actual < dicc_cita['fecha_hora'] %}
-                            <a class="btn btn-lg btn-primary" href="/eliminar_cita/{{ dicc_cita['id_cita'] }}">Eliminar
-                                cita</a>
-                            <a Type="button" class="btn btn-lg btn-primary" href="/modificar_cita/{{ dicc_cita['id_cita'] }}">Editar
+                        {% if fecha_actual < dicc_cita['fecha_hora'] %} <a class="btn btn-lg btn-primary"
+                            href="/eliminar_cita/{{ dicc_cita['id_cita'] }}">Eliminar
                             cita</a>
-                        {% endif %}
+                            <a Type="button" class="btn btn-lg btn-primary"
+                                href="/modificar_cita/{{ dicc_cita['id_cita'] }}">Editar
+                                cita</a>
+                            {% endif %}
 
                     </div>
 
@@ -228,13 +225,15 @@
 
 
     </main>
+
+
     <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-            crossorigin="anonymous"></script>
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
 
     {#
     <script src="sidebars.js"></script>#}
-    </body>
+</body>
 
-    </html>
+</html>
 {% endblock %}

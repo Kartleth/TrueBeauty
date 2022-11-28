@@ -85,7 +85,12 @@ button.submit:hover {
   opacity: 0.8;
 }
 
-a.btn-agendar {
+a.btn {
+  font-weight: bold;
+
+}
+
+a.btn-inicio {
 
   color: #fff;
   padding: 14px 64px;
@@ -97,11 +102,11 @@ a.btn-agendar {
   cursor: pointer;
   transition: opacity 0.4s;
   border-radius: 30px;
-  text-decoration:none;
+  text-decoration: none;
 }
 
-a.btn-agendar:hover {
+a.btn-inicio:hover {
   opacity: 0.8;
-  text-decoration:none;
+  text-decoration: none;
   color: #FFF;
 }
