@@ -3,51 +3,51 @@
 {% block title %}Confirmar cita{% endblock %}
 
 {% block body %}
-    <!doctype html>
-    <html lang="en">
+<!doctype html>
+<html lang="en">
 
-    <head>
-        <style>
-            .bd-placeholder-img {
-                font-size: 1.125rem;
-                text-anchor: middle;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
+<head>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
             }
+        }
 
-            @media (min-width: 768px) {
-                .bd-placeholder-img-lg {
-                    font-size: 3.5rem;
-                }
-            }
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-            .b-example-divider {
-                height: 3rem;
-                background-color: rgba(0, 0, 0, .1);
-                border: solid rgba(0, 0, 0, .15);
-                border-width: 1px 0;
-                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-            }
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-            .b-example-vr {
-                flex-shrink: 0;
-                width: 1.5rem;
-                height: 100vh;
-            }
-
-            .bi {
-                vertical-align: -.125em;
-                fill: currentColor;
-            }
-        </style>
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+    </style>
 
 
-        <!-- Custom styles for this template -->
-        <link href="/static/css/fecha_cita.css" rel="stylesheet">
-    </head>
+    <!-- Custom styles for this template -->
+    <link href="/static/css/fecha_cita.css" rel="stylesheet">
+</head>
 
-    <body class="bg-light">
+<body class="bg-light" style="margin-top: 35px!important;">
     <form class="needs-validation" action="" method="POST">
 
         <main class="container">
@@ -65,22 +65,24 @@
                     <div class="row g-3">
 
                         <div class="col-12">
+                            <h4 class="border-bottom pb-2 mb-0">Información de cita</h4>
 
 
                             <div class="row g-3">
                                 {% if info_cliente %}
-                                    <div class="col-md-6">
+                                <div class="col-md-6">
                                     <label for="nombre_cliente" class="form-label">Nombre de cliente:</label>
-                                    <input  type="text" class="form-control" id="nombre_cliente" name="nombre_cliente"
-                                           value="{{ info_cliente['nombre'] }} {{ info_cliente['apellido_paterno'] }} {{ info_cliente['apellido_materno'] }}" readonly>
+                                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente"
+                                        value="{{ info_cliente['nombre'] }} {{ info_cliente['apellido_paterno'] }} {{ info_cliente['apellido_materno'] }}"
+                                        readonly>
                                     <div class="invalid-feedback">
                                         Ingrese una fecha
                                     </div>
                                 </div>
-                                    <div class="col-md-6">
+                                <div class="col-md-6">
                                     <label for="correo" class="form-label">Correo de cliente:</label>
-                                    <input  type="text" class="form-control" id="correo" name="correo_cliente"
-                                           value="{{ info_cliente['correo'] }}" readonly>
+                                    <input type="text" class="form-control" id="correo" name="correo_cliente"
+                                        value="{{ info_cliente['correo'] }}" readonly>
                                     <div class="invalid-feedback">
                                         Ingrese una fecha
                                     </div>
@@ -89,8 +91,8 @@
 
                                 <div class="col-md-6">
                                     <label for="fecha" class="form-label">Fecha:</label>
-                                    <input  type="text" class="form-control" id="fecha" name="fecha"
-                                           value="{{ info_cita['fecha'] }}" readonly>
+                                    <input type="text" class="form-control" id="fecha" name="fecha"
+                                        value="{{ info_cita['fecha'] }}" readonly>
                                     <div class="invalid-feedback">
                                         Ingrese una fecha
                                     </div>
@@ -99,91 +101,94 @@
                                 <div class="col-md-6">
                                     <label for="hora" class="form-label">Hora (24h):</label>
                                     <input type="text" class="form-control" id="hora" name="hora"
-                                           value="{{ info_cita['hora'] }}" readonly>
+                                        value="{{ info_cita['hora'] }}" readonly>
                                     <div class="invalid-feedback">
                                         hora requerida.
                                     </div>
                                 </div>
 
-                                    <div class="col-md-5">
-                                        <label id="sucursal" class="form-label">Sucursal:</label>
-                                        <input class="form-control" value="{{ info_cita['info_sucursal']['nombre'] }}" id="sucursal" readonly>
+                                <div class="col-md-5">
+                                    <label id="sucursal" class="form-label">Sucursal:</label>
+                                    <input class="form-control" value="{{ info_cita['info_sucursal']['nombre'] }}"
+                                        id="sucursal" readonly>
 
-                                        <div class="invalid-feedback">
-                                            hora requerida.
-                                        </div>
-                                        <input type="text" style="display: none" name="id_sucursal"
-                                               value="{{ info_cita['info_sucursal']['id_sucursal'] }}"
-                                               >
+                                    <div class="invalid-feedback">
+                                        hora requerida.
                                     </div>
-                                    <div class="col-md-7">
-                                        <label for="direccion" class="form-label">Dirección:</label>
-                                        <input class="form-control" value="{{ info_cita['info_sucursal']['direccion'] }}" id="direccion" readonly>
+                                    <input type="text" style="display: none" name="id_sucursal"
+                                        value="{{ info_cita['info_sucursal']['id_sucursal'] }}">
+                                </div>
+                                <div class="col-md-7">
+                                    <label for="direccion" class="form-label">Dirección:</label>
+                                    <input class="form-control" value="{{ info_cita['info_sucursal']['direccion'] }}"
+                                        id="direccion" readonly>
 
-                                    </div>
+                                </div>
 
-<h4 class="border-bottom pb-2 mb-0">Servicios a realizar</h4>
-                    <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Descripción</th>
+                                <h4 class="border-bottom pb-2 mb-0">Servicios a realizar</h4>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Descripción</th>
 
-                        <th scope="col">Precio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for servicio in info_cita['lista_servicios'] %}
-                     <tr>
-                        <th scope="row">{{ servicio['nombre'] }}</th>
-                        <td>{{ servicio['descripcion'] }}</td>
+                                            <th scope="col">Precio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for servicio in info_cita['lista_servicios'] %}
+                                        <tr>
+                                            <th scope="row">{{ servicio['nombre'] }}</th>
+                                            <td>{{ servicio['descripcion'] }}</td>
 
-                        <td>${{ servicio['precio'] }}</td>
-                    </tr>
+                                            <td>${{ servicio['precio'] }}</td>
+                                        </tr>
 
-                {% endfor %}
+                                        {% endfor %}
 
-                </tbody>
+                                    </tbody>
 
-            </table>
+                                </table>
 
-                            <div class="col-md-4">
+                                <div class="col-md-4">
                                     <label for="subtotal" class="form-label">Subtotal:</label>
                                     <input type="number" class="form-control" id="subtotal" name="monto"
-                                           value="{{ info_cita['monto'] }}" readonly>
+                                        value="{{ info_cita['monto'] }}" readonly>
 
                                 </div>
-                            <div class="col-md-4">
+                                <div class="col-md-4">
                                     <label for="iva" class="form-label">IVA:</label>
-                                    <input type="number" class="form-control" id="iva"
-                                           value="{{ info_cita['iva'] }}" readonly>
+                                    <input type="number" class="form-control" id="iva" value="{{ info_cita['iva'] }}"
+                                        readonly>
 
                                 </div>
-                            <div class="col-md-4">
+                                <div class="col-md-4">
                                     <label for="total" class="form-label">Total:</label>
                                     <input type="number" class="form-control" id="total"
-                                           value="{{ info_cita['total'] }}" readonly>
+                                        value="{{ info_cita['total'] }}" readonly>
 
                                 </div>
 
 
-{#                                <div style="display: flex; flex-direction: column; justify-content: flex-start; border-bottom-style: solid; border-bottom-width:1px ">#}
-{#                                    <label for="" class="form-label">Servicios:</label>#}
-{#                                    {% for servicio in info_cita['lista_servicios'] %}#}
-{#                                        <div style="display: flex; justify-content: space-between">#}
-{#                                            <label class="form-label">{{ servicio['nombre'] }}</label>#}
-{#                                            <label class="form-label">{{ servicio['descripcion'] }}</label>#}
-{#                                            <label class="form-label">${{ servicio['precio'] }}</label>#}
-{#                                        </div>#}
-{#                                    {% endfor %}#}
-{##}
-{#                                </div>#}
-{#                                <div style="display: flex; justify-content: space-between; padding-bottom: 2rem">#}
-{#                                    <label for="total" class="form-label">Total:</label>#}
-{#                                    <label for="total" class="form-label">${{ info_cita['monto'] }}</label>#}
-{#                                    <input type="text" style="display: none" name="monto"#}
-{#                                           value="{{ info_cita['monto'] }}">#}
-{#                                </div>#}
+                                {# <div
+                                    style="display: flex; flex-direction: column; justify-content: flex-start; border-bottom-style: solid; border-bottom-width:1px ">
+                                    #}
+                                    {# <label for="" class="form-label">Servicios:</label>#}
+                                    {# {% for servicio in info_cita['lista_servicios'] %}#}
+                                    {# <div style="display: flex; justify-content: space-between">#}
+                                        {# <label class="form-label">{{ servicio['nombre'] }}</label>#}
+                                        {# <label class="form-label">{{ servicio['descripcion'] }}</label>#}
+                                        {# <label class="form-label">${{ servicio['precio'] }}</label>#}
+                                        {# </div>#}
+                                    {# {% endfor %}#}
+                                    {##}
+                                    {# </div>#}
+                                {# <div style="display: flex; justify-content: space-between; padding-bottom: 2rem">#}
+                                    {# <label for="total" class="form-label">Total:</label>#}
+                                    {# <label for="total" class="form-label">${{ info_cita['monto'] }}</label>#}
+                                    {# <input type="text" style="display: none" name="monto" #} {#
+                                        value="{{ info_cita['monto'] }}">#}
+                                    {# </div>#}
 
 
                             </div>
@@ -197,10 +202,13 @@
                     <main>
                         <div class="row g-5 center">
                             <div class="col-md-7 col-lg-8">
-                                {#              SE PUEDE MODIFICAR PERO SOLO A TRAVES DE CLASES (class="..."), NO CAMBIAR TIPO DE ETIQUETA (<button></button>) O EL ATRIBUTO "type" PORFAVOR #}
-                     <button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>
+                                {# SE PUEDE MODIFICAR PERO SOLO A TRAVES DE CLASES (class="..."), NO CAMBIAR TIPO DE
+                                ETIQUETA (<button></button>) O EL ATRIBUTO "type" PORFAVOR #}
+                                <!--<button class="w-100 btn btn-primary btn-lg" type="submit">Agendar cita</button>-->
+                                <button class="submit" type="submit">Agendar cita</button>
 
-{#                                 <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a></p>#}
+                                {# <p align="right"><a class="btn btn-lg btn-primary" href="/inicio">Agendar cita</a>
+                                </p>#}
 
                             </div>
                         </div>
@@ -223,21 +231,21 @@
 
 
     <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-            crossorigin="anonymous"></script>
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
 
     <script src="form-validation.js"></script>
 
 
     <script src="/docs/5.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-            crossorigin="anonymous"></script>
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
 
     <script src="offcanvas.js"></script>
 
 
-    </body>
+</body>
 
 
-    </html>
+</html>
 {% endblock %}
