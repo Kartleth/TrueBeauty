@@ -22,31 +22,31 @@
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
       <h6 class="border-bottom pb-2 mb-0">Citas realizadas</h6>
-        {% for cita in lista_citas %}
+      {% for cita in lista_citas %}
       <div class="d-flex text-muted pt-3">
 
-{#        <img class="me-3" src="/static/images/{{ cita['nombre_servicio'] }}.png" alt="" width="48" height="48">#}
-          <img class="me-3" src="/static/images/Peinado.png" alt="" width="48" height="48">
+        {# <img class="me-3" src="/static/images/{{ cita['nombre_servicio'] }}.png" alt="" width="48" height="48">#}
+        <img class="me-3" src="/static/images/Peinado.png" alt="" width="48" height="48">
         <p class="pb-3 mb-0 small lh-sm border-bottom btn-style">
           <strong class="d-block text-gray-dark">Cita de {% for servicio in cita['lista_servicios'] %}
-              {% if cita['lista_servicios'].index(servicio) == 0 %}
-              {{ servicio['nombre'] }}
-                  {% else %}-{{ servicio['nombre'] }}
-              {% endif %}
+            {% if cita['lista_servicios'].index(servicio) == 0 %}
+            {{ servicio['nombre'] }}
+            {% else %}-{{ servicio['nombre'] }}
+            {% endif %}
 
-          {% endfor %}
+            {% endfor %}
           </strong>
           Cita agendada para el {{ cita['fecha'] }} a las {{ cita['hora'] }} horas.
 
-          <div class="btn-group" role="group" aria-label="Basic outlined example">
-            <a type="button" class="btn btn-outline-primary" href="/informacion_cita/{{ cita['id_cita'] }}">Ver cita</a>
-            <a type="button" class="btn btn-outline-primary" href="/modificar_cita/{{ cita['id_cita'] }}">Cambiar cita</a>
-          </div>
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+          <a type="button" class="btn btn-outline-primary" href="/informacion_cita/{{ cita['id_cita'] }}">Ver cita</a>
+          <a type="button" class="btn btn-outline-primary" href="/modificar_cita/{{ cita['id_cita'] }}">Cambiar cita</a>
+        </div>
         </p>
 
       </div>
 
-        {% endfor %}
+      {% endfor %}
 
       <small class="d-block text-end mt-3">
         <a href="/escoger_cita/" class="btn btn-lg btn-primary">Agendar cita nueva</a>

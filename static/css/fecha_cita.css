@@ -83,3 +83,10 @@ button {
   justify-content: center;
   align-items: center;
 }
+
+.btn-agregar{
+  color: #fff;
+  background:  rgb(81, 148, 196);
+  display: inline-block;
+  border-radius: 15px
+}
