@@ -68,8 +68,9 @@ a.cambiarContraseña{
     text-decoration: none;
 }
 
-a.btn-cambiarContraseña:hover {
+a.cambiarContraseña:hover {
     opacity: 0.8;
-    text-decoration: none;
     color: #FFF;
+    text-decoration: none;
+    
 }
