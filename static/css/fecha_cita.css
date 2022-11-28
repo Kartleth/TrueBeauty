@@ -94,6 +94,7 @@ button {
   display: inline-block;
   border-radius: 8px;
   margin: inherit;
+  
 }
 
 button.btn-agregar:hover {
