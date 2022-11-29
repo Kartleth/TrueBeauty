@@ -474,6 +474,19 @@ def get_lista_citas_fechas(fecha1, fecha2) -> list:
     conexion.close()
     return lista
 
+def get_lista_citas_mes(anio, mes) -> list:
+    conexion = obtener_conexion()
+    lista = []
+    with conexion.cursor() as cursor:
+        cursor.execute(
+            "SELECT a.id_cita, a.fecha, u.nombre as cliente, a.monto, a.iva, a.total FROM cita a, usuario u WHERE (YEAR(fecha)= %s and MONTH(fecha)= %s) and u.id_usuario=a.id_cliente",
+            (anio, mes))
+        lista = cursor.fetchall()
+
+    conexion.commit()
+    conexion.close()
+    return lista
+
 
 def get_lista_usuarios_fechas(fecha1, fecha2) -> list:
     conexion = obtener_conexion()
@@ -506,6 +519,16 @@ def get_suma_citas(fecha1, fecha2):
     with conexion.cursor() as cursor:
         cursor.execute("SELECT SUM(total), SUM(iva), SUM(monto) FROM cita WHERE (DATE(fecha) BETWEEN %s and %s)",
                        (fecha1, fecha2))
+        atencion = cursor.fetchone()
+    conexion.commit()
+    conexion.close()
+    return atencion
+
+def get_suma_citas_mes(anio, mes):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT SUM(total), SUM(iva), SUM(monto) FROM cita WHERE (YEAR(fecha)= %s and MONTH(fecha)= %s)",
+                       (anio, mes))
         atencion = cursor.fetchone()
     conexion.commit()
     conexion.close()

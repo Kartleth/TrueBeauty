@@ -121,28 +121,6 @@ def signup():
         return redirect("/")
     
 
-# @app.route('/confirmar_correo', methods=['GET','POST'])
-# def confirmar_correo():  
-#     """ Se asegura que el codigo sea correcto.1|
-#     Se redirige para cambiar contraseña a '/new_password'"""
-#     if 'logeado' not in session.keys():
-        
-#         if request.method == 'GET':
-#             return render_template('reset_code.html')
-#         elif request.method == 'POST':
-#             codigo_usuario = request.form['codigo']
-#             username = session['usuario_codigo']
-#             codigo = session['codigo']
-#             if codigo_usuario == codigo:
-#                 return redirect('/new_password')
-#             else:
-#                 mensaje = 'Codigo Incorrecto, pruebe de nuevo'
-#                 flash(mensaje)
-#                 return render_template('reset_code.html')
-#     else:
-#         return redirect("/")
-
-
 @app.route('/error')
 def error():
     return render_template("error.html")
@@ -190,20 +168,26 @@ def reset_code():
         if request.method == 'GET':
             return render_template('reset_code.html')
         elif request.method == 'POST':
-            codigo_usuario = request.form['codigo']
-            username = session['usuario_codigo']
-            codigo = session['codigo']
-            if codigo_usuario == codigo and session['bool']==False:
-                return redirect('/new_password')
-            elif codigo_usuario == codigo and session['bool']:
-                insertar_usuario(session['nombre'], session['apellido_paterno'], session['apellido_materno'], username, sha256_crypt.hash(session['password']),
-                                  session['telefono'], session['tipo_usuario']) 
-                return redirect('/login')
-            
+            if 'usuario_codigo' in session: 
+                codigo_usuario = request.form['codigo']
+                username = session['usuario_codigo']
+                codigo = session['codigo']
+                if codigo_usuario == codigo and session['bool']==False:
+                    return redirect('/new_password')
+                elif codigo_usuario == codigo and session['bool']:
+                    insertar_usuario(session['nombre'], session['apellido_paterno'], session['apellido_materno'], username, sha256_crypt.hash(session['password']),
+                                    session['telefono'], session['tipo_usuario']) 
+                    mensaje = 'Se ha registrado correctamente'
+                    flash(mensaje)
+                    session.clear()
+                    return redirect('/login')
+                
+                else:
+                    mensaje = 'Codigo Incorrecto, pruebe de nuevo'
+                    flash(mensaje)
+                    return render_template('reset_code.html')
             else:
-                mensaje = 'Codigo Incorrecto, pruebe de nuevo'
-                flash(mensaje)
-                return render_template('reset_code.html')
+                return redirect("/")
     else:
         return redirect("/")
 
@@ -980,7 +964,64 @@ def informe_ventas_rango():
     else:
         abort(403)
 
+@app.route("/informe_ventas/mensual", methods=['GET', 'POST'])
+def informe_ventas_mensual():
+    """
+      Se asegura que la cuenta tenga permisos de administrador.
+      Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas divido por meses.
+      Si se selecciona alguna fecha en especifico la información cambia dependiendo de la misma.
+      """
+    if 'logeado' in session.keys():
+        if session['logeado']:
+            if session['tipo'] == 'gerente' or session['tipo'] == 'recepcionista':
+                if request.method == 'GET':
+                    fecha = get_cur_datetime()
+                    fecha = fecha['now'].split('-')
+                    mes_anio = fecha[0]+"-"+fecha[1]    
+                    citas = get_lista_citas_mes(fecha[0], fecha[1])
+                    usuarios = get_lista_usuarios_fechas(fecha[0], fecha[1])
+                    servicios = get_lista_serv_de_citas()
+                    suma = get_suma_citas_mes(fecha[0], fecha[1])
+                    total_citas_monto = suma['SUM(monto)']
+                    total_citas_iva = suma['SUM(iva)']
+                    total_citas_total = suma['SUM(total)']                 
+                    data_dict = get_datos_grafica_mensual(mes_anio)
+                    return render_template("reporte.html", lista_usuarios=usuarios,
+                                           total_citas_subtotal=total_citas_monto,
+                                           total_citas_iva=total_citas_iva,
+                                           total_citas_total=total_citas_total,
+                                           lista_citas=citas, lista_servicios=servicios,
+                                           tipo='Mensual',  date=mes_anio,
+                                           data=json.dumps(data_dict))
+                if request.method == 'POST':
 
+                    mes1=request.form['mes']
+                    mes=mes1.split("-")                    
+                    anio=mes[0]
+                    mes=mes[1]
+                    mes_anio = anio+"-"+mes    
+                    citas = get_lista_citas_mes(anio, mes)
+                    usuarios = get_lista_usuarios_fechas(anio, mes)
+                    servicios = get_lista_serv_de_citas()
+                    suma = get_suma_citas_mes(anio, mes)
+                    total_citas_monto = suma['SUM(monto)']
+                    total_citas_iva = suma['SUM(iva)']
+                    total_citas_total = suma['SUM(total)']                 
+                    data_dict = get_datos_grafica_mensual(mes_anio)
+                    return render_template("reporte.html", lista_usuarios=usuarios,
+                                           total_citas_subtotal=total_citas_monto,
+                                           total_citas_iva=total_citas_iva,
+                                           total_citas_total=total_citas_total,
+                                           lista_citas=citas, lista_servicios=servicios,
+                                           tipo='Mensual',  date=mes_anio,
+                                           data=json.dumps(data_dict))
+
+            else:
+                abort(403)
+        else:
+            abort(403)
+    else:
+        abort(403)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
