@@ -9,7 +9,7 @@
         
         <div class="col-lg-8 container my-5">
             <div class="d-flex mx-2 justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="">Informe de Ventas</h1>
+                <h1 class="">Informe de Citas</h1>
                 <form class="btn-toolbar mb-2 mb-md-0" , action="" , method="POST">
                     <button type="button" class="me-2 btn btn-sm btn-outline-secondary" onclick="download('Informe{{tipo}}{{date}}')">Exportar</button>
 
@@ -155,7 +155,7 @@
                             <td>{{usuario['nombre']}}</td>
                             <td>{{usuario['correo']}}</td>
                             <td>{{usuario['telefono']}}</td>
-                            <td><a href="/mod_usuario/{{usuario['correo']}}" class="btn boton_pie">Modificar</a></td>
+                            <td><a href="/info_cuenta/{{usuario['id_usuario']}}" class="btn boton_pie">Modificar</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
