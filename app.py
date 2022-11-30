@@ -842,8 +842,8 @@ def reparacion():
 
 # Informes se va a dividir en diaria, mensual y en rango.
 
-@app.route("/informe_ventas/diaria", methods=['GET', 'POST'])
-def informe_ventas_diaria():
+@app.route("/informe_citas/diaria", methods=['GET', 'POST'])
+def informe_citas_diaria():
     ''' Se asegura que la cuenta tenga permisos de administrador.
     Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas.
     Si se selecciona alguna fecha en especifico la información cambia dependiendo de la misma.
@@ -899,8 +899,8 @@ def informe_ventas_diaria():
         abort(403)
         
         
-@app.route("/informe_ventas/rango", methods=['GET', 'POST'])
-def informe_ventas_rango():
+@app.route("/informe_citas/rango", methods=['GET', 'POST'])
+def informe_citas_rango():
     ''' Se asegura que la cuenta tenga permisos de administrador.
     Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas.
     Si se selecciona alguna fecha en especifico la información cambia dependiendo de la misma.
@@ -964,8 +964,8 @@ def informe_ventas_rango():
     else:
         abort(403)
 
-@app.route("/informe_ventas/mensual", methods=['GET', 'POST'])
-def informe_ventas_mensual():
+@app.route("/informe_citas/mensual", methods=['GET', 'POST'])
+def informe_citas_mensual():
     """
       Se asegura que la cuenta tenga permisos de administrador.
       Regresa el template con toda la información del sistema para mostrar su respectivo informe de ventas divido por meses.

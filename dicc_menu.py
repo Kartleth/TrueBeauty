@@ -54,7 +54,7 @@ diccionario_menu = {
                 '/agregar_servicio': 'Agregar nuevo servicio',
                 '/consultar_clientes': 'Ver clientes',
                 '/consultar_usuarios': 'Ver usuarios',
-                '/informe_ventas/diaria': 'Ver informes',
+                '/informe_citas/diaria': 'Ver informes',
                 '/registrar_usuario': 'Registrar usuario',
 
                 },
@@ -63,7 +63,7 @@ diccionario_menu = {
                       '/consultar_servicios': 'Servicios disponibles',
 
                       '/consultar_clientes': 'Ver clientes',
-                    '/informe_ventas/diaria': 'Ver informes',
+                    '/informe_citas/diaria': 'Ver informes',
                       '/registrar_usuario': 'Registrar usuario',
 
                       },
