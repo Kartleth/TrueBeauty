@@ -106,3 +106,24 @@ button.cambiarPassword:hover {
   border-radius: 30px!important;
 }
 
+.btn-enviar-informe-citas{
+
+  font-weight: bold !important;
+  font-family: 'Montserrat';
+  opacity: 0.8;
+  text-decoration:none;
+  color: #FFF!important;
+  border: none!important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(-135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);
+  cursor: pointer;
+  transition: opacity 0.4s;
+  border-radius: 30px!important;
+
+}
+
+.btn-enviar-informe-citas:hover {
+  opacity: 0.8!important;
+}
+
