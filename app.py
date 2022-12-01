@@ -164,7 +164,7 @@ def forgot_password():
 def reset_code():
     """ Se asegura que el codigo sea correcto.1|
     Se redirige para cambiar contraseña a '/new_password'"""
-    if 'logeado' not in session.keys():
+    if 'logeado' not in session.keys() and ('usuario_codigo' in session):
         if request.method == 'GET':
             return render_template('reset_code.html')
         elif request.method == 'POST':
@@ -178,8 +178,7 @@ def reset_code():
                     insertar_usuario(session['nombre'], session['apellido_paterno'], session['apellido_materno'], username, sha256_crypt.hash(session['password']),
                                     session['telefono'], session['tipo_usuario']) 
                     mensaje = 'Se ha registrado correctamente'
-                    flash(mensaje)
-                    session.clear()
+                    flash(mensaje)         
                     return redirect('/login')
                 
                 else:
@@ -197,7 +196,7 @@ def new_password():
     """Permite al usuario introducir su nueva contraseña.
     Si las dos coiciden se guardan los camnios.
     Se redirige a '/password_changed'"""
-    if 'logged_in' not in session.keys():
+    if 'logeado' not in session.keys() and ('usuario_codigo' in session):
         if request.method == 'GET':
             return render_template("new_password.html")
         elif request.method == 'POST':
@@ -208,11 +207,13 @@ def new_password():
                 # cambiar contraseña
                 nueva_contraseña = sha256_crypt.hash(password1)
                 actualizar_usuario(usr['id_usuario'], 'contrasenia', nueva_contraseña)
+                session.clear()
                 return redirect('/login')
             else:
                 mensaje = 'Contraseñas no concuerdan, intente de nuevo'
                 flash(mensaje)
                 return render_template("new_password.html")
+                
     else:
         return redirect("/")
 
