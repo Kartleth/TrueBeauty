@@ -87,6 +87,7 @@ button.submit:hover {
 
 a.btn {
   font-weight: bold;
+  
 
 }
 
@@ -109,4 +110,9 @@ a.btn-inicio:hover {
   opacity: 0.8;
   text-decoration: none;
   color: #FFF;
+}
+
+
+.a{
+  background: linear-gradient(-135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);
 }

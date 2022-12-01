@@ -20,8 +20,8 @@
 
         <!--<div class="b-example-divider b-example-vr" style="margin-top: 4%;"></div>-->
 
-        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; margin-top: 4%;">
-            <a >
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px; margin-top: 4%; ">
+            <a>
                 <span class="fs-4">Servicios disponibles</span>
             </a>
             <hr>
@@ -32,9 +32,9 @@
                     <a href="/informacion_servicio/{{ servicio['id_servicio'] }}"
                         class="nav-link {% if servicio['id_servicio']== info_servicio['id_servicio'] %}active{% else %} link-dark{% endif %}"
                         aria-current="page">
-{#                        <svg class="bi pe-none me-2" width="16" height="16">#}
-{#                            <use xlink:href="#home"></use>#}
-{#                        </svg>#}
+                        {# <svg class="bi pe-none me-2" width="16" height="16">#}
+                            {# <use xlink:href="#home"></use>#}
+                            {# </svg>#}
                         {{ servicio['nombre'] }}
                     </a>
                 </li>
@@ -62,8 +62,8 @@
 
             </ul>
 
-            
-            
+
+
 
             <!--<div class="dropdown">
                 <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
@@ -92,7 +92,8 @@
 
 
 
-                    <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm" style="background-color:  #7CB8EB">
+                    <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm"
+                        style="background: linear-gradient(-135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);">
                         <img class="me-3" src="/static/images/calendario_fecha_cita.png" alt="" width="48" height="48">
                         <div class="lh-1">
                             <h1 class="h6 mb-0 text-white lh-1">Información de {{ info_servicio['nombre'] }}</h1>
@@ -104,13 +105,14 @@
 
                     <div class="col-12">
                         <label for="nombre" class="form-label">Nombre de servicio</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ info_servicio['nombre'] }}"  required>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                            value="{{ info_servicio['nombre'] }}" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="precio" class="form-label">Precio:</label>
-                        <input  type="number" min="1" class="form-control" id="precio" name="precio" value="{{ info_servicio['precio'] }}"
-                            required>
+                        <input type="number" min="1" class="form-control" id="precio" name="precio"
+                            value="{{ info_servicio['precio'] }}" required>
                         <div class="invalid-feedback">
                             Ingrese el precio
                         </div>
@@ -118,8 +120,8 @@
 
                     <div class="col-md-6">
                         <label for="tiempo" class="form-label">Tiempo de duración (minutos):</label>
-                        <input type="number" min="1" class="form-control" id="tiempo" name="tiempo" value="{{ info_servicio['tiempo'] }}"
-                            required>
+                        <input type="number" min="1" class="form-control" id="tiempo" name="tiempo"
+                            value="{{ info_servicio['tiempo'] }}" required>
                         <div class="invalid-feedback">
                             Ingrese el tiempo de duración
                         </div>
@@ -129,12 +131,21 @@
 
                     <div class="mb-6">
                         <label for="exampleFormControlTextarea1" class="form-label">Descripción de servicio</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="descripcion" >{{ info_servicio['descripcion'] }}</textarea>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                            name="descripcion">{{ info_servicio['descripcion'] }}</textarea>
                     </div>
 
                     <hr>
 
-                    <p align="right"><button class="btn btn-lg btn-primary" type="submit" >Guardar cambios</button></p>
+                    <p align="right"><button style="background: linear-gradient(-135deg, rgb(81, 148, 196) 35%, rgb(158, 210, 255) 100%);
+                        border: none;
+                        border-radius: 30px;
+                        font-weight: bold;
+                        letter-spacing: 2px;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        transition: opacity 0.4s;
+                        text-transform: uppercase;" class="btn btn-lg btn-primary" type="submit">GUARDAR CAMBIOS</button></p>
 
 
                 </div>
