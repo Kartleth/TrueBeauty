@@ -1,0 +1,47 @@
+argon2-cffi @ file:///opt/conda/conda-bld/argon2-cffi_1645000214183/work
+argon2-cffi-bindings @ file:///C:/ci/argon2-cffi-bindings_1644569876605/work
+asttokens @ file:///opt/conda/conda-bld/asttokens_1646925590279/work
+attrs @ file:///opt/conda/conda-bld/attrs_1642510447205/work
+backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
+bcrypt @ file:///C:/Windows/Temp/abs_36kl66t_aw/croots/recipe/bcrypt_1659554334050/work
+certifi @ file:///C:/b/abs_ac29jvt43w/croot/certifi_1665076682579/work/certifi
+cffi @ file:///C:/Windows/Temp/abs_6808y9x40v/croots/recipe/cffi_1659598653989/work
+click==8.0.3
+colorama @ file:///tmp/build/80754af9/colorama_1607707115595/work
+cryptography @ file:///C:/ci/cryptography_1643209086516/work
+debugpy @ file:///C:/ci_310/debugpy_1642079916595/work
+decorator @ file:///opt/conda/conda-bld/decorator_1643638310831/work
+entrypoints==0.3
+Flask @ file:///opt/conda/conda-bld/flask_1648041541647/work
+html5lib @ file:///Users/ktietz/demo/mc3/conda-bld/html5lib_1629144453894/work
+itsdangerous @ file:///tmp/build/80754af9/itsdangerous_1621432558163/work
+jedi @ file:///C:/ci/jedi_1644315428305/work
+Jinja2 @ file:///opt/conda/conda-bld/jinja2_1647436528585/work
+jsonschema @ file:///C:/ci/jsonschema_1650008058746/work
+jupyter-core @ file:///C:/ci_310/jupyter_core_1642174363798/work
+MarkupSafe @ file:///C:/ci_310/markupsafe_1642084045935/work
+mypy-extensions==0.4.3
+parso @ file:///opt/conda/conda-bld/parso_1641458642106/work
+passlib==1.7.4
+pathspec @ file:///C:/Windows/TEMP/abs_581d0u45mh/croots/recipe/pathspec_1659627132171/work
+pickleshare @ file:///tmp/build/80754af9/pickleshare_1606932040724/work
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+Pygments @ file:///opt/conda/conda-bld/pygments_1644249106324/work
+PyMySQL @ file:///C:/ci_310/pymysql_1643295949948/work
+pyparsing @ file:///tmp/build/80754af9/pyparsing_1635766073266/work
+pyrsistent @ file:///C:/ci_310/pyrsistent_1642117077485/work
+python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
+python-Levenshtein @ file:///C:/ci_310/python-levenshtein_1642089624127/work
+pytz @ file:///C:/Windows/TEMP/abs_90eacd4e-8eff-491e-b26e-f707eba2cbe1ujvbhqz1/croots/recipe/pytz_1654762631027/work
+pywin32==302
+PyYAML==6.0
+pyzmq @ file:///C:/ci_310/pyzmq_1642090360481/work
+six @ file:///tmp/build/80754af9/six_1644875935023/work
+tomli @ file:///tmp/build/80754af9/tomli_1637314251069/work
+tornado @ file:///C:/ci_310/tornado_1642093111997/work
+traitlets @ file:///tmp/build/80754af9/traitlets_1636710298902/work
+typing_extensions @ file:///C:/Windows/TEMP/abs_dd2d0moa85/croots/recipe/typing_extensions_1659638831135/work
+wcwidth @ file:///Users/ktietz/demo/mc3/conda-bld/wcwidth_1629357192024/work
+webencodings==0.5.1
+Werkzeug @ file:///opt/conda/conda-bld/werkzeug_1645628268370/work
+wincertstore==0.2
