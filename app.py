@@ -8,6 +8,7 @@ from random import randint
 from herramientas import *
 from datetime import datetime
 import json 
+import re
 
 app = Flask(__name__)
 app.secret_key = 'lwiu74dhn2SuF3j'
@@ -84,9 +85,24 @@ def signup():
                 return redirect('/signup')
             password = request.form['password1']
             password2 = request.form['password2']
-
             if password != password2:
                 flash('Contraseñas no concuerdan, intente de nuevo')
+                return render_template("signup.html")
+
+            elif not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\{\}\[\]\-\+\.\(\)])[^\s]{12,}$', password):                
+                flash("Las contraseñas no cumplen con los requisitos: ")
+                if not re.match(r'^[^\s]{12,}$', password):                    
+                    flash("Mínimo doce caracteres de longitud.")                
+                    flash("La cadena no puede contener espacios en blanco.")              
+                #mayúscula
+                if not any(char.isupper() for char in password):
+                    flash("Una letra mayúscula.")             
+                #minúscula
+                if not any(char.islower() for char in password):
+                    flash("Una letra minúscula.")
+                #
+                if not re.match(r'^(?=.*[\{\}\[\]\-\+\.\(\)])', password):       
+                    flash("Un carácter especial de los siguientes: {,}, [,], -, +,. , (, )")  
                 return render_template("signup.html")
             else:
                 nombre = request.form['nombre']
