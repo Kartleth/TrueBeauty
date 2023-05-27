@@ -1,0 +1,2 @@
+
+TrueBeauty is a comprehensive solution designed to streamline appointment and service management for a local beauty salon. Its primary objective is to enhance logistical efficiency and provide valuable statistical insights for administrative purposes. The system incorporates various user roles, each with unique credentials, leveraging the power of a MySQL database for secure data storage and retrieval.
