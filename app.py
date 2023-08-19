@@ -427,8 +427,9 @@ def consultar_servicios():
             servicios = get_lista_servicios()
             return render_template('consultar_servicios.html', lista_servicios=servicios, tipo_usuario=session['tipo'])
     else:
-
-        return redirect('/')
+        servicios = get_lista_servicios()
+        return render_template('consultar_servicios.html', lista_servicios=servicios, tipo_usuario='cliente')
+        
 
 
 @app.route('/consultar_citas')
