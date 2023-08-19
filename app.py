@@ -308,9 +308,13 @@ def escoger_cita(id_cliente=None):
             else:
                 return redirect('/')
         else:
-            return redirect('/')
+            flash('Inicie sesión o cree una cuenta para hacer una cita')
+        
+            return redirect('/login')
     else:
-        return redirect('/')
+        flash('Inicie sesión o cree una cuenta para hacer una cita')
+        
+        return redirect('/login')
 
 
 @app.route('/fecha_cita')
